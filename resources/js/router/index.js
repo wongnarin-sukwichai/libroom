@@ -4,6 +4,8 @@ import Welcome from "../components/Welcome.vue";
 import Login from "../components/Login.vue";
 import Home from "../components/Home.vue";
 import Dashboard from "../components/Dashboard.vue";
+import Time from "../components/Time.vue";
+import Holiday from "../components/Holiday.vue";
 
 import store from "../store";
 
@@ -36,7 +38,23 @@ const routes = [
                 meta: {
                     guard: "auth"
                 }
-            },      
+            },  
+            {
+                path: "/time",
+                name: "time",
+                component: Time,
+                meta: {
+                    guard: "auth"
+                }
+            },  
+            {
+                path: "/holiday",
+                name: "holiday",
+                component: Holiday,
+                meta: {
+                    guard: "auth"
+                }
+            },     
         ]
     }
 ];

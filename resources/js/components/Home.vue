@@ -1,14 +1,156 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Example Component</div>
-
-                    <div class="card-body">
-                        I'm an example component.
+    <div class="p-16 bg-gray-50">
+        <div class="grid grid-cols-6 gap-2">
+            <div
+                class="p-6 rounded-md bg-white bg-opacity-50 lg:w-60 border rounded-lg shadow-lg no-print"
+            >
+                <nav class="space-y-4 text-sm text-gray-700">                 
+                    <div class="space-y-2">
+                        <h2
+                            class="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
+                        >
+                            Home
+                        </h2>
+                        <div class="flex flex-col space-y-2">
+                            <router-link
+                                to="/home"
+                                class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                ><box-icon
+                                    name="home"
+                                    color="gray"
+                                    size="sm"
+                                    class="pr-2"
+                                ></box-icon>
+                                <p class="p-1">หน้าแรก</p></router-link
+                            >                     
+                        </div>
                     </div>
-                </div>
+                    <div class="space-y-2">
+                        <h2
+                            class="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
+                        >
+                            System
+                        </h2>
+                        <div class="flex flex-col space-y-2">
+                            <router-link
+                                to="/"
+                                class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                ><box-icon
+                                    name="package"
+                                    color="gray"
+                                    size="sm"
+                                    class="pr-2"
+                                ></box-icon>
+                                <p class="p-1">สถานที่</p></router-link
+                            >
+
+                            <router-link
+                                to="/holiday"
+                                class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                ><box-icon
+                                    name="calendar"
+                                    color="gray"
+                                    size="sm"
+                                    class="pr-2"
+                                ></box-icon>
+                                <p class="p-1">วันหยุดนักขัตฤกษ์</p></router-link
+                            >
+
+                            <router-link
+                                to="/time"
+                                class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                ><box-icon
+                                    name="time"
+                                    color="gray"
+                                    size="sm"
+                                    class="pr-2"
+                                ></box-icon>
+                                <p class="p-1">เวลาให้บริการ</p></router-link
+                            >
+                            
+                            <router-link
+                                to="/home"
+                                class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                ><box-icon
+                                    name="block"
+                                    color="gray"
+                                    size="sm"
+                                    class="pr-2"
+                                ></box-icon>
+                                <p class="p-1 line-through">บล็อคผู้ใช้</p></router-link
+                            >
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h2
+                            class="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
+                        >
+                            Statistic
+                        </h2>
+                        <div class="flex flex-col space-y-1">
+                            <router-link
+                                to="/"
+                                class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                ><box-icon
+                                    name="bar-chart"
+                                    color="gray"
+                                    size="sm"
+                                    class="pr-2"
+                                ></box-icon>
+                                <p class="p-1">สถิติ</p></router-link
+                            >
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <h2
+                            class="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
+                        >
+                            Tools
+                        </h2>
+                        <div class="flex flex-col space-y-1">
+                            <router-link
+                                to="/"
+                                class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                ><box-icon
+                                    name="file"
+                                    color="gray"
+                                    size="sm"
+                                    class="pr-2"
+                                ></box-icon>
+                                <p class="p-1">คู่มือการใช้งาน</p></router-link
+                            >
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <h2
+                            class="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
+                        >
+                            System
+                        </h2>
+                        <div class="flex flex-col space-y-1">
+                            <a
+                                href=""
+                                class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                @click="logout()"
+                                ><box-icon
+                                    name="log-out-circle"
+                                    color="red"
+                                    size="sm"
+                                    class="pr-2"
+                                ></box-icon>
+                                <p class="p-1">ออกจากระบบ</p></a
+                            >
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+            <div
+                class="col-span-5 bg-white border rounded-md bg-opacity-50 shadow-lg p-8"
+            >
+                <router-view />
             </div>
         </div>
     </div>

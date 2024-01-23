@@ -1,6 +1,8 @@
 <template>
     <div class="min-h-full">
-        <nav class="bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500">
+        <nav
+            class="bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500"
+        >
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="flex h-16 items-center justify-between">
                     <div class="flex items-center">
@@ -21,18 +23,18 @@
                                 >
 
                                 <router-link
-                                    to="/advertise"
+                                    to=""
                                     class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                                     >ข้อปฏิบัติการเข้าใช้บริการ</router-link
                                 >
 
                                 <router-link
-                                    to="/guide"
+                                    to=""
                                     class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                                     >แบบประเมินความพึงพอใจ</router-link
                                 >
                                 <router-link
-                                    to="/guide"
+                                    to=""
                                     class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                                     >คู่มือการใช้งานระบบ</router-link
                                 >
@@ -53,37 +55,37 @@
                                 <div v-else>
                                     <button
                                         type="button"
-                                        class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                        class="relative flex max-w-xs items-center rounded-full bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-400"
                                         id="user-menu-button"
                                         aria-expanded="false"
                                         aria-haspopup="true"
                                         @click="show = !show"
                                     >
-                                        <div class="flex items-center px-5">
+                                        <div class="flex items-center px-5 p-2">
                                             <div class="mr-3">
                                                 <div
                                                     class="text-base font-medium leading-none text-gray-900 text-left"
                                                 >
-                                                
+                                                    {{ user.name }}
+                                                    {{ user.surname }}
                                                 </div>
                                                 <div
-                                                    class="text-sm font-medium leading-none text-gray-50"
+                                                    class="text-sm font-medium leading-none text-gray-900"
                                                 >
-                                                
+                                                    {{ user.email }}
                                                 </div>
                                             </div>
                                             <div class="flex-shrink-0">
                                                 <box-icon
                                                     name="user"
-                                                    color="white"
+                                                    color="black"
                                                 ></box-icon>
                                             </div>
                                         </div>
                                     </button>
                                 </div>
 
-                                <transition name="fade" mode="out-in"
-                                >
+                                <transition name="fade" mode="out-in">
                                     <div
                                         class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                         role="menu"
@@ -161,67 +163,68 @@
             </div>
 
             <!-- Mobile menu, show/hide based on menu state. -->
-            <div class="md:hidden" id="mobile-menu" 
-            v-if="showNav"           
-            >
-                <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                    <!-- Current: "bg-gray-900 text-gray-900", Default: "text-gray-50 hover:bg-gray-50 hover:text-gray-900" -->
-                    <router-link
-                        to="/"
-                        class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
-                        >หน้าแรก</router-link
-                    >
-                    <router-link
-                        to="/advertise"
-                        class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
-                        >ข้อปฏิบัติการเข้าใช้บริการ</router-link
-                    >
-                    <router-link
-                        to="/guide"
-                        class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
-                        >แบบประเมินความพึงพอใจ</router-link
-                    >
-                    <router-link
-                        to="/guide"
-                        class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
-                        >คู่มือการใช้งานระบบ</router-link
-                    >
-                </div>
-                <div class="border-t border-gray-700 pb-3 pt-4">
-                    <div class="flex items-center px-5">
-                        <div class="flex-shrink-0">
-                            <box-icon name="user" color="white"></box-icon>
-                        </div>
-                        <div class="ml-3">
-                            <div
-                                class="text-base font-medium leading-none text-gray-900"
-                            >
-                             
-                            </div>
-                            <div
-                                class="text-sm font-medium leading-none text-gray-50"
-                            >
-                           
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-3 space-y-1 px-2">
-                        <a
-                            href="#"
-                            class="block rounded-md px-3 py-2 text-base font-medium text-gray-50 hover:bg-gray-50 hover:text-gray-900"
-                            @click="logout()"
-                            >ออกจากระบบ</a
+            <transition name="slide-fade">
+                <div class="md:hidden" id="mobile-menu" v-if="showNav">
+                    <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+                        <!-- Current: "bg-gray-900 text-gray-900", Default: "text-gray-50 hover:bg-gray-50 hover:text-gray-900" -->
+                        <router-link
+                            to=""
+                            class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
+                            >หน้าแรก</router-link
+                        >
+                        <router-link
+                            to=""
+                            class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
+                            >ข้อปฏิบัติการเข้าใช้บริการ</router-link
+                        >
+                        <router-link
+                            to=""
+                            class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
+                            >แบบประเมินความพึงพอใจ</router-link
+                        >
+                        <router-link
+                            to=""
+                            class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
+                            >คู่มือการใช้งานระบบ</router-link
                         >
                     </div>
+
+                    <div class="border-t border-gray-700 pb-3 pt-4" v-if="user">
+                        <div class="flex items-center px-5">
+                            <div class="flex-shrink-0">
+                                <box-icon
+                                    name="user"
+                                    color="white"
+                                    size="sd"
+                                    class="absolute"
+                                ></box-icon>
+                                <span class="pl-8 text-white"
+                                    >{{ user.name }} {{ user.surname }}</span
+                                >
+                            </div>
+                            <div class="ml-3">
+                                <div
+                                    class="text-base font-medium leading-none text-gray-900"
+                                ></div>
+                                <div
+                                    class="text-sm font-medium leading-none text-gray-50"
+                                ></div>
+                            </div>
+                        </div>
+                        <div class="mt-3 space-y-1 px-2">
+                            <a
+                                href="#"
+                                class="block rounded-md px-3 py-2 text-base font-medium text-gray-50 hover:bg-gray-50 hover:text-gray-900"
+                                @click="logout()"
+                                >ออกจากระบบ</a
+                            >
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </transition>
         </nav>
         <!-- Replace with your content -->
         <main>
-            <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-                <img :src="banner" class="p-2 shadow-lg" />
-            </div>
-
             <router-view v-slot="{ Component, route }">
                 <transition name="fade" mode="out-in">
                     <div :key="route.name">
@@ -249,8 +252,8 @@ export default {
     data() {
         return {
             library: "img/library.png",
-            banner: "img/banner.jpg",
             user: "",
+            show: false,
             showNav: false,
         };
     },
