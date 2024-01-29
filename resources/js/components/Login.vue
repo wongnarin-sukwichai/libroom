@@ -83,6 +83,13 @@ export default {
         async login() {
             try {
                 await this.$store.dispatch("login", this.auth); //dispatch ส่งค่าไปยัง store ของ vuex
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "เข้าสู่ระบบเรียบร้อย",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
                 this.$router.push({ name: "home" }); //หากสำเร็จให้เปิด router ชื่อ home แบบ SPA
             } catch (err) {
                 Swal.fire({

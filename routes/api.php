@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\MonthController;
+use App\Http\Controllers\Api\HolidayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,10 +19,13 @@ use App\Http\Controllers\Api\UserController;
 */
 Route::post('logout', [AuthController::class, 'logout']);
 
+
 Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', UserController::class);
+    Route::resource('month', MonthController::class);
+    Route::resource('holiday', HolidayController::class);
 });

@@ -42,13 +42,13 @@
                         <th class="border p-2 w-56">#</th>
                     </tr>
                 </thead>
-                <tbody
-                    class="border"
-                    v-for="(month, index) in monthList"
-                    :key="index"
-                >
-                    <tr class="bg-sky-50">
-                        <td class="p-2 col-span-4 text-lg">
+                <tbody>
+                    <tr
+                        class="border bg-sky-50"
+                        v-for="(month, index) in monthList"
+                        :key="index"
+                    >
+                        <td class="p-2 col-span-3 text-lg">
                             {{ month.title }}
                         </td>
                         <td></td>
@@ -60,12 +60,20 @@
                         v-for="(holiday, index) in holidayList"
                         :key="index"
                     >
-                    <template v-if="month.ref_id === holiday.m">
                         <td class="border p-2">{{ holiday.d }}</td>
                         <td class="border p-2">{{ holiday.detail }}</td>
-                        <td class="border p-2">{{ holiday.created }}</td>
+                        <td>{{ holiday.created }}</td>
                         <td class="border p-2">
                             <div class="flex justify-center">
+                                <div>
+                                    <box-icon
+                                        name="cog"
+                                        color="#94a3b8"
+                                        size="sm"
+                                        animation="tada-hover"
+                                        class="cursor-pointer"
+                                    ></box-icon>
+                                </div>
                                 <div class="pl-2">
                                     <box-icon
                                         name="trash"
@@ -78,7 +86,6 @@
                                 </div>
                             </div>
                         </td>
-                    </template>
                     </tr>
                 </tbody>
             </table>
@@ -162,7 +169,7 @@
                                         <option
                                             v-for="(month, index) in monthList"
                                             :key="index"
-                                            :value="month.ref_id"
+                                            :value="month.id"
                                         >
                                             {{ month.title }}
                                         </option>
@@ -220,7 +227,7 @@
                 </div>
             </div>
         </div>
-    </transition> 
+    </transition>
 </template>
 
 <script>
@@ -271,26 +278,21 @@ export default {
                     console.log(err);
                 });
         },
-        async send() { 
-
-            if(this.data.d < 10) {
-                this.data.d = this.addZero(this.data.d)
-            } 
-            console.log(this.data.d)
-            // try {
-            //     await this.$store.dispatch("storeHoliday", this.data);
-            //     await Swal.fire({
-            //         position: "top-end",
-            //         icon: "success",
-            //         title: "บันทึกข้อมูลเรียบร้อย",
-            //         showConfirmButton: false,
-            //         timer: 1500,
-            //     });
-            //     this.isModalShow = false;
-            //     this.getHoliday();
-            // } catch (err) {
-            //     console.log(err);
-            // }
+        async send() {
+            try {
+                await this.$store.dispatch("storeHoliday", this.data);
+                await Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "บันทึกข้อมูลเรียบร้อย",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                this.isModalShow = false;
+                this.getHoliday();
+            } catch (err) {
+                console.log(err);
+            }
         },
         del(id, index) {
             Swal.fire({
@@ -316,9 +318,6 @@ export default {
                 }
             });
         },
-        addZero(text) {
-            return text.pad()
-        }
     },
 };
 </script>
