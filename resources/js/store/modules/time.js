@@ -11,10 +11,10 @@ export default {
       
     },
     actions: {
-        async storeHoliday({ dispatch }, payload) {
+        async storeTime({ dispatch }, payload) {
             try {
                 await axios
-                    .post("/api/holiday", payload)
+                    .post("/api/time", payload)
                     .then((response) => {
              
                     })

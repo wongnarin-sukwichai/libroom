@@ -47,14 +47,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="text-center">
-                        <td class="border p-4">1</td>
-                        <td class="border p-4">เวลาปกติ</td>
-                        <td class="border p-4">10</td>
-                        <td class="border p-4">08.00 น.</td>
-                        <td class="border p-4">18.00 น.</td>
-                        <td class="border p-4">วงศ์นรินทร์ สุขวิชัย</td>
-                        <td class="border p-4">2024-01-23</td>
+                    <tr 
+                    class="text-center"
+                    v-for="(time, index) in timeList"
+                    :key="index"
+                    >
+                        <td class="border p-4">{{ time.id }}</td>
+                        <td class="border p-4">{{ time.title }}</td>
+                        <td class="border p-4">{{ time.time }}</td>
+                        <td class="border p-4">{{ time.start }}</td>
+                        <td class="border p-4">{{ time.end }}</td>
+                        <td class="border p-4">{{ time.created }}</td>
+                        <td class="border p-4">{{ moment(time.created_at).format("LL") }}</td>
                         <td class="border p-4">
                             <div class="flex justify-center">
                                 <div>
@@ -77,36 +81,7 @@
                                 </div>
                             </div>
                         </td>
-                    </tr>
-                    <tr class="text-center">
-                        <td class="border p-4">2</td>
-                        <td class="border p-4">เสาร์ - อาทิตย์</td>
-                        <td class="border p-4">8</td>
-                        <td class="border p-4">10.00 น.</td>
-                        <td class="border p-4">18.00 น.</td>
-                        <td class="border p-4">วงศ์นรินทร์ สุขวิชัย</td>
-                        <td class="border p-4">2024-01-23</td>
-                        <td class="flex p-4 justify-center">
-                            <div>
-                                <box-icon
-                                    name="cog"
-                                    color="#94a3b8"
-                                    size="sm"
-                                    animation="tada-hover"
-                                    class="cursor-pointer"
-                                ></box-icon>
-                            </div>
-                            <div class="pl-2">
-                                <box-icon
-                                    name="trash"
-                                    color="#f87171"
-                                    size="sm"
-                                    animation="tada-hover"
-                                    class="cursor-pointer"
-                                ></box-icon>
-                            </div>
-                        </td>
-                    </tr>
+                    </tr>              
                 </tbody>
             </table>
         </div>
@@ -154,6 +129,8 @@
                                     <input
                                         type="text"
                                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                        required
+                                        v-model="data.title"
                                     />
                                 </div>
                             </div>
@@ -180,6 +157,8 @@
                                         type="text"
                                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                         placeholder="10"
+                                        required
+                                        v-model="data.time"
                                     />
                                 </div>
                             </div>
@@ -197,6 +176,8 @@
                                         type="text"
                                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                         placeholder="08.00"
+                                        required
+                                        v-model="data.start"
                                     />
                                 </div>
                             </div>
@@ -229,13 +210,25 @@
 <script>
 import "boxicons";
 import Swal from "sweetalert2";
+import moment from "moment"; //format date thai
+import "moment/dist/locale/th";
+moment.locale("th");
 
 export default {
-    mounted() {},
+    mounted() {
+        this.getTime();
+    },
     data() {
         return {
             isModalShow: false,
-            data: {},
+            timeList: "",
+            moment: moment,
+            data: {
+                title: "",
+                time: "",
+                start: "",
+                end: ""
+            },
         };
     },
     methods: {
@@ -245,6 +238,45 @@ export default {
         close() {
             this.isModalShow = false;
         },
+        getTime() {
+            axios
+                .get("/api/time")
+                .then((response) => {
+                    this.timeList = response.data;
+                    console.log(this.timeList)
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        async send() {      
+            try {
+                this.data.end = await this.calTime(this.data.start, this.data.time)
+                await this.$store.dispatch("storeTime", this.data);
+                await Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "บันทึกข้อมูลเรียบร้อย",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                this.isModalShow = false;
+                this.getTime();
+            } catch (err) {
+                console.log(err)
+            }
+        },
+        calTime(num, time) {
+            let res = num.substring(0, 2)
+            let last = num.substring(2, 5)
+            let result = parseInt(res) + parseInt(time)
+
+            if(result < 10) {
+                return result.toString().padStart(2, 0) + last;
+            } else {
+                return result + last
+            }          
+        }
     },
 };
 </script>

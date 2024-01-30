@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\MonthController;
 use App\Http\Controllers\Api\HolidayController;
+use App\Http\Controllers\Api\TimeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +29,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', UserController::class);
     Route::resource('month', MonthController::class);
     Route::resource('holiday', HolidayController::class);
+    Route::resource('time', TimeController::class);
 });

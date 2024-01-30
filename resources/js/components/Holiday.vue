@@ -60,25 +60,25 @@
                         v-for="(holiday, index) in holidayList"
                         :key="index"
                     >
-                    <template v-if="month.ref_id === holiday.m">
-                        <td class="border p-2">{{ holiday.d }}</td>
-                        <td class="border p-2">{{ holiday.detail }}</td>
-                        <td class="border p-2">{{ holiday.created }}</td>
-                        <td class="border p-2">
-                            <div class="flex justify-center">
-                                <div class="pl-2">
-                                    <box-icon
-                                        name="trash"
-                                        color="#f87171"
-                                        size="sm"
-                                        animation="tada-hover"
-                                        class="cursor-pointer"
-                                        @click="del(holiday.id, index)"
-                                    ></box-icon>
+                        <template v-if="month.ref_id === holiday.m">
+                            <td class="border p-2">{{ holiday.d }}</td>
+                            <td class="border p-2">{{ holiday.detail }}</td>
+                            <td class="border p-2">{{ holiday.created }}</td>
+                            <td class="border p-2">
+                                <div class="flex justify-center">
+                                    <div class="pl-2">
+                                        <box-icon
+                                            name="trash"
+                                            color="#f87171"
+                                            size="sm"
+                                            animation="tada-hover"
+                                            class="cursor-pointer"
+                                            @click="del(holiday.id, index)"
+                                        ></box-icon>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </template>
+                            </td>
+                        </template>
                     </tr>
                 </tbody>
             </table>
@@ -104,7 +104,7 @@
                 >
                     <form
                         class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
-                        @submit.prevent="send()"
+                        @submit.prevent="sendHoliday()"
                     >
                         <div
                             class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4 mt-4"
@@ -220,7 +220,7 @@
                 </div>
             </div>
         </div>
-    </transition> 
+    </transition>
 </template>
 
 <script>
@@ -237,6 +237,7 @@ export default {
             isModalShow: false,
             monthList: "",
             holidayList: "",
+            // number: [{ num:'01'}, {num:'02'}, {num:'03'}],
             data: {
                 d: "",
                 m: "",
@@ -271,26 +272,24 @@ export default {
                     console.log(err);
                 });
         },
-        async send() { 
-
-            if(this.data.d < 10) {
-                this.data.d = this.addZero(this.data.d)
-            } 
-            console.log(this.data.d)
-            // try {
-            //     await this.$store.dispatch("storeHoliday", this.data);
-            //     await Swal.fire({
-            //         position: "top-end",
-            //         icon: "success",
-            //         title: "บันทึกข้อมูลเรียบร้อย",
-            //         showConfirmButton: false,
-            //         timer: 1500,
-            //     });
-            //     this.isModalShow = false;
-            //     this.getHoliday();
-            // } catch (err) {
-            //     console.log(err);
-            // }
+        async sendHoliday() {
+            try {
+                if (this.data.d < 10) {
+                    this.data.d = await this.addZero(this.data.d);
+                }
+                await this.$store.dispatch("storeHoliday", this.data);
+                await Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "บันทึกข้อมูลเรียบร้อย",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                this.isModalShow = false;
+                this.getHoliday();
+            } catch (err) {
+                console.log(err);
+            }
         },
         del(id, index) {
             Swal.fire({
@@ -316,9 +315,9 @@ export default {
                 }
             });
         },
-        addZero(text) {
-            return text.pad()
-        }
+        addZero(num) {
+            return num.toString().padStart(2, 0);
+        },
     },
 };
 </script>
