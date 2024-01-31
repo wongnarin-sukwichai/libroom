@@ -58,7 +58,8 @@ class TimeController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = Time::find($id);
+        return response()->json($data);
     }
 
     /**
@@ -74,7 +75,17 @@ class TimeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+       $data = Time::find($id);
+
+       $data->title = $request['title'];
+       $data->time = $request['time'];
+       $data->start = $request['start'];
+       $data->end = $request['end'];
+       $data->created = Auth::user()-> name . ' ' . Auth::user()->surname;
+
+       $data->update();
+
+       return response()->json($data);
     }
 
     /**
@@ -82,6 +93,7 @@ class TimeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Time::find($id)->delete();
+        return response()->json();
     }
 }

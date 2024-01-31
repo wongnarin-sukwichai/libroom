@@ -6,6 +6,7 @@ import Home from "../components/Home.vue";
 import Dashboard from "../components/Dashboard.vue";
 import Time from "../components/Time.vue";
 import Holiday from "../components/Holiday.vue";
+import Room from "../components/Room.vue";
 
 import store from "../store";
 
@@ -51,6 +52,14 @@ const routes = [
                 path: "/holiday",
                 name: "holiday",
                 component: Holiday,
+                meta: {
+                    guard: "auth"
+                }
+            },  
+            {
+                path: "/room",
+                name: "room",
+                component: Room,
                 meta: {
                     guard: "auth"
                 }

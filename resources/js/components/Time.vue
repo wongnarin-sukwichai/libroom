@@ -47,10 +47,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr 
-                    class="text-center"
-                    v-for="(time, index) in timeList"
-                    :key="index"
+                    <tr
+                        class="text-center"
+                        v-for="(time, index) in timeList"
+                        :key="index"
                     >
                         <td class="border p-4">{{ time.id }}</td>
                         <td class="border p-4">{{ time.title }}</td>
@@ -58,7 +58,9 @@
                         <td class="border p-4">{{ time.start }}</td>
                         <td class="border p-4">{{ time.end }}</td>
                         <td class="border p-4">{{ time.created }}</td>
-                        <td class="border p-4">{{ moment(time.created_at).format("LL") }}</td>
+                        <td class="border p-4">
+                            {{ moment(time.created_at).format("LL") }}
+                        </td>
                         <td class="border p-4">
                             <div class="flex justify-center">
                                 <div>
@@ -68,6 +70,7 @@
                                         size="sm"
                                         animation="tada-hover"
                                         class="cursor-pointer"
+                                        @click="getEdit(time.id)"
                                     ></box-icon>
                                 </div>
                                 <div class="pl-2">
@@ -77,11 +80,12 @@
                                         size="sm"
                                         animation="tada-hover"
                                         class="cursor-pointer"
+                                        @click="del(time.id, index)"
                                     ></box-icon>
                                 </div>
                             </div>
                         </td>
-                    </tr>              
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -205,6 +209,128 @@
             </div>
         </div>
     </transition>
+
+    <!-- Modal Edit -->
+    <transition name="fade" mode="out-in">
+        <div
+            class="relative z-10"
+            aria-labelledby="modal-title"
+            role="dialog"
+            aria-modal="true"
+            v-show="isModalEdit"
+        >
+            <div
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            ></div>
+
+            <div class="fixed inset-0 z-10 overflow-y-auto">
+                <div
+                    class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+                >
+                    <form
+                        class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                        @submit.prevent="update()"
+                    >
+                        <div
+                            class="bg-amber-100 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
+                        ></div>
+                        <div class="bg-white px-4 pt-5 sm:p-4 sm:pb-4 mt-4">
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon
+                                        name="message-rounded-dots"
+                                    ></box-icon>
+                                </div>
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                    >
+                                        รายละเอียด :</label
+                                    >
+                                    <input
+                                        type="text"
+                                        class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                        required
+                                        v-model="dataEdit.title"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                        >
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon name="time"></box-icon>
+                                </div>
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >จำนวนชั่วโมง/วัน :
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                        placeholder="10"
+                                        required
+                                        v-model="dataEdit.time"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >เวลาเริ่มต้น :
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                        placeholder="08.00"
+                                        required
+                                        v-model="dataEdit.start"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
+                        >
+                            <button
+                                type="submit"
+                                class="inline-flex w-full justify-center rounded-md bg-amber-400 px-3 py-2 text-sm text-white shadow-sm hover:bg-amber-500 sm:ml-3 sm:w-auto"
+                            >
+                                ปรับปรุงข้อมูล
+                            </button>
+                            <button
+                                type="button"
+                                class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
+                                @click="closeEdit()"
+                            >
+                                ออก
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </transition>
 </template>
 
 <script>
@@ -221,13 +347,21 @@ export default {
     data() {
         return {
             isModalShow: false,
+            isModalEdit: false,
             timeList: "",
             moment: moment,
             data: {
                 title: "",
                 time: "",
                 start: "",
-                end: ""
+                end: "",
+            },
+            dataEdit: {
+                id: "",
+                title: "",
+                time: "",
+                start: "",
+                end: "",
             },
         };
     },
@@ -238,20 +372,26 @@ export default {
         close() {
             this.isModalShow = false;
         },
+        closeEdit() {
+            this.isModalEdit = false;
+        },
         getTime() {
             axios
                 .get("/api/time")
                 .then((response) => {
                     this.timeList = response.data;
-                    console.log(this.timeList)
+                    console.log(this.timeList);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         },
-        async send() {      
+        async send() {
             try {
-                this.data.end = await this.calTime(this.data.start, this.data.time)
+                this.data.end = await this.calTime(
+                    this.data.start,
+                    this.data.time
+                );
                 await this.$store.dispatch("storeTime", this.data);
                 await Swal.fire({
                     position: "top-end",
@@ -263,20 +403,78 @@ export default {
                 this.isModalShow = false;
                 this.getTime();
             } catch (err) {
-                console.log(err)
+                console.log(err);
             }
         },
         calTime(num, time) {
-            let res = num.substring(0, 2)
-            let last = num.substring(2, 5)
-            let result = parseInt(res) + parseInt(time)
+            let res = num.substring(0, 2);
+            let last = num.substring(2, 5);
+            let result = parseInt(res) + parseInt(time);
 
-            if(result < 10) {
+            if (result < 10) {
                 return result.toString().padStart(2, 0) + last;
             } else {
-                return result + last
-            }          
-        }
+                return result + last;
+            }
+        },
+        del(id, index) {
+            Swal.fire({
+                title: "ต้องการลบข้อมูล?",
+                text: "ยืนยันการลบข้อมูลหรือไม่",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .delete("/api/time/" + id)
+                        .then((response) => {
+                            //console.log(res);
+                        })
+                        .catch((err) => {
+                            //console.log(err);
+                        });
+                    this.timeList.splice(index, 1);
+                    Swal.fire("ลบข้อมูล!", "ลบข้อมูลเรียบร้อย", "success");
+                }
+            });
+        },
+        getEdit(id) {
+            this.isModalEdit = true;
+            axios
+                .get("/api/time/" + id)
+                .then((response) => {
+                    this.dataEdit.id = response.data.id;
+                    this.dataEdit.title = response.data.title;
+                    this.dataEdit.time = response.data.time;
+                    this.dataEdit.start = response.data.start;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        async update() {
+            try {
+                this.dataEdit.end = await this.calTime(
+                    this.dataEdit.start,
+                    this.dataEdit.time
+                );
+                await this.$store.dispatch("updateTime", this.dataEdit);
+                await Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "บันทึกข้อมูลเรียบร้อย",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                this.isModalEdit = false;
+                this.getTime();
+            } catch (err) {
+                console.log(err);
+            }
+        },
     },
 };
 </script>

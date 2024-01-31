@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\MonthController;
 use App\Http\Controllers\Api\HolidayController;
 use App\Http\Controllers\Api\TimeController;
+use App\Http\Controllers\Api\LocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,7 @@ use App\Http\Controllers\Api\TimeController;
 |
 */
 Route::post('logout', [AuthController::class, 'logout']);
-
+Route::resource('location', LocationController::class);
 
 Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login']);

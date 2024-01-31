@@ -53,7 +53,8 @@ class HolidayController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = Holiday::find($id);
+        return response()->json($data);
     }
 
     /**
@@ -69,7 +70,16 @@ class HolidayController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = Holiday::find($id);
+
+       $data->d= $request['d'];
+       $data->m = $request['m'];
+       $data->detail = $request['detail'];
+       $data->created = Auth::user()-> name . ' ' . Auth::user()->surname;
+
+       $data->update();
+
+       return response()->json($data);
     }
 
     /**

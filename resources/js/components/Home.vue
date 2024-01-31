@@ -33,7 +33,7 @@
                         </h2>
                         <div class="flex flex-col space-y-2">
                             <router-link
-                                to="/"
+                                to="/room"
                                 class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
                                 ><box-icon
                                     name="package"
@@ -41,7 +41,7 @@
                                     size="sm"
                                     class="pr-2"
                                 ></box-icon>
-                                <p class="p-1">สถานที่</p></router-link
+                                <p class="p-1">สร้างห้อง</p></router-link
                             >
 
                             <router-link

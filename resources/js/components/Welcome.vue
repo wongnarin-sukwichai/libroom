@@ -14,48 +14,25 @@
                     <div
                         class="mt-6 space-y-12 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:space-y-0"
                     >
-                        <div class="group relative">
+                        <div
+                            class="group relative"
+                            v-for="(loc, index) in locationList"
+                            :key="index"
+                        >
                             <div
-                                class="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 sm:h-64 hover:opacity-75"
-                                :class="
-                                    showArec === true
-                                        ? 'ring-2 ring-offset-2 ring-blue-400'
-                                        : ''
-                                "
-                            >
+                                class="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 sm:h-64 hover:opacity-75 ring-2 ring-offset-2 ring-blue-400"
+                                @click="showRoom(loc.id)"
+                                >
                                 <img
-                                    :src="img_1"
-                                    class="h-full w-full object-cover object-center cursor-pointer"
-                                    @click="displayArec()"
+                                    :src="location + loc.pic"
+                                    class="h-full w-full object-cover object-center cursor-pointer"                              
                                 />
                             </div>
                             <h3 class="mt-6 text-sm text-gray-500">
-                                Academic Resource Center
+                                {{ loc.eng }}
                             </h3>
                             <p class="text-base font-semibold text-gray-900">
-                                สำนักวิทยบริการ
-                            </p>
-                        </div>
-                        <div class="group relative">
-                            <div
-                                class="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 sm:h-64 hover:opacity-75"
-                                :class="
-                                    showDlp === true
-                                        ? 'ring-2 ring-offset-2 ring-blue-400'
-                                        : ''
-                                "
-                            >
-                                <img
-                                    :src="img_2"
-                                    class="h-full w-full object-cover object-center cursor-pointer"
-                                    @click="displayDlp()"
-                                />
-                            </div>
-                            <h3 class="mt-6 text-sm text-gray-500">
-                                Digital Learning Park
-                            </h3>
-                            <p class="text-base font-semibold text-gray-900">
-                                Digital Learning Park (DLP)
+                                {{ loc.title }}
                             </p>
                         </div>
                     </div>
@@ -249,10 +226,13 @@
 
 <script>
 export default {
-    mounted() {},
+    mounted() {
+        this.getLocation();
+    },
     data() {
         return {
             banner: "img/banner.jpg",
+            location: "img/locations/",
             img_1: "/img/arec.jpg",
             img_2: "/img/dlp.jpg",
             img_a: "/img/a.jpg",
@@ -263,19 +243,31 @@ export default {
             showLoc: true,
             showArec: false,
             showDlp: false,
-            showRoom: false,
             showTable: false,
             tableList: "",
+            locationList: "",
         };
     },
     methods: {
-        displayArec() {
-            this.showDlp = false;
-            this.showArec = true;
+        getLocation() {
+            axios
+                .get("/api/location")
+                .then((response) => {
+                    this.locationList = response.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
-        displayDlp() {
-            this.showArec = false;
-            this.showDlp = true;
+        showRoom(id) {
+            console.log(id)
+            if (id === 1) {
+                this.showDlp = false;
+                this.showArec = true;
+            } else {
+                this.showArec = false;
+                this.showDlp = true;
+            }
         },
     },
 };

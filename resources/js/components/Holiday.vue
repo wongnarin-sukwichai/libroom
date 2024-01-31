@@ -10,12 +10,12 @@
                             class="pr-2"
                         ></box-icon>
                         <box-icon
-                            name="time"
+                            name="calendar"
                             color="gray"
                             size="md"
                             class="pr-2"
                         ></box-icon>
-                        <span class="text-xl py-1">เวลาให้บริการ</span>
+                        <span class="text-xl py-1">วันหยุดนักขัตฤกษ์</span>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                         <td></td>
                     </tr>
                     <tr
-                        class="text-center"
+                        class="text-center text-sm"
                         v-for="(holiday, index) in holidayList"
                         :key="index"
                     >
@@ -66,6 +66,16 @@
                             <td class="border p-2">{{ holiday.created }}</td>
                             <td class="border p-2">
                                 <div class="flex justify-center">
+                                    <div>
+                                        <box-icon
+                                            name="cog"
+                                            color="#94a3b8"
+                                            size="sm"
+                                            animation="tada-hover"
+                                            class="cursor-pointer"
+                                            @click="getEdit(holiday.id)"
+                                        ></box-icon>
+                                    </div>
                                     <div class="pl-2">
                                         <box-icon
                                             name="trash"
@@ -221,6 +231,146 @@
             </div>
         </div>
     </transition>
+
+    <!-- Modal Edit -->
+    <transition name="fade" mode="out-in">
+        <div
+            class="relative z-10"
+            aria-labelledby="modal-title"
+            role="dialog"
+            aria-modal="true"
+            v-show="isModalEdit"
+        >
+            <div
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            ></div>
+
+            <div class="fixed inset-0 z-10 overflow-y-auto">
+                <div
+                    class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+                >
+                    <form
+                        class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                        @submit.prevent="update()"
+                    >
+                        <div
+                            class="bg-amber-100 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
+                        ></div>
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4 mt-4"
+                        >
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon name="calendar"></box-icon>
+                                </div>
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >วันที่ :
+                                    </label>
+                                    <select
+                                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        required
+                                        v-model="dataEdit.d"
+                                    >
+                                        <option :value="dataEdit.d" selected>
+                                            {{ dataEdit.d }}
+                                        </option>
+                                        <option
+                                            v-for="n in 31"
+                                            :key="n"
+                                            :value="n"
+                                        >
+                                            {{ n }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >เดือน :
+                                    </label>
+                                    <select
+                                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        required
+                                        v-model="dataEdit.m"
+                                    >
+                                        <option :value="dataEdit.m" selected>
+                                            {{ dataEdit.m }}
+                                        </option>
+                                        <option
+                                            v-for="(month, index) in monthList"
+                                            :key="index"
+                                            :value="month.ref_id"
+                                        >
+                                            {{ month.title }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white px-4 pt-5 sm:p-4 sm:pb-4">
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon
+                                        name="message-rounded-dots"
+                                    ></box-icon>
+                                </div>
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                    >
+                                        รายละเอียด :</label
+                                    >
+                                    <textarea
+                                        class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                        id="detail"
+                                        required
+                                        v-model="dataEdit.detail"
+                                    ></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
+                        >
+                            <button
+                                type="submit"
+                                class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto"
+                            >
+                                บันทึก
+                            </button>
+                            <button
+                                type="button"
+                                class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
+                                @click="closeEdit()"
+                            >
+                                ออก
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </transition>
 </template>
 
 <script>
@@ -235,10 +385,15 @@ export default {
     data() {
         return {
             isModalShow: false,
+            isModalEdit: false,
             monthList: "",
             holidayList: "",
-            // number: [{ num:'01'}, {num:'02'}, {num:'03'}],
             data: {
+                d: "",
+                m: "",
+                detail: "",
+            },
+            dataEdit: {
                 d: "",
                 m: "",
                 detail: "",
@@ -251,6 +406,9 @@ export default {
         },
         close() {
             this.isModalShow = false;
+        },
+        closeEdit() {
+            this.isModalEdit = false;
         },
         getMonth() {
             axios
@@ -317,6 +475,39 @@ export default {
         },
         addZero(num) {
             return num.toString().padStart(2, 0);
+        },
+        getEdit(id) {
+            this.isModalEdit = true;
+            axios
+                .get("/api/holiday/" + id)
+                .then((response) => {
+                    this.dataEdit.id = response.data.id;
+                    this.dataEdit.d = response.data.d;
+                    this.dataEdit.m = response.data.m;
+                    this.dataEdit.detail = response.data.detail;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        async update() {
+            try {
+                if (this.dataEdit.d < 10) {
+                    this.dataEdit.d = await this.addZero(this.dataEdit.d);
+                }
+                await this.$store.dispatch("updateHoliday", this.dataEdit);
+                await Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "บันทึกข้อมูลเรียบร้อย",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                this.isModalEdit = false;
+                this.getHoliday();
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };

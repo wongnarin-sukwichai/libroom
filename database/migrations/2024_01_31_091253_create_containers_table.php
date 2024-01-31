@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('deps', function (Blueprint $table) {
+        Schema::create('containers', function (Blueprint $table) {
             $table->id();
+            $table->integer('loc_id');
             $table->string('pic')->nullable();
-            $table->string('dep_title');
-            $table->integer('dep_group');
-            $table->string('created')->nullable();
+            $table->string('title');
+            $table->string('detail')->nullable();
+            $table->string('created');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('deps');
+        Schema::dropIfExists('containers');
     }
 };
