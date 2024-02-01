@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\MonthController;
 use App\Http\Controllers\Api\HolidayController;
 use App\Http\Controllers\Api\TimeController;
 use App\Http\Controllers\Api\LocationController;
+use App\Http\Controllers\Api\UploadController;
+use App\Http\Controllers\Api\ContainerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('month', MonthController::class);
     Route::resource('holiday', HolidayController::class);
     Route::resource('time', TimeController::class);
+    Route::resource('upload', UploadController::class);
+    Route::post('uploadPicContainer', [UploadController::class, 'uploadPicContainer']);
+    Route::resource('container', ContainerController::class);
 });
