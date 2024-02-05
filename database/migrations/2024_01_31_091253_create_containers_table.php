@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('pic')->nullable();
             $table->string('title');
             $table->string('detail')->nullable();
+            $table->integer('status')->comment('0=เปิด,1=ปิด');
             $table->string('created');
             $table->timestamps();
         });

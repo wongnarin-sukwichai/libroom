@@ -19,6 +19,7 @@
         "vue": "^3.2.37"
     },
     "dependencies": {
+        "@egjs/vue3-flicking": "^4.11.2",
         "@vitejs/plugin-vue": "^5.0.3",
         "boxicons": "^2.1.4",
         "laravel-vue-pagination": "^4.1.3",

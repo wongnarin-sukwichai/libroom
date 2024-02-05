@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Container;
+use Mockery\Matcher\Contains;
 
 class ContainerController extends Controller
 {
@@ -15,7 +16,9 @@ class ContainerController extends Controller
      */
     public function index()
     {
-        //
+        $data = Container::all();
+
+        return response()->json($data);
     }
 
     /**
@@ -44,6 +47,7 @@ class ContainerController extends Controller
         $data->pic = $request['pic'];
         $data->title = $request['title'];
         $data->detail = $request['detail'];
+        $data->status = 0;
         $data->created = Auth::user()->name . ' ' . Auth::user()->surname;
 
         $data->save();
@@ -56,7 +60,9 @@ class ContainerController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = Container::find($id);
+
+        return response()->json($data);
     }
 
     /**
@@ -64,7 +70,6 @@ class ContainerController extends Controller
      */
     public function edit(string $id)
     {
-        //
     }
 
     /**
@@ -72,7 +77,17 @@ class ContainerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = Container::find($id);
+
+        $data->loc_id = $request['loc_id'];
+        $data->pic = $request['pic'];
+        $data->title = $request['title'];
+        $data->detail = $request['detail'];
+        $data->created = Auth::user()->name . ' ' . Auth::user()->surname;
+
+        $data->update();
+
+        return response()->json($data);
     }
 
     /**
@@ -81,5 +96,18 @@ class ContainerController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function conStatus(string $id, string $code)
+    {
+
+        $data = Container::find($id);
+
+        $data->status = $code;
+        $data->created = Auth::user()->name . ' ' . Auth::user()->surname;
+
+        $data->update();
+
+        return response()->json($data);
     }
 }

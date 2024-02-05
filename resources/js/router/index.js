@@ -6,6 +6,7 @@ import Home from "../components/Home.vue";
 import Dashboard from "../components/Dashboard.vue";
 import Time from "../components/Time.vue";
 import Holiday from "../components/Holiday.vue";
+import Container from "../components/Container.vue";
 import Room from "../components/Room.vue";
 
 import store from "../store";
@@ -37,35 +38,43 @@ const routes = [
                 name: "dashboard",
                 component: Dashboard,
                 meta: {
-                    guard: "auth"
-                }
-            },  
+                    guard: "auth",
+                },
+            },
             {
                 path: "/time",
                 name: "time",
                 component: Time,
                 meta: {
-                    guard: "auth"
-                }
-            },  
+                    guard: "auth",
+                },
+            },
             {
                 path: "/holiday",
                 name: "holiday",
                 component: Holiday,
                 meta: {
-                    guard: "auth"
-                }
-            },  
+                    guard: "auth",
+                },
+            },
             {
-                path: "/room",
+                path: "/container",
+                name: "container",
+                component: Container,
+                meta: {
+                    guard: "auth",
+                },
+            },
+            {
+                path: "/room/:id",
                 name: "room",
                 component: Room,
                 meta: {
-                    guard: "auth"
-                }
-            },     
-        ]
-    }
+                    guard: "auth",
+                },
+            },
+        ],
+    },
 ];
 
 const router = createRouter({

@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\TimeController;
 use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\ContainerController;
+use App\Http\Controllers\Api\RoomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,4 +37,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('upload', UploadController::class);
     Route::post('uploadPicContainer', [UploadController::class, 'uploadPicContainer']);
     Route::resource('container', ContainerController::class);
+    Route::resource('room', RoomController::class);
+    Route::get('conStatus/{id}/{code}', [ContainerController::class, 'conStatus']);
 });

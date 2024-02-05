@@ -18,6 +18,9 @@ export default {
         },
         level(state) {
             return state.user.level
+        },
+        userLoc(state) {
+            return state.user.loc_id
         }
     },
     mutations: {
