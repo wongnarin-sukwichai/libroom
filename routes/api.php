@@ -36,7 +36,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('time', TimeController::class);
     Route::resource('upload', UploadController::class);
     Route::post('uploadPicContainer', [UploadController::class, 'uploadPicContainer']);
+    Route::post('uploadPicRoom', [UploadController::class, 'uploadPicRoom']);
     Route::resource('container', ContainerController::class);
     Route::resource('room', RoomController::class);
     Route::get('conStatus/{id}/{code}', [ContainerController::class, 'conStatus']);
+    Route::get('roomStatus/{id}/{code}', [RoomController::class, 'roomStatus']);
 });

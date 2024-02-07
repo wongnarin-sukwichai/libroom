@@ -28,6 +28,9 @@ export default {
         setUser(state, payload) {
             state.user = payload;
         },
+        setAuthen(state, payload) {
+            state.authenticated = payload
+        }
     },
     actions: {
         //action ส่วนในการคำนวณ ติดต่อข้อมูล api จาก backend ในที่นี้คือ axios ของ laravel นั่นเอง
@@ -58,6 +61,7 @@ export default {
                 .then((response) => {
                     // console.log(response)
                     commit("setUser", null);
+                    commit("setAuthen", false);
                 })
                 .catch((err) => {
                     // console.log("ERROR::",err.response.headers)

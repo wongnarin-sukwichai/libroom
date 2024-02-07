@@ -16,6 +16,9 @@ return new class extends Migration
             $table->integer('loc_id');
             $table->string('pic')->nullable();
             $table->string('title');
+            $table->integer('limited')->comment('เข้าใช้บริการได้ไม่ต่ำกว่า');
+            $table->integer('time_1')->comment('จ-ศ');
+            $table->integer('time_2')->comment('ส-อ');
             $table->string('detail')->nullable();
             $table->integer('status')->comment('0=เปิด,1=ปิด');
             $table->string('created');

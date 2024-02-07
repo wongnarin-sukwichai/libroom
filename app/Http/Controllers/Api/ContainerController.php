@@ -39,6 +39,9 @@ class ContainerController extends Controller
             'loc_id' => 'required',
             'pic' => 'required',
             'title' => 'required',
+            'limited' => 'required',
+            'time_1' => 'required',
+            'time_2' => 'required',
             'detail' => 'required'
         ]);
 
@@ -46,6 +49,9 @@ class ContainerController extends Controller
         $data->loc_id = $request['loc_id'];
         $data->pic = $request['pic'];
         $data->title = $request['title'];
+        $data->limited = $request['limited'];
+        $data->time_1 = $request['time_1'];
+        $data->time_2 = $request['time_2'];
         $data->detail = $request['detail'];
         $data->status = 0;
         $data->created = Auth::user()->name . ' ' . Auth::user()->surname;
@@ -82,6 +88,9 @@ class ContainerController extends Controller
         $data->loc_id = $request['loc_id'];
         $data->pic = $request['pic'];
         $data->title = $request['title'];
+        $data->limited = $request['limited'];
+        $data->time_1 = $request['time_1'];
+        $data->time_2 = $request['time_2'];
         $data->detail = $request['detail'];
         $data->created = Auth::user()->name . ' ' . Auth::user()->surname;
 

@@ -61,6 +61,33 @@ class UploadController extends Controller
         return response()->json($image_name);
     }
 
+    public function uploadPicRoom (Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:png,jpg,jpeg'
+        ]);
+
+        $image = $request->file('file');                                                 //ดึงไฟล์รูปภาพ 
+        $manager = new ImageManager(new Driver());
+        $thumbnail = $manager->read($image)->resize(319, 319);                           //Resize รูปภาพ
+        $image_name = uniqid() . '.' . $image->getClientOriginalExtension();            //ตั้งชื่อใหม่ให้รูปภาพ / ข้างหลังคือการดึงชื่อนามสกุลไฟล์เดิมมาต่อท้าย
+
+        $serv_path = "storage/rooms/";                                                 //สร้าง Path สำหรับ save file 
+        $serv_thumb = "storage/rooms/thumbnails/";
+
+        $chkPath = public_path($serv_path);                                             //public_path ตือ folder public
+        $chkThumb = public_path($serv_thumb);
+
+        if (!File::exists($chkPath)) File::makeDirectory($chkPath, 0777, true);         //Check ว่ามี folder ไหม ถ้าไม่มีให้สร้าง folder ขึ้นมาใหม่
+        if (!File::exists($chkThumb)) File::makeDirectory($chkThumb, 0777, true);
+
+        $image->move($chkPath, $image_name);                                           //ถ้าไม่ได้ resize ให้ใช้คำสั่ง move และ , พร้อมตั้งชื่อไฟล์
+        $thumbnail->save($chkThumb . $image_name);                                     //ถ้า resize ให้ใช้ save และ
+
+        return response()->json($image_name);
+    }
+
+
     /**
      * Display the specified resource.
      */

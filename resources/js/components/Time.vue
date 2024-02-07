@@ -73,7 +73,7 @@
                                         @click="getEdit(time.id)"
                                     ></box-icon>
                                 </div>
-                                <div class="pl-2">
+                                <!-- <div class="pl-2">
                                     <box-icon
                                         name="trash"
                                         color="#f87171"
@@ -82,7 +82,7 @@
                                         class="cursor-pointer"
                                         @click="del(time.id, index)"
                                     ></box-icon>
-                                </div>
+                                </div> -->
                             </div>
                         </td>
                     </tr>

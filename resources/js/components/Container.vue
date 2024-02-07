@@ -10,12 +10,12 @@
                             class="pr-2"
                         ></box-icon>
                         <box-icon
-                            name="package"
+                            name="box"
                             color="gray"
                             size="md"
                             class="pr-2"
                         ></box-icon>
-                        <span class="text-xl py-1">สร้างห้อง</span>
+                        <span class="text-xl py-1">ประเภทห้อง</span>
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
         <hr />
 
         <!-- Button -->
-        <div class="flex justify-end my-4">
+        <div class="flex justify-end mt-4">
             <button
                 class="bg-green-300 hover:bg-green-400 shadow-lg rounded-md p-2 text-sm text-gray-700"
                 @click="showModal()"
@@ -84,7 +84,10 @@
                                 class="h-auto overflow-hidden hover:cursor-pointer"
                                 @click="getRoom(con.id)"
                             >
-                                <div class="h-36 overflow-hidden relative">
+                                <div
+                                    class="h-36 overflow-hidden relative"
+                                    :class="con.status === 1 ? 'grayscale' : ''"
+                                >
                                     <img :src="conPath + con.pic" alt="" />
                                 </div>
                             </div>
@@ -258,12 +261,14 @@
                             </transition>
                         </div>
 
-                        <div class="bg-white px-4 pt-5 sm:p-4 sm:pb-4">
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                        >
                             <div class="sm:flex sm:items-start">
                                 <div
                                     class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
                                 >
-                                    <box-icon name="package"></box-icon>
+                                    <box-icon name="box"></box-icon>
                                 </div>
                                 <div
                                     class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
@@ -271,15 +276,107 @@
                                     <label
                                         id="listbox-label"
                                         class="block text-sm font-medium leading-6 text-gray-900"
-                                    >
-                                        ชื่อห้อง :</label
-                                    >
+                                        >ชื่อห้อง :
+                                    </label>
                                     <input
                                         type="text"
                                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                         required
                                         v-model="data.title"
                                     />
+                                </div>
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >จำนวนให้บริการไม่เกิน/คน :
+                                    </label>
+                                    <select
+                                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        required
+                                        v-model="data.limited"
+                                    >
+                                        <option disabled value="" selected>
+                                            กรุณาเลือก...
+                                        </option>
+                                        <option
+                                            v-for="n in 15"
+                                            :key="n"
+                                            :value="n"
+                                        >
+                                            {{ n }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                        >
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon name="menu"></box-icon>
+                                </div>
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >เวลาให้บริการ : จันทร์ - ศุกร์
+                                    </label>
+                                    <select
+                                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        required
+                                        v-model="data.time_1"
+                                    >
+                                        <option disabled value="" selected>
+                                            กรุณาเลือก...
+                                        </option>
+                                        <option
+                                            v-for="(time, index) in timeList"
+                                            :key="index"
+                                            :value="time.id"
+                                        >
+                                            {{ time.title }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >: เสาร์ - อาทิตย์
+                                    </label>
+                                    <select
+                                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        required
+                                        v-model="data.time_2"
+                                    >
+                                        <option disabled value="" selected>
+                                            กรุณาเลือก...
+                                        </option>
+                                        <option
+                                            v-for="(time, index) in timeList"
+                                            :key="index"
+                                            :value="time.id"
+                                        >
+                                            {{ time.title }}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -446,12 +543,14 @@
                             </transition>
                         </div>
 
-                        <div class="bg-white px-4 pt-5 sm:p-4 sm:pb-4">
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                        >
                             <div class="sm:flex sm:items-start">
                                 <div
                                     class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10"
                                 >
-                                    <box-icon name="package"></box-icon>
+                                    <box-icon name="box"></box-icon>
                                 </div>
                                 <div
                                     class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
@@ -459,15 +558,107 @@
                                     <label
                                         id="listbox-label"
                                         class="block text-sm font-medium leading-6 text-gray-900"
-                                    >
-                                        ชื่อห้อง :</label
-                                    >
+                                        >ชื่อห้อง :
+                                    </label>
                                     <input
                                         type="text"
                                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                         required
                                         v-model="dataEdit.title"
                                     />
+                                </div>
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >จำนวนให้บริการไม่เกิน/คน :
+                                    </label>
+                                    <select
+                                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        required
+                                        v-model="dataEdit.limited"
+                                    >
+                                        <option disabled value="" selected>
+                                            กรุณาเลือก...
+                                        </option>
+                                        <option
+                                            v-for="n in 15"
+                                            :key="n"
+                                            :value="n"
+                                        >
+                                            {{ n }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                        >
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon name="menu"></box-icon>
+                                </div>
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >เวลาให้บริการ : จันทร์ - ศุกร์
+                                    </label>
+                                    <select
+                                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        required
+                                        v-model="dataEdit.time_1"
+                                    >
+                                        <option disabled value="" selected>
+                                            กรุณาเลือก...
+                                        </option>
+                                        <option
+                                            v-for="(time, index) in timeList"
+                                            :key="index"
+                                            :value="time.id"
+                                        >
+                                            {{ time.title }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >: เสาร์ - อาทิตย์
+                                    </label>
+                                    <select
+                                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        required
+                                        v-model="dataEdit.time_2"
+                                    >
+                                        <option disabled value="" selected>
+                                            กรุณาเลือก...
+                                        </option>
+                                        <option
+                                            v-for="(time, index) in timeList"
+                                            :key="index"
+                                            :value="time.id"
+                                        >
+                                            {{ time.title }}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -532,6 +723,7 @@ export default {
     mounted() {
         this.getLocation();
         this.getContainer();
+        this.getTime();
     },
     data() {
         return {
@@ -545,10 +737,14 @@ export default {
             locationList: "",
             containerList: "",
             showContainer: "",
+            timeList: "",
             data: {
                 loc_id: "",
                 pic: "",
                 title: "",
+                limited: "",
+                time_1: "",
+                time_2: "",
                 detail: "",
             },
             dataEdit: {
@@ -556,6 +752,9 @@ export default {
                 loc_id: "",
                 pic: "",
                 title: "",
+                limited: "",
+                time_1: "",
+                time_2: "",
                 detail: "",
             },
         };
@@ -585,6 +784,17 @@ export default {
                 .get("/api/container")
                 .then((response) => {
                     this.containerList = response.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        getTime() {
+            axios
+                .get("/api/time")
+                .then((response) => {
+                    this.timeList = response.data;
+                    console.log(this.timeList);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -630,7 +840,7 @@ export default {
             } else {
                 let formData = new FormData(); //สร้าง FromData เพื่อรองรับข้อมูลประเภท File
                 formData.append("file", this.file[0]);
-                console.log(formData);
+                // console.log(formData);
 
                 await this.$store.dispatch("uploadPicContainer", formData);
                 this.data.pic = await this.$store.getters.picName;
@@ -644,7 +854,9 @@ export default {
                     timer: 1500,
                 });
                 this.isModalShow = false;
-                this.getContainer(this.data.loc_id);
+                setTimeout(() => {
+                    window.location.reload();
+                }, "1500");
             }
         },
         getEdit(id) {
@@ -656,6 +868,9 @@ export default {
                     this.dataEdit.loc_id = response.data.loc_id;
                     this.dataEdit.pic = response.data.pic;
                     this.dataEdit.title = response.data.title;
+                    this.dataEdit.limited = response.data.limited;
+                    this.dataEdit.time_1 = response.data.time_1;
+                    this.dataEdit.time_2 = response.data.time_2;
                     this.dataEdit.detail = response.data.detail;
 
                     this.previewImage = this.conPath + response.data.pic;
@@ -683,7 +898,9 @@ export default {
                     timer: 1500,
                 });
                 this.isModalEdit = false;
-                this.getContainer();
+                setTimeout(() => {
+                    window.location.reload();
+                }, "1500");
             } catch (err) {
                 console.log(err);
             }
@@ -692,30 +909,35 @@ export default {
             this.$router.push("/room/" + id);
         },
         async status(id, code, text) {
-            try {
-                await Swal.fire({
-                    title: text,
-                    text: "ยืนยันการเปลี่ยนแปลง",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        axios
-                            .get("/api/conStatus/" + id + "/" + code)
-                            .then((response) => {
-                                //console.log(res);
-                            })
-                            .catch((err) => {
-                                //console.log(err);
+            Swal.fire({
+                title: text,
+                text: "ยืนยันการเปลี่ยนสถานะ?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .get("/api/conStatus/" + id + "/" + code)
+                        .then((response) => {
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: "บันทึกข้อมูลเรียบร้อย",
+                                showConfirmButton: false,
+                                timer: 1500,
                             });
-                    }
-                });
-            } catch (err) {
-                console.log(err);
-            }
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, "1500");
+                        })
+                        .catch((err) => {
+                            //console.log(err);
+                        });
+                }
+            });
         },
     },
 };

@@ -4,7 +4,7 @@
             <div
                 class="p-6 rounded-md bg-white bg-opacity-50 lg:w-60 border rounded-lg shadow-lg no-print"
             >
-                <nav class="space-y-4 text-sm text-gray-700">                 
+                <nav class="space-y-4 text-sm text-gray-700">
                     <div class="space-y-2">
                         <h2
                             class="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
@@ -22,7 +22,7 @@
                                     class="pr-2"
                                 ></box-icon>
                                 <p class="p-1">หน้าแรก</p></router-link
-                            >                     
+                            >
                         </div>
                     </div>
                     <div class="space-y-2">
@@ -36,7 +36,7 @@
                                 to="/container"
                                 class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
                                 ><box-icon
-                                    name="package"
+                                    name="box"
                                     color="gray"
                                     size="sm"
                                     class="pr-2"
@@ -53,7 +53,9 @@
                                     size="sm"
                                     class="pr-2"
                                 ></box-icon>
-                                <p class="p-1">วันหยุดนักขัตฤกษ์</p></router-link
+                                <p class="p-1">
+                                    วันหยุดนักขัตฤกษ์
+                                </p></router-link
                             >
 
                             <router-link
@@ -67,7 +69,7 @@
                                 ></box-icon>
                                 <p class="p-1">เวลาให้บริการ</p></router-link
                             >
-                            
+
                             <router-link
                                 to="/home"
                                 class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
@@ -77,7 +79,9 @@
                                     size="sm"
                                     class="pr-2"
                                 ></box-icon>
-                                <p class="p-1 line-through">บล็อคผู้ใช้</p></router-link
+                                <p class="p-1 line-through">
+                                    บล็อคผู้ใช้
+                                </p></router-link
                             >
                         </div>
                     </div>
@@ -102,7 +106,7 @@
                             >
                         </div>
                     </div>
-                    
+
                     <div class="space-y-2">
                         <h2
                             class="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
@@ -131,7 +135,7 @@
                         </h2>
                         <div class="flex flex-col space-y-1">
                             <a
-                                href=""
+                                href="#"
                                 class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
                                 @click="logout()"
                                 ><box-icon
@@ -157,9 +161,13 @@
 </template>
 
 <script>
-    export default {
-        mounted() {
-
-        }
-    }
+export default {
+    mounted() {},
+    methods: {
+        async logout() {
+            await this.$store.dispatch("logout");
+            this.$router.push({ name: "login" });
+        },
+    },
+};
 </script>
