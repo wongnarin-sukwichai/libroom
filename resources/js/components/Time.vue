@@ -54,7 +54,7 @@
                     >
                         <td class="border p-4">{{ time.id }}</td>
                         <td class="border p-4">{{ time.title }}</td>
-                        <td class="border p-4">{{ time.time }}</td>
+                        <td class="border p-4">{{ time.total }}</td>
                         <td class="border p-4">{{ time.start }}</td>
                         <td class="border p-4">{{ time.end }}</td>
                         <td class="border p-4">{{ time.created }}</td>
@@ -112,7 +112,9 @@
                         class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
                         @submit.prevent="send()"
                     >
-                        <div class="bg-white px-4 pt-5 sm:p-4 sm:pb-4 mt-4">
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                        >
                             <div class="sm:flex sm:items-start">
                                 <div
                                     class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10"
@@ -138,6 +140,25 @@
                                     />
                                 </div>
                             </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >จำนวนชั่วโมง/วัน :
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                        placeholder="10"
+                                        required
+                                        v-model="data.total"
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         <div
@@ -155,14 +176,14 @@
                                     <label
                                         id="listbox-label"
                                         class="block text-sm font-medium leading-6 text-gray-900"
-                                        >จำนวนชั่วโมง/วัน :
+                                        >เวลาเริ่มต้น : ชั่วโมง
                                     </label>
                                     <input
                                         type="text"
                                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                        placeholder="10"
+                                        placeholder="8"
                                         required
-                                        v-model="data.time"
+                                        v-model="data.hour"
                                     />
                                 </div>
                             </div>
@@ -174,15 +195,50 @@
                                     <label
                                         id="listbox-label"
                                         class="block text-sm font-medium leading-6 text-gray-900"
-                                        >เวลาเริ่มต้น :
+                                        >นาที :
                                     </label>
                                     <input
                                         type="text"
                                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                        placeholder="08.00"
+                                        placeholder=".00 น."
                                         required
-                                        v-model="data.start"
+                                        v-model="data.minute"
                                     />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                        >
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon name="timer"></box-icon>
+                                </div>
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >เวลาเริ่มต้น :
+                                    </label>
+                                    {{ start }}
+                                </div>
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >เวลาสิ้นสุด :
+                                    </label>
+                                    {{ end }}
                                 </div>
                             </div>
                         </div>
@@ -232,9 +288,8 @@
                         @submit.prevent="update()"
                     >
                         <div
-                            class="bg-amber-100 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
-                        ></div>
-                        <div class="bg-white px-4 pt-5 sm:p-4 sm:pb-4 mt-4">
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                        >
                             <div class="sm:flex sm:items-start">
                                 <div
                                     class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10"
@@ -260,6 +315,25 @@
                                     />
                                 </div>
                             </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >จำนวนชั่วโมง/วัน :
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                        placeholder="10"
+                                        required
+                                        v-model="dataEdit.total"
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         <div
@@ -277,14 +351,14 @@
                                     <label
                                         id="listbox-label"
                                         class="block text-sm font-medium leading-6 text-gray-900"
-                                        >จำนวนชั่วโมง/วัน :
+                                        >เวลาเริ่มต้น : ชั่วโมง
                                     </label>
                                     <input
                                         type="text"
                                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                        placeholder="10"
+                                        placeholder="8"
                                         required
-                                        v-model="dataEdit.time"
+                                        v-model="dataEdit.hour"
                                     />
                                 </div>
                             </div>
@@ -296,15 +370,50 @@
                                     <label
                                         id="listbox-label"
                                         class="block text-sm font-medium leading-6 text-gray-900"
-                                        >เวลาเริ่มต้น :
+                                        >นาที :
                                     </label>
                                     <input
                                         type="text"
                                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                        placeholder="08.00"
+                                        placeholder=".00 น."
                                         required
-                                        v-model="dataEdit.start"
+                                        v-model="dataEdit.minute"
                                     />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                        >
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon name="timer"></box-icon>
+                                </div>
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >เวลาเริ่มต้น :
+                                    </label>
+                                    {{ startEdit }}
+                                </div>
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >เวลาสิ้นสุด :
+                                    </label>
+                                    {{ endEdit }}
                                 </div>
                             </div>
                         </div>
@@ -352,14 +461,18 @@ export default {
             moment: moment,
             data: {
                 title: "",
-                time: "",
+                total: "",
+                hour: "",
+                minute: "",
                 start: "",
                 end: "",
             },
             dataEdit: {
                 id: "",
                 title: "",
-                time: "",
+                total: "",
+                hour: "",
+                minute: "",
                 start: "",
                 end: "",
             },
@@ -388,10 +501,10 @@ export default {
         },
         async send() {
             try {
-                this.data.end = await this.calTime(
-                    this.data.start,
-                    this.data.time
-                );
+                // this.data.end = await this.calTime(
+                //     this.data.start,
+                //     this.data.time
+                // );
                 await this.$store.dispatch("storeTime", this.data);
                 await Swal.fire({
                     position: "top-end",
@@ -406,17 +519,17 @@ export default {
                 console.log(err);
             }
         },
-        calTime(num, time) {
-            let res = num.substring(0, 2);
-            let last = num.substring(2, 5);
-            let result = parseInt(res) + parseInt(time);
+        // calTime(num, time) {
+        //     let res = num.substring(0, 2);
+        //     let last = num.substring(2, 5);
+        //     let result = parseInt(res) + parseInt(time);
 
-            if (result < 10) {
-                return result.toString().padStart(2, 0) + last;
-            } else {
-                return result + last;
-            }
-        },
+        //     if (result < 10) {
+        //         return result.toString().padStart(2, 0) + last;
+        //     } else {
+        //         return result + last;
+        //     }
+        // },
         del(id, index) {
             Swal.fire({
                 title: "ต้องการลบข้อมูล?",
@@ -448,8 +561,9 @@ export default {
                 .then((response) => {
                     this.dataEdit.id = response.data.id;
                     this.dataEdit.title = response.data.title;
-                    this.dataEdit.time = response.data.time;
-                    this.dataEdit.start = response.data.start;
+                    this.dataEdit.total = response.data.total;
+                    this.dataEdit.hour = response.data.hour;
+                    this.dataEdit.minute = response.data.minute;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -457,10 +571,10 @@ export default {
         },
         async update() {
             try {
-                this.dataEdit.end = await this.calTime(
-                    this.dataEdit.start,
-                    this.dataEdit.time
-                );
+                // this.dataEdit.end = await this.calTime(
+                //     this.dataEdit.start,
+                //     this.dataEdit.time
+                // );
                 await this.$store.dispatch("updateTime", this.dataEdit);
                 await Swal.fire({
                     position: "top-end",
@@ -474,6 +588,24 @@ export default {
             } catch (err) {
                 console.log(err);
             }
+        },
+    },
+    computed: {
+        start() {
+            this.data.start = this.data.hour + this.data.minute;
+            return this.data.start;
+        },
+        end() {
+            this.data.end = (parseInt(this.data.total) + parseInt(this.data.hour)) + this.data.minute;
+            return this.data.end;
+        },
+        startEdit() {
+            this.dataEdit.start = this.dataEdit.hour + this.dataEdit.minute;
+            return this.dataEdit.start;
+        },
+        endEdit() {
+            this.dataEdit.end = (parseInt(this.dataEdit.total) + parseInt(this.dataEdit.hour)) + this.dataEdit.minute;
+            return this.dataEdit.end;
         },
     },
 };

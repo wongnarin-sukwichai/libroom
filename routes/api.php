@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\ContainerController;
 use App\Http\Controllers\Api\RoomController;
+use App\Http\Controllers\Api\MainController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,8 @@ use App\Http\Controllers\Api\RoomController;
 |
 */
 Route::post('logout', [AuthController::class, 'logout']);
-Route::resource('location', LocationController::class);
+Route::get('locMain', [MainController::class, 'locMain']);
+Route::get('conMain', [MainController::class, 'conMain']);
 
 Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
@@ -37,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('upload', UploadController::class);
     Route::post('uploadPicContainer', [UploadController::class, 'uploadPicContainer']);
     Route::post('uploadPicRoom', [UploadController::class, 'uploadPicRoom']);
+    Route::resource('location', LocationController::class);
     Route::resource('container', ContainerController::class);
     Route::resource('room', RoomController::class);
     Route::get('conStatus/{id}/{code}', [ContainerController::class, 'conStatus']);

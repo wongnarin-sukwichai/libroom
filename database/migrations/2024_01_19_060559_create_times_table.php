@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('times', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->integer('time')->comment('จำนวนเวลา จำนวน column เวลาทั้งหมด');
+            $table->integer('total')->comment('จำนวนเวลาทั้งหมด');
+            $table->integer('hour')->comment('เวลาเริ่มต้น');
+            $table->string('minute')->comment('text ต่อท้ายเฉยๆ');
             $table->string('start')->comment('** เวลาเริ่มต้น 08.00 **');
-            $table->string('end')->nullable()->comment('** เวลาสิ้นสุด **');
+            $table->string('end')->comment('** เวลาสิ้นสุด **');
             $table->string('created')->nullable();
             $table->timestamps();
         });

@@ -6,26 +6,24 @@
     <div class="bg-white rounded-lg">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <!-- Location -->
-            <div
-                class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
-                v-show="showLoc"
-            >
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl lg:max-w-none">
                     <div
                         class="mt-6 space-y-12 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:space-y-0"
                     >
                         <div
                             class="group relative"
-                            v-for="(loc, index) in locationList"
+                            v-for="(loc, index) in locList"
                             :key="index"
                         >
                             <div
-                                class="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 sm:h-64 hover:opacity-75 ring-2 ring-offset-2 ring-blue-400"
-                                @click="showRoom(loc.id)"
-                                >
+                                class="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 sm:h-64 hover:opacity-75"
+                                @click="pickCon(loc.id)"
+                                :class="{ active: isActive === loc.id ? 'ring-2 ring-offset-2' : '' }"
+                            >
                                 <img
-                                    :src="location + loc.pic"
-                                    class="h-full w-full object-cover object-center cursor-pointer"                              
+                                    :src="locPath + loc.pic"
+                                    class="h-full w-full object-cover object-center cursor-pointer"
                                 />
                             </div>
                             <h3 class="mt-6 text-sm text-gray-500">
@@ -41,113 +39,37 @@
 
             <!-- Arec Room -->
             <transition name="fade" mode="out-in">
-                <div class="bg-white" v-show="showArec">
+                <div class="bg-white">
                     <div
                         class="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-12 lg:max-w-7xl lg:px-8"
                     >
                         <div
                             class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
                         >
-                            <div class="">
-                                <div
-                                    class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 cursor-pointer opacity-75"
-                                >
-                                    <img
-                                        :src="img_a"
-                                        class="h-full w-full object-cover object-center"
-                                    />
-                                </div>
-                                <h3 class="mt-4 text-lg text-gray-700">
-                                    ห้องศึกษาค้นคว้า A
-                                </h3>
-                                <p class="mt-1 text-xs text-gray-500">
-                                    ใช้บริการ 3-6 คน
-                                </p>
-                            </div>
-                            <div class="group">
+                            <div
+                                class="group"
+                                v-for="(con, index) in showContainer"
+                                :key="index"
+                            >
                                 <div
                                     class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7"
                                 >
                                     <img
-                                        :src="img_b"
+                                        :src="conPath + con.pic"
                                         class="h-full w-full object-cover object-center group-hover:opacity-75"
                                     />
                                 </div>
                                 <h3 class="mt-4 text-md text-gray-700">
-                                    ห้องศึกษาค้นคว้า B
+                                    {{ con.title }}
                                 </h3>
                                 <p class="mt-1 text-xs text-gray-500">
-                                    ใช้บริการ 3-6 คน
-                                </p>
-                            </div>
-                            <div class="group">
-                                <div
-                                    class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7"
-                                >
-                                    <img
-                                        :src="img_c"
-                                        class="h-full w-full object-cover object-center group-hover:opacity-75"
-                                    />
-                                </div>
-                                <h3 class="mt-4 text-md text-gray-700">
-                                    ห้องศึกษาค้นคว้า C
-                                </h3>
-                                <p class="mt-1 text-xs text-gray-500">
-                                    ใช้บริการ 5-10 คน
-                                </p>
-                            </div>
-                            <div class="group">
-                                <div
-                                    class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7"
-                                >
-                                    <img
-                                        :src="img_d"
-                                        class="h-full w-full object-cover object-center group-hover:opacity-75"
-                                    />
-                                </div>
-                                <h3 class="mt-4 text-md text-gray-700">
-                                    PLAYGROUND
-                                </h3>
-                                <p class="mt-1 text-xs text-gray-500">
-                                    ใช้บริการ 3-15 คน
+                                    {{ con.detail }}
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </transition>
-
-            <!-- Dlp Room -->
-            <transition name="fade" mode="out-in">
-                <div class="bg-white" v-show="showDlp">
-                    <div
-                        class="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-12 lg:max-w-7xl lg:px-8"
-                    >
-                        <h2 class="sr-only">Products</h2>
-
-                        <div
-                            class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
-                        >
-                            <div class="group">
-                                <div
-                                    class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7"
-                                >
-                                    <img
-                                        :src="img_a"
-                                        class="h-full w-full object-cover object-center group-hover:opacity-75"
-                                    />
-                                </div>
-                                <h3 class="mt-4 text-lg text-gray-700">
-                                    ห้องศึกษาค้นคว้า A
-                                </h3>
-                                <p class="mt-1 text-xs text-gray-500">
-                                    ใช้บริการ 3-6 คน
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </transition>
+            </transition>         
 
             <!-- Table -->
             <div class="overflow-auto">
@@ -228,47 +150,57 @@
 export default {
     mounted() {
         this.getLocation();
+        this.getContainer();
     },
     data() {
         return {
             banner: "img/banner.jpg",
-            location: "img/locations/",
-            img_1: "/img/arec.jpg",
-            img_2: "/img/dlp.jpg",
-            img_a: "/img/a.jpg",
-            img_b: "/img/b.jpg",
-            img_c: "/img/c.jpg",
-            img_d: "/img/d.jpg",
-            img_a1: "/img/a1.jpg",
-            showLoc: true,
-            showArec: false,
-            showDlp: false,
-            showTable: false,
-            tableList: "",
-            locationList: "",
+            locPath: "img/locations/",
+            conPath: "storage/containers/",
+            roomPath: "storage/rooms/",
+            locList: "",
+            conList: "",
+            showContainer: "",
         };
     },
     methods: {
         getLocation() {
             axios
-                .get("/api/location")
+                .get("/api/locMain")
                 .then((response) => {
-                    this.locationList = response.data;
+                    this.locList = response.data;
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         },
-        showRoom(id) {
-            console.log(id)
-            if (id === 1) {
-                this.showDlp = false;
-                this.showArec = true;
-            } else {
-                this.showArec = false;
-                this.showDlp = true;
-            }
+        getContainer() {
+            axios
+                .get("/api/conMain")
+                .then((response) => {
+                    this.conList = response.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        pickCon(id) {
+            let arr = [];
+            let i = 0;
+            this.conList.forEach((showCon) => {
+                if (showCon.loc_id === id) {
+                    arr[i] = showCon;
+                    i++;
+                }
+            });
+            this.showContainer = arr;
+            this.chkLoc(id)
         },
     },
+    computed: {
+        chkLoc(id) {
+            return id
+        }
+    }
 };
 </script>

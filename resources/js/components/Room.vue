@@ -563,7 +563,7 @@ export default {
                 });
                 this.isModalShow = false;
                 setTimeout(() => {
-                    window.location.reload();
+                    this.getRoom()
                 }, "1500");
             }
         },
@@ -602,7 +602,7 @@ export default {
                 });
                 this.isModalEdit = false;
                 setTimeout(() => {
-                    window.location.reload();
+                    this.getRoom()
                 }, "1500");
             } catch (err) {
                 console.log(err);
@@ -630,7 +630,7 @@ export default {
                                 timer: 1500,
                             });
                             setTimeout(() => {
-                                window.location.reload();
+                                this.getRoom()
                             }, "1500");
                         })
                         .catch((err) => {

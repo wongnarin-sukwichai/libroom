@@ -35,14 +35,18 @@ class TimeController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'time' => 'required',
+            'total' => 'required',
+            'hour' => 'required',
+            'minute' => 'required',
             'start' => 'required',
             'end' => 'required'
         ]);
 
         $data = new Time();
         $data->title = $request['title'];
-        $data->time = $request['time'];
+        $data->total = $request['total'];
+        $data->hour = $request['hour'];
+        $data->minute = $request['minute'];
         $data->start = $request['start'];
         $data->end = $request['end'];
         $data->created = Auth::user()-> name . ' ' . Auth::user()->surname;
@@ -78,7 +82,9 @@ class TimeController extends Controller
        $data = Time::find($id);
 
        $data->title = $request['title'];
-       $data->time = $request['time'];
+       $data->total = $request['total'];
+       $data->hour = $request['hour'];
+       $data->minute = $request['minute'];
        $data->start = $request['start'];
        $data->end = $request['end'];
        $data->created = Auth::user()-> name . ' ' . Auth::user()->surname;

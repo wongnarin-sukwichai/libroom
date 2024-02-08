@@ -27,7 +27,7 @@
                 <div class="grid w-full sm:grid-cols-2 xl:grid-cols-4 gap-6">
                     <div
                         class="relative flex flex-col shadow-md rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 max-w-sm hover:cursor-pointer"
-                        v-for="(loc, index) in locationList"
+                        v-for="(loc, index) in locList"
                         :key="index"
                         @click="pickCon(loc.id)"
                     >
@@ -734,8 +734,8 @@ export default {
             previewImage: "",
             file: null,
             chkPic: true,
-            locationList: "",
-            containerList: "",
+            locList: "",
+            conList: "",
             showContainer: "",
             timeList: "",
             data: {
@@ -773,7 +773,7 @@ export default {
             axios
                 .get("/api/location")
                 .then((response) => {
-                    this.locationList = response.data;
+                    this.locList = response.data;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -783,7 +783,7 @@ export default {
             axios
                 .get("/api/container")
                 .then((response) => {
-                    this.containerList = response.data;
+                    this.conList = response.data;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -803,7 +803,7 @@ export default {
         pickCon(id) {
             let arr = [];
             let i = 0;
-            this.containerList.forEach((showCon) => {
+            this.conList.forEach((showCon) => {
                 if (showCon.loc_id === id) {
                     arr[i] = showCon;
                     i++;
