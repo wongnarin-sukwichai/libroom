@@ -26,6 +26,8 @@ use App\Http\Controllers\Api\MainController;
 Route::post('logout', [AuthController::class, 'logout']);
 Route::get('locMain', [MainController::class, 'locMain']);
 Route::get('conMain', [MainController::class, 'conMain']);
+Route::get('roomMain/{id}', [MainController::class, 'roomMain']);
+Route::get('timeMain', [MainController::class, 'timeMain']);
 
 Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
