@@ -11,20 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reserves', function (Blueprint $table) {
+        Schema::create('records', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->integer('loc_id');
-            $table->integer('con_id');
-            $table->integer('room_id');
-            $table->integer('time');
+            $table->integer('res_id')->comment('reserve table');
             $table->string('uid');
             $table->string('name');
             $table->string('surname');
             $table->string('faculty')->nullable()->comment('คณะ');
             $table->string('major')->nullable()->comment('สาขาวิชา');
-            $table->string('capcha')->comment('capcha ยกเลิกห้อง');
-            $table->integer('status')->nullable()->comment('0=ใช้งาน, 1=ถูกยกเลิก');
             $table->timestamps();
         });
     }
@@ -34,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reserves');
+        Schema::dropIfExists('records');
     }
 };

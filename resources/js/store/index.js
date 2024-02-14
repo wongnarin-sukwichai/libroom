@@ -6,6 +6,7 @@ import time from "./modules/time";
 import upload from "./modules/upload";
 import container from "./modules/container";
 import room from "./modules/room";
+import reserve from "./modules/reserve";
 
 const store = createStore({
     plugins:[
@@ -17,7 +18,8 @@ const store = createStore({
         time,
         upload,
         container,
-        room
+        room,
+        reserve
     }
 })
 

@@ -120,7 +120,7 @@
                                         class="border p-4 cursor-pointer hover:bg-sky-50"
                                         v-for="(n, index) in isTime.total"
                                         :key="index"
-                                        @click="showModal(room.id, index)"
+                                        @click="showModal(room.id)"
                                     ></td>
                                 </template>
                                 <template v-else>
@@ -137,6 +137,7 @@
                 </div>
             </transition>
         </div>
+        {{ data.time }} {{ chkLength }} {{ type }}
     </div>
 
     <!-- Modal Show -->
@@ -180,6 +181,7 @@
                                         type="text"
                                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                         required
+                                        v-model="data.uid"
                                     />
                                 </div>
                             </div>
@@ -202,7 +204,7 @@
                                         จองเวลา :</label
                                     >
                                     <div
-                                        class="grid grid-cols-4 p-3 border rounded-lg "
+                                        class="grid grid-cols-4 p-3 border rounded-lg"
                                     >
                                         <label
                                             v-for="(n, index) in isTime.total"
@@ -211,11 +213,21 @@
                                             <input
                                                 type="checkbox"
                                                 class="mr-1 cursor-pointer"
+                                                :value="index"
+                                                v-model="data.time"
                                             />
                                             {{ isTime.hour + index
                                             }}{{ isTime.minute }}
                                         </label>
                                     </div>
+                                    <transition name="fade" mode="out-in">
+                                        <div
+                                            class="pt-2 text-rose-500"
+                                            v-show="showAlert"
+                                        >
+                                            ** ใช้บริการได้ไม่เกิน 3 ชั่วโมง/วัน
+                                        </div>
+                                    </transition>
                                 </div>
                             </div>
                         </div>
@@ -237,13 +249,12 @@
                                         class="block text-sm font-medium leading-6 text-gray-900"
                                         >จองข้ามวัน
                                     </label>
-                                    <div
-                                        class="border p-4 rounded-lg"
-                                    >
+                                    <div class="border p-4 rounded-lg">
                                         <label>
                                             <input
                                                 type="checkbox"
                                                 class="mr-1 cursor-pointer"
+                                                v-model="type"
                                             />
                                             วันพรุ่งนี้
                                         </label>
@@ -282,7 +293,12 @@
 </template>
 
 <script>
-import axios from "axios";
+import "boxicons";
+import Swal from "sweetalert2";
+import moment from "moment"; //format date thai
+import "moment/dist/locale/th";
+moment.locale("th");
+
 export default {
     mounted() {
         this.getLocation();
@@ -293,6 +309,7 @@ export default {
     data() {
         return {
             isModalShow: false,
+            showAlert: false,
             banner: "img/banner.jpg",
             locPath: "img/locations/",
             conPath: "storage/containers/",
@@ -309,6 +326,16 @@ export default {
             timeList: "",
             weekend: "",
             isTime: "",
+            moment: moment,
+            data: {
+                date: "",
+                loc_id: "",
+                con_id: "",
+                room_id: "",
+                time: [],
+                uid: "",
+            },
+            type: false,
         };
     },
     methods: {
@@ -355,6 +382,7 @@ export default {
             this.locActive = id;
             this.locGray = false;
             this.conGray = true;
+            this.data.loc_id = id
         },
         pickRoom(id, time_1, time_2) {
             if (this.weekend == false) {
@@ -374,6 +402,7 @@ export default {
             this.tableList = true;
             this.conActive = id;
             this.conGray = false;
+            this.data.con_id = id
         },
         isWeekend() {
             //เช็ค เสาร์-อาทิตย์
@@ -394,11 +423,57 @@ export default {
             });
             return result;
         },
-        showModal() {
+        showModal(id) {
             this.isModalShow = true;
+            this.data.room_id = id
         },
         close() {
             this.isModalShow = false;
+        },
+        async send() {
+            if (this.data.time.length > 3) {
+                Swal.fire({
+                    title: "ผิดพลาด",
+                    text: "ใช้บริการได้ไม่เกิน 3 ชั่วโมง/วัน",
+                    icon: "error",
+                });
+            } else {
+                if (this.type == true) {
+                    this.data.date = moment()
+                        .add("1", "days")
+                        .format("YYYY-MM-DD");
+                } else {
+                    this.data.date = moment().format("YYYY-MM-DD");
+                }
+
+                try {
+                    await this.$store.dispatch("storeReserve", this.data);
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "บันทึกข้อมูลเรียบร้อย",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    this.isModalShow = false;
+                } catch (err) {
+                    // console.log(err);
+                    Swal.fire({
+                        icon: "error",
+                        title: "ผิดพลาด",
+                        text: "ไม่สามารถบันทึกข้อมูลได้",
+                    });
+                }
+            }
+        },
+    },
+    computed: {
+        chkLength() {
+            if (this.data.time.length > 3) {
+                this.showAlert = true;
+            } else {
+                this.showAlert = false;
+            }
         },
     },
 };

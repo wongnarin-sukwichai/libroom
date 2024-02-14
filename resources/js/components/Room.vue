@@ -568,7 +568,7 @@ export default {
             }
         },
         getEdit(id) {
-            console.log(id);
+            // console.log(id);
             this.isModalEdit = true;
             axios
                 .get("/api/room/" + id + "/edit")

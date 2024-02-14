@@ -55,7 +55,7 @@ export default {
         },     
 
         async logout({ commit }) {
-            await axios.get("/sanctum/csrf-cookie");
+            //await axios.get("/sanctum/csrf-cookie");
             await axios
                 .post("/api/logout")
                 .then((response) => {
