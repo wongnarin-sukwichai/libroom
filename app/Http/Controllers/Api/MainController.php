@@ -41,41 +41,63 @@ class MainController extends Controller
         return response()->json($data);
     }
 
+    public function reserveMain(string $id, string $code)
+    {
+        $data = Reserve::where('date', $code)
+            ->where('con_id', $id)
+            ->select('room_id', 'time', 'name', 'surname', 'status')
+            ->get();
+
+        return response()->json($data);
+    }
+
     public function reserve(Request $request)
     {
-        dd($request->all(), count($request['time']));
 
         $request->validate([
-            'day' => 'required',
-            'd' => 'required',
-            'm' => 'required',
-            'y' => 'required',
+            'date' => 'required',
+            'loc_id' => 'required',
+            'con_id' => 'required',
+            'room_id' => 'required',
             'uid' => 'required',
             'time' => 'required',
-            'capcha' => 'required'
+            'code' => 'required'
         ]);
 
-        $name = 'วงศ์นรินทร์';
-        $surname = 'สุขวิชัย';
+        if ($request['uid'] != '000') {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'ผิดพลาด',
+                'text' => 'รหัสนิสิตไม่ถูกต้อง กรุณาตรวจสอบ'
+            ]);
+        } else {
 
-        $data = new Reserve();
+            $name = 'วงศ์นรินทร์';
+            $surname = 'สุขวิชัย';
 
-        for ($i = 0; $i < count($request['time']); $i++) {
+            for ($i = 0; $i < count($request['time']); $i++) {
 
-            $data->date = $request['date'];
-            $data->loc_id = $request['loc_id'];
-            $data->con_id = $request['con_id'];
-            $data->room_id = $request['room_id'];
-            $data->time = $request['time'][$i];
-            $data->uid = $request['uid'];
-            $data->name = $name;
-            $data->surname = $surname;
-            $data->capcha = $request['capcha'];
-            $data->status = 0;
+                $data = new Reserve();
 
-            $data->save();
+                $data->date = $request['date'];
+                $data->loc_id = $request['loc_id'];
+                $data->con_id = $request['con_id'];
+                $data->room_id = $request['room_id'];
+                $data->time = $request['time'][$i];
+                $data->uid = $request['uid'];
+                $data->name = $name;
+                $data->surname = $surname;
+                $data->code = $request['code'];
+                $data->status = 0;
+
+                $data->save();
+            }
+
+            return response()->json([
+                'icon' => "success",
+                'title' => $request['code'],
+                'text' => "** รหัสยกเลิกการจอง **"
+            ]);
         }
-
-        return response()->json();
     }
 }

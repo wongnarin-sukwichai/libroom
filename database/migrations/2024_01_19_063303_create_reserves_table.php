@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('surname');
             $table->string('faculty')->nullable()->comment('คณะ');
             $table->string('major')->nullable()->comment('สาขาวิชา');
-            $table->string('capcha')->comment('capcha ยกเลิกห้อง');
+            $table->string('code')->comment('code ยกเลิกห้อง');
             $table->integer('status')->nullable()->comment('0=ใช้งาน, 1=ถูกยกเลิก');
             $table->timestamps();
         });

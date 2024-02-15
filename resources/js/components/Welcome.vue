@@ -116,16 +116,31 @@
                                     {{ room.title }}
                                 </td>
                                 <template v-if="room.status === 0">
-                                    <td
-                                        class="border p-4 cursor-pointer hover:bg-sky-50"
+                                    <template
                                         v-for="(n, index) in isTime.total"
                                         :key="index"
-                                        @click="showModal(room.id)"
-                                    ></td>
+                                    >
+                                    {{ chkReserve(room.id, index) }}
+                                        <!-- <td
+                                            v-if="
+                                                chkReserve(room.id, index) === 1
+                                            "
+                                            class="border p-4 bg-rose-300 text-center"
+                                        >
+                                            5555
+                                        </td>
+                                        <td
+                                            v-else
+                                            class="border p-4 cursor-pointer hover:bg-sky-50"
+                                            @click="showModal(room.id)"
+                                        >
+                                            666
+                                        </td> -->
+                                    </template>
                                 </template>
                                 <template v-else>
                                     <td
-                                        class="border p-4 bg-rose-50 text-center"
+                                        class="border p-4 bg-rose-300 text-center"
                                         :colspan="isTime.total"
                                     >
                                         ** งดให้บริการชั่วคราว **
@@ -137,7 +152,7 @@
                 </div>
             </transition>
         </div>
-        {{ data.time }} {{ chkLength }} {{ type }}
+        <!-- {{ data.time }} {{ chkLength }} {{ type }} -->
     </div>
 
     <!-- Modal Show -->
@@ -324,6 +339,7 @@ export default {
             conGray: true,
             roomList: "",
             timeList: "",
+            reserveList: [],
             weekend: "",
             isTime: "",
             moment: moment,
@@ -334,6 +350,7 @@ export default {
                 room_id: "",
                 time: [],
                 uid: "",
+                code: "",
             },
             type: false,
         };
@@ -382,16 +399,16 @@ export default {
             this.locActive = id;
             this.locGray = false;
             this.conGray = true;
-            this.data.loc_id = id
+            this.data.loc_id = id;
         },
-        pickRoom(id, time_1, time_2) {
+        async pickRoom(id, time_1, time_2) {
             if (this.weekend == false) {
                 this.isTime = this.setTimer(time_1);
             } else {
                 this.isTime = this.setTimer(time_2);
             }
             // console.log(this.isTime);
-            axios
+            await axios
                 .get("/api/roomMain/" + id)
                 .then((response) => {
                     this.roomList = response.data;
@@ -402,7 +419,18 @@ export default {
             this.tableList = true;
             this.conActive = id;
             this.conGray = false;
-            this.data.con_id = id
+            this.data.con_id = id;
+
+            var today = moment().format("YYYY-MM-DD");
+
+            await axios
+                .get("/api/reserveMain/" + id + "/" + today)
+                .then((response) => {
+                    this.reserveList = response.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
         isWeekend() {
             //เช็ค เสาร์-อาทิตย์
@@ -425,7 +453,7 @@ export default {
         },
         showModal(id) {
             this.isModalShow = true;
-            this.data.room_id = id
+            this.data.room_id = id;
         },
         close() {
             this.isModalShow = false;
@@ -447,15 +475,17 @@ export default {
                 }
 
                 try {
-                    await this.$store.dispatch("storeReserve", this.data);
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "บันทึกข้อมูลเรียบร้อย",
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
-                    this.isModalShow = false;
+                    this.data.code = await this.getCode();
+                    await axios
+                        .post("/api/reserve", this.data)
+                        .then((response) => {
+                            this.isModalShow = false;
+                            Swal.fire({
+                                icon: response.data.icon,
+                                title: response.data.title,
+                                text: response.data.text,
+                            });
+                        });
                 } catch (err) {
                     // console.log(err);
                     Swal.fire({
@@ -465,6 +495,19 @@ export default {
                     });
                 }
             }
+        },
+        getCode() {
+            return Math.floor(Math.random() * 9000 + 1000);
+        },
+        chkReserve(id, code) {
+            this.reserveList.forEach((showRes) => {
+                if (showRes.room_id == id && showRes.time == code) {
+                    console.log(showRes.room_id, showRes.time);
+                    return true;
+                } else {
+                    return false;
+                }
+            });
         },
     },
     computed: {
