@@ -41,10 +41,9 @@ class MainController extends Controller
         return response()->json($data);
     }
 
-    public function reserveMain(string $id, string $code)
+    public function reserveMain(string $id)
     {
-        $data = Reserve::where('date', $code)
-            ->where('con_id', $id)
+        $data = Reserve::where('date', $id)
             ->select('room_id', 'time', 'name', 'surname', 'status')
             ->get();
 
@@ -97,6 +96,30 @@ class MainController extends Controller
                 'icon' => "success",
                 'title' => $request['code'],
                 'text' => "** รหัสยกเลิกการจอง **"
+            ]);
+        }
+    }
+
+    public function delReserve(Request $request)
+    {
+        //  dd($request->all());
+
+        $data = Reserve::where('date', $request['today'])->where('room_id', $request['id'])->where('time', $request['time'])->first();
+
+        if ($data->code == $request['code']) {
+
+            $data->delete();
+
+            return response()->json([
+                'icon' => "success",
+                'title' => "ยกเลิกการจอง",
+                'text' => "ยกเลิกการจองเรียบร้อย"
+            ]);
+        } else {
+            return response()->json([
+                'icon' => "error",
+                'title' => "รหัสไม่ถูกต้อง",
+                'text' => "กรุณาตรวจสอบ"
             ]);
         }
     }

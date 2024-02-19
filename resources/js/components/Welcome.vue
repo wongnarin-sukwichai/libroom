@@ -120,22 +120,19 @@
                                         v-for="(n, index) in isTime.total"
                                         :key="index"
                                     >
-                                    {{ chkReserve(room.id, index) }}
-                                        <!-- <td
+                                        <td
                                             v-if="
-                                                chkReserve(room.id, index) === 1
+                                                chkReserve(room.id, index) ===
+                                                true
                                             "
-                                            class="border p-4 bg-rose-300 text-center"
-                                        >
-                                            5555
-                                        </td>
+                                            class="border p-4 bg-rose-300 text-center cursor-pointer hover:bg-rose-400"
+                                            @click="showReserve(room.id, index)"
+                                        ></td>
                                         <td
                                             v-else
                                             class="border p-4 cursor-pointer hover:bg-sky-50"
                                             @click="showModal(room.id)"
-                                        >
-                                            666
-                                        </td> -->
+                                        ></td>
                                     </template>
                                 </template>
                                 <template v-else>
@@ -152,7 +149,6 @@
                 </div>
             </transition>
         </div>
-        <!-- {{ data.time }} {{ chkLength }} {{ type }} -->
     </div>
 
     <!-- Modal Show -->
@@ -305,6 +301,95 @@
             </div>
         </div>
     </transition>
+
+    <!-- Modal Name Reserve -->
+    <transition name="fade" mode="out-in">
+        <div
+            class="relative z-10"
+            aria-labelledby="modal-title"
+            role="dialog"
+            aria-modal="true"
+            v-show="showModalRes"
+        >
+            <div
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            ></div>
+
+            <div class="fixed inset-0 z-10 overflow-y-auto">
+                <div
+                    class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+                >
+                    <form
+                        class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                        @submit.prevent="cancel()"
+                    >
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                        >
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon name="user"></box-icon>
+                                </div>
+                                <div
+                                    class="text-center sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >ชื่อผู้จอง :
+                                    </label>
+                                    <div
+                                        class="border-dotted border-2 rounded-lg p-2"
+                                    >
+                                        วงศ์นรินทร์ สุขวิชัย
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="text-center sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >ยกเลิกการจอง :
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="form-control block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                        placeholder="** ใส่รหัสยกเลิก 4 หลัก **"
+                                        required
+                                        v-model="dataCancel.code"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
+                        >
+                            <button
+                                type="submit"
+                                class="inline-flex w-full justify-center rounded-md bg-rose-400 px-3 py-2 text-sm text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
+                            >
+                                ยกเลิก
+                            </button>
+                            <button
+                                type="button"
+                                class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
+                                @click="closeReserve()"
+                            >
+                                ออก
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </transition>
 </template>
 
 <script>
@@ -320,11 +405,13 @@ export default {
         this.getContainer();
         this.isWeekend();
         this.getTime();
+        this.getReserve();
     },
     data() {
         return {
             isModalShow: false,
             showAlert: false,
+            showModalRes: false,
             banner: "img/banner.jpg",
             locPath: "img/locations/",
             conPath: "storage/containers/",
@@ -353,6 +440,13 @@ export default {
                 code: "",
             },
             type: false,
+            active: false,
+            dataCancel: {
+                id: "",
+                time: "",
+                code: "",
+                today: moment().format("YYYY-MM-DD")
+            },
         };
     },
     methods: {
@@ -420,11 +514,12 @@ export default {
             this.conActive = id;
             this.conGray = false;
             this.data.con_id = id;
-
+        },
+        getReserve() {
             var today = moment().format("YYYY-MM-DD");
 
-            await axios
-                .get("/api/reserveMain/" + id + "/" + today)
+            axios
+                .get("/api/reserveMain/" + today)
                 .then((response) => {
                     this.reserveList = response.data;
                 })
@@ -500,14 +595,55 @@ export default {
             return Math.floor(Math.random() * 9000 + 1000);
         },
         chkReserve(id, code) {
-            this.reserveList.forEach((showRes) => {
-                if (showRes.room_id == id && showRes.time == code) {
-                    console.log(showRes.room_id, showRes.time);
-                    return true;
-                } else {
-                    return false;
+            var res = this.reserveList.some(
+                (selection) =>
+                    selection["room_id"] == id && selection["time"] == code
+            );
+            return res;
+        },
+        showReserve(id, time) {
+            this.showModalRes = true;
+            this.dataCancel.id = id;
+            this.dataCancel.time = time
+        },
+        closeReserve() {
+            this.showModalRes = false;
+        },
+        cancel() {
+            Swal.fire({
+                title: "ยกเลิกการจอง?",
+                text: "ยืนยันการยกเลิก",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .post("/api/delReserve", this.dataCancel)
+                        .then((response) => {
+                            //console.log(res);
+                            Swal.fire({
+                                title: response.data.title,
+                                text: response.data.text,
+                                icon: response.data.icon,
+                            });
+                            this.showModalRes = false;
+                        })
+                        .catch((err) => {
+                            //console.log(err);
+                            Swal.fire({
+                                icon: "error",
+                                title: "ไม่สามารถยกเลิกได้",
+                                text: "กรุณาติดต่อเจ้าหน้าที่",
+                            });
+                        });
                 }
             });
+            setTimeout(() => {
+                window.location.reload();
+            }, "3000");
         },
     },
     computed: {

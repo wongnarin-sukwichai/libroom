@@ -29,8 +29,7 @@ Route::get('conMain', [MainController::class, 'conMain']);
 Route::get('roomMain/{id}', [MainController::class, 'roomMain']);
 Route::get('timeMain', [MainController::class, 'timeMain']);
 Route::post('reserve', [MainController::class, 'reserve']);
-Route::get('reserveMain/{id}', [MainController::class, 'reserveMain']);
-Route::post('delReserve', [MainController::class, 'delReserve']);
+Route::get('reserveMain/{id}/{code}', [MainController::class, 'reserveMain']);
 
 Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
