@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\ContainerController;
 use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\MainController;
+use App\Http\Controllers\Api\ReserveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,7 @@ Route::get('locMain', [MainController::class, 'locMain']);
 Route::get('conMain', [MainController::class, 'conMain']);
 Route::get('roomMain/{id}', [MainController::class, 'roomMain']);
 Route::get('timeMain', [MainController::class, 'timeMain']);
-Route::post('reserve', [MainController::class, 'reserve']);
+Route::post('addReserve', [MainController::class, 'addReserve']);
 Route::get('reserveMain/{id}', [MainController::class, 'reserveMain']);
 Route::post('delReserve', [MainController::class, 'delReserve']);
 
@@ -49,4 +50,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('room', RoomController::class);
     Route::get('conStatus/{id}/{code}', [ContainerController::class, 'conStatus']);
     Route::get('roomStatus/{id}/{code}', [RoomController::class, 'roomStatus']);
+    Route::resource('reserve', ReserveController::class);
 });

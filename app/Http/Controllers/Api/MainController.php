@@ -50,7 +50,7 @@ class MainController extends Controller
         return response()->json($data);
     }
 
-    public function reserve(Request $request)
+    public function addReserve(Request $request)
     {
 
         $request->validate([

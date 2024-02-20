@@ -125,13 +125,22 @@
                                                 chkReserve(room.id, index) ===
                                                 true
                                             "
-                                            class="border p-4 bg-rose-300 text-center cursor-pointer hover:bg-rose-400"
+                                            class="border p-4 bg-rose-300 text-center cursor-pointer"
+                                            :class="
+                                                room.status === 0
+                                                    ? 'bg-rose-300'
+                                                    : room.status === 1
+                                                    ? 'bg-sky-300'
+                                                    : 'bg-white'
+                                            "
                                             @click="showReserve(room.id, index)"
                                         ></td>
                                         <td
                                             v-else
                                             class="border p-4 cursor-pointer hover:bg-sky-50"
-                                            @click="showModal(room.id)"
+                                            @click="
+                                                showModal(room.id, room.title)
+                                            "
                                         ></td>
                                     </template>
                                 </template>
@@ -222,6 +231,18 @@
                                             :key="index"
                                         >
                                             <input
+                                                v-if="
+                                                    chkReserve(
+                                                        this.data.room_id,
+                                                        index
+                                                    ) === true
+                                                "
+                                                type="checkbox"
+                                                class="mr-1"
+                                                disabled
+                                            />
+                                            <input
+                                                v-else
                                                 type="checkbox"
                                                 class="mr-1 cursor-pointer"
                                                 :value="index"
@@ -231,6 +252,7 @@
                                             }}{{ isTime.minute }}
                                         </label>
                                     </div>
+                                    <div>{{ chkLength }}</div>
                                     <transition name="fade" mode="out-in">
                                         <div
                                             class="pt-2 text-rose-500"
@@ -279,22 +301,29 @@
                                 ></div>
                             </div>
                         </div>
-                        <div
-                            class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
-                        >
-                            <button
-                                type="submit"
-                                class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto"
+                        <div class="grid grid-cols-2">
+                            <div
+                                class="px-4 py-4 sm:px-6 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100"
                             >
-                                บันทึก
-                            </button>
-                            <button
-                                type="button"
-                                class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
-                                @click="close()"
+                                {{ this.roomTitle }}
+                            </div>
+                            <div
+                                class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
                             >
-                                ออก
-                            </button>
+                                <button
+                                    type="submit"
+                                    class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto"
+                                >
+                                    บันทึก
+                                </button>
+                                <button
+                                    type="button"
+                                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
+                                    @click="close()"
+                                >
+                                    ออก
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -445,8 +474,9 @@ export default {
                 id: "",
                 time: "",
                 code: "",
-                today: moment().format("YYYY-MM-DD")
+                today: moment().format("YYYY-MM-DD"),
             },
+            roomTitle: "",
         };
     },
     methods: {
@@ -481,6 +511,7 @@ export default {
                 });
         },
         pickCon(id) {
+            this.tableList = false;
             let arr = [];
             let i = 0;
             this.conList.forEach((showCon) => {
@@ -546,9 +577,10 @@ export default {
             });
             return result;
         },
-        showModal(id) {
+        showModal(id, code) {
             this.isModalShow = true;
             this.data.room_id = id;
+            this.roomTitle = code;
         },
         close() {
             this.isModalShow = false;
@@ -572,7 +604,7 @@ export default {
                 try {
                     this.data.code = await this.getCode();
                     await axios
-                        .post("/api/reserve", this.data)
+                        .post("/api/addReserve", this.data)
                         .then((response) => {
                             this.isModalShow = false;
                             Swal.fire({
@@ -604,7 +636,7 @@ export default {
         showReserve(id, time) {
             this.showModalRes = true;
             this.dataCancel.id = id;
-            this.dataCancel.time = time
+            this.dataCancel.time = time;
         },
         closeReserve() {
             this.showModalRes = false;

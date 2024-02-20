@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('records', function (Blueprint $table) {
             $table->id();
+            $table->date('date');
             $table->integer('res_id')->comment('reserve table');
             $table->string('uid');
             $table->string('name');

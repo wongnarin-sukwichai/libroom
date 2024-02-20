@@ -8,6 +8,7 @@ import Time from "../components/Time.vue";
 import Holiday from "../components/Holiday.vue";
 import Container from "../components/Container.vue";
 import Room from "../components/Room.vue";
+import Reserve from "../components/Reserve.vue"
 
 import store from "../store";
 
@@ -69,6 +70,14 @@ const routes = [
                 path: "/room/:id",
                 name: "room",
                 component: Room,
+                meta: {
+                    guard: "auth",
+                },
+            },
+            {
+                path: "/reserve/:id",
+                name: "reserve",
+                component: Reserve,
                 meta: {
                     guard: "auth",
                 },
