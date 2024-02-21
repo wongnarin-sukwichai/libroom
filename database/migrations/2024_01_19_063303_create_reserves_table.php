@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('faculty')->nullable()->comment('คณะ');
             $table->string('major')->nullable()->comment('สาขาวิชา');
             $table->string('code')->comment('code ยกเลิกห้อง');
-            $table->integer('status')->nullable()->comment('0=ใช้งาน, 1=ยืนยัน');
+            $table->integer('status')->nullable()->comment('0=จอง, 1=ยืนยัน');
             $table->timestamps();
         });
     }

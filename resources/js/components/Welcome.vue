@@ -125,13 +125,11 @@
                                                 chkReserve(room.id, index) ===
                                                 true
                                             "
-                                            class="border p-4 bg-rose-300 text-center cursor-pointer"
+                                            class="border p-4 text-center cursor-pointer"
                                             :class="
-                                                room.status === 0
+                                                chkConfirm(room.id, index) === 0
                                                     ? 'bg-rose-300'
-                                                    : room.status === 1
-                                                    ? 'bg-sky-300'
-                                                    : 'bg-white'
+                                                    : 'bg-green-300'
                                             "
                                             @click="showReserve(room.id, index)"
                                         ></td>
@@ -633,6 +631,15 @@ export default {
             );
             return res;
         },
+        chkConfirm(id, code) {
+            if (id != null && code != null) {
+                var res = this.reserveList.find(
+                    (selection) =>
+                        selection["room_id"] == id && selection["time"] == code
+                );
+                return res.status;
+            }
+        },
         showReserve(id, time) {
             this.showModalRes = true;
             this.dataCancel.id = id;
@@ -676,6 +683,15 @@ export default {
             setTimeout(() => {
                 window.location.reload();
             }, "3000");
+        },
+        chkConfirm(id, code) {
+            if (id != null && code != null) {
+                var res = this.reserveList.find(
+                    (selection) =>
+                        selection["room_id"] == id && selection["time"] == code
+                );
+                return res.status;
+            }
         },
     },
     computed: {

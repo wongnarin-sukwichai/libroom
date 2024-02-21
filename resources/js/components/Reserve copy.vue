@@ -177,13 +177,18 @@
                                     </label>
                                     <button
                                         class="relative inline-flex items-center justify-center p-4 px-6 py-2 overflow-hidden font-medium text-green-500 transition duration-300 ease-out border-2 border-green-400 rounded-full shadow-md group"
-                                        :disabled="this.update.status === 1"
-                                        @click="sendConfirm()"
+                                        :disabled="this.reserveStatus === 1"
+                                        @click="
+                                            sendConfirm(
+                                                this.reserveID,
+                                                this.reserveStatus
+                                            )
+                                        "
                                     >
                                         <span
                                             class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 bg-green-400 group-hover:translate-x-0 ease"
                                             :class="
-                                                this.update.status === 0
+                                                this.reserveStatus === 0
                                                     ? '-translate-x-full'
                                                     : ''
                                             "
@@ -196,7 +201,7 @@
                                         </span>
                                         <span
                                             class="absolute flex items-center justify-center w-full h-full text-gray-400 transition-all duration-300 transform group-hover:translate-x-full ease"
-                                            v-if="this.update.status === 0"
+                                            v-if="this.reserveStatus === 0"
                                             >ยืนยัน</span
                                         >
                                         <span class="relative invisible"
@@ -232,7 +237,7 @@
                                             class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                             placeholder="** รหัสนิสิต"
                                             required
-                                            :disabled="this.update.status === 0"
+                                            :disabled="this.reserveStatus === 0"
                                         />
                                     </div>
                                 </div>
@@ -296,13 +301,17 @@ export default {
             reserveList: "",
             weekend: "",
             isTime: "",
-            update: {
-                id: "",
-                status: "",
+            data: {
+                pic: "",
+                loc_id: "",
+                con_id: this.$route.params.id,
+                title: "",
             },
             roomID: "",
             roomTitle: "",
             reserveTime: "",
+            reserveID: "",
+            reserveStatus: "",
         };
     },
     methods: {
@@ -310,8 +319,8 @@ export default {
             this.roomID = id;
             this.roomTitle = code;
             this.reserveTime = index;
-            this.update.id = this.getResID(id, index);
-            this.update.status = this.chkConfirm(id, index);
+            this.reserveID = this.getResID(id, index);
+            this.reserveStatus = this.chkConfirm(id, index);
 
             this.isModalShow = true;
         },
@@ -414,9 +423,9 @@ export default {
                 return res.id;
             }
         },
-        sendConfirm() {
+        sendConfirm(id, code) {
             axios
-                .put("../api/reserve/" + this.update.id, this.update)
+                .put("../api/reserve/" + id, { code: code })
                 .then((response) => {
                     Swal.fire({
                         position: "top-end",
@@ -425,7 +434,10 @@ export default {
                         showConfirmButton: false,
                         timer: 1500,
                     });
-                    this.update.status = response.data.status;
+                    this.isModalShow = false;
+                    // setTimeout(() => {
+                    //     window.location.reload();
+                    // }, "1500");
                 })
                 .catch((err) => {
                     console.log(err);

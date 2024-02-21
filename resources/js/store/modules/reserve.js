@@ -3,13 +3,11 @@ import axios from "axios";
 export default {
     state() {
         return {
-            reserve: [],
+            reserve: "",
         };
     },
     getters: {
-        reserve(state) {
-            return state.reserve;
-        },
+
     },
     mutations: {
         setReserve(state, payload) {
@@ -19,10 +17,10 @@ export default {
     actions: {
         async storeReserve({ dispatch }, payload) {
             try {
-               
             } catch (e) {
                 throw e;
             }
         },
+
     },
 };

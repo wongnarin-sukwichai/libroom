@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Record;
 use Illuminate\Http\Request;
+
+use App\Models\Reserve;
 
 class ReserveController extends Controller
 {
@@ -36,15 +39,17 @@ class ReserveController extends Controller
      */
     public function show(string $id)
     {
-        dd('555');
+        $data = Reserve::where('date', $id)->get();
+
+        return response()->json($data);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id, string $code)
     {
-        //
+        // dd('666');
     }
 
     /**
@@ -52,7 +57,34 @@ class ReserveController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        if ($request['status'] == 0) {
+            $result = 1;
+        } else {
+            $result = 0;
+        }
+
+        $data = Reserve::find($id);
+
+        $data->status = $result;
+
+        $data->update();
+
+        sleep(1);
+
+        if ($request['status'] == 0) {
+
+            $res = new Record();
+            $res->date = $data->date;
+            $res->res_id = $data->id;
+            $res->uid = $data->uid;
+            $res->name = $data->name;
+            $res->surname = $data->surname;
+
+            $res->save();
+        }
+
+        return response()->json($data);
     }
 
     /**
