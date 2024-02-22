@@ -227,19 +227,38 @@
                                         >
                                             ผู้เข้าร่วม :</label
                                         >
-                                        <input
-                                            type="text"
-                                            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                            placeholder="** รหัสนิสิต"
-                                            required
-                                            :disabled="this.update.status === 0"
-                                        />
+
+                                        <div
+                                            x-show="open"
+                                            class="flex items-center justify-between"
+                                        >
+                                            <input
+                                                type="text"
+                                                class="form-control block w-full px-3 py-1.5 rounded-l-lg text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-sky-300 focus:outline-none"
+                                                placeholder="** รหัสนิสิต"
+                                                required
+                                                v-model="data.uid"
+                                                :disabled="
+                                                    this.update.status === 0
+                                                "
+                                            />
+                                            <div
+                                                class="flex items-center justify-center space-x-2"
+                                            >
+                                                <button
+                                                    type="submit"
+                                                    class="btn bg-sky-400 px-3 py-2.5 text-sm text-white hover:bg-sky-500 rounded-r-lg"
+                                                >
+                                                    บันทึก
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </form>
 
-                        <div class="grid grid-cols-2">
+                        <div class="grid grid-cols-2 mt-4">
                             <div
                                 class="px-4 py-4 sm:px-6 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100"
                             >
@@ -249,7 +268,7 @@
                                 class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
                             >
                                 <button
-                                    type="submit"
+                                    type="button"
                                     class="inline-flex w-full justify-center rounded-md bg-rose-400 px-3 py-2 text-sm text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
                                 >
                                     ยกเลิกห้อง
@@ -303,6 +322,12 @@ export default {
             roomID: "",
             roomTitle: "",
             reserveTime: "",
+            data: {
+                today: moment().format("YYYY-MM-DD"),
+                res_id: "",
+                uid: "",
+            },
+            recordList: "",
         };
     },
     methods: {
@@ -312,6 +337,9 @@ export default {
             this.reserveTime = index;
             this.update.id = this.getResID(id, index);
             this.update.status = this.chkConfirm(id, index);
+
+            this.data.res_id = this.getResID(id, index);
+            this.recordList = this.getRecord(this.getResID(id, index));
 
             this.isModalShow = true;
         },
@@ -430,6 +458,33 @@ export default {
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+        async send() {
+            try {
+                await axios
+                    .post("/api/record", this.data)
+                    .then((response) => {
+                        this.recordList = response.data;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            } catch (e) {
+                return e;
+            }
+        },
+        getRecord(id) {
+            if(id != null) {
+            axios
+                .get("/api/record/" + id)
+                .then((response) => {
+                    this.recordList = response.data;
+                    console.log(this.recordList)
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            }
         },
     },
 };

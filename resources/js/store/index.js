@@ -7,6 +7,7 @@ import upload from "./modules/upload";
 import container from "./modules/container";
 import room from "./modules/room";
 import reserve from "./modules/reserve";
+import record from "./modules/record";
 
 const store = createStore({
     plugins:[
@@ -19,7 +20,8 @@ const store = createStore({
         upload,
         container,
         room,
-        reserve
+        reserve,
+        record
     }
 })
 

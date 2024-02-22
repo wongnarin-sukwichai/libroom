@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\ContainerController;
 use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\MainController;
+use App\Http\Controllers\Api\RecordController;
 use App\Http\Controllers\Api\ReserveController;
 
 /*
@@ -51,4 +52,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('conStatus/{id}/{code}', [ContainerController::class, 'conStatus']);
     Route::get('roomStatus/{id}/{code}', [RoomController::class, 'roomStatus']);
     Route::resource('reserve', ReserveController::class);
+    Route::resource('record', RecordController::class);
 });
