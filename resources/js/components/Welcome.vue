@@ -3,7 +3,27 @@
         <img :src="banner" class="p-2 shadow-lg" />
     </div>
 
-    <div class="bg-white rounded-lg">
+    <div class="bg-white rounded-lg" v-if="!chkHoliday">
+        <div
+            class="mx-auto max-w-7xl px-6 lg:px-8 border-4 border-dashed border-gray-200 hover:border-gray-300 py-28 text-center text-gray-200 hover:text-gray-300 text-4xl cursor-pointer"
+        >
+            <box-icon 
+            type="solid" 
+            name="quote-left" 
+            class="mr-4" 
+            color="#d1d5db">
+            </box-icon>
+            งดให้บริการในวันหยุดนักขัตฤกษ์
+            <box-icon
+                type="solid"
+                name="quote-right"
+                class="ml-4"
+                color="#d1d5db"
+            ></box-icon>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg" v-else>
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <!-- Location -->
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -428,6 +448,7 @@ moment.locale("th");
 
 export default {
     mounted() {
+        this.getHoliday();
         this.getLocation();
         this.getContainer();
         this.isWeekend();
@@ -436,6 +457,7 @@ export default {
     },
     data() {
         return {
+            holiday: false,
             isModalShow: false,
             showAlert: false,
             showModalRes: false,
@@ -478,6 +500,19 @@ export default {
         };
     },
     methods: {
+        getHoliday() {
+            var d = moment().format("DD");
+            var m = moment().format("MM");
+
+            axios
+                .get("/api/holidayMain/" + d + "/" + m)
+                .then((response) => {
+                    this.holiday = response.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
         getLocation() {
             axios
                 .get("/api/locMain")
@@ -701,6 +736,9 @@ export default {
             } else {
                 this.showAlert = false;
             }
+        },
+        chkHoliday() {
+            return this.holiday;
         },
     },
 };

@@ -142,7 +142,7 @@
                         class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
                     >
                         <div
-                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                            class="grid grid-cols-2 bg-white px-4 sm:p-4"
                         >
                             <div class="sm:flex sm:items-start">
                                 <div
@@ -207,8 +207,31 @@
                             </div>
                         </div>
 
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pt-2"
+                            v-for="(record, index) in recordList"
+                            :key="index"
+                        >
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-200 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                <box-icon name='check'></box-icon>
+                                </div>
+                                <div
+                                    class="text-center sm:ml-4 sm:text-left w-full"
+                                >
+                                    <div
+                                        class="border-dotted border-2 rounded-lg p-2"
+                                    >
+                                        {{ record.name }} {{ record.surname }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <form @submit.prevent="send()">
-                            <div class="bg-white px-4 pt-5 sm:p-4 sm:pb-4">
+                            <div class="bg-white px-4 sm:pt-4">
                                 <div class="sm:flex sm:items-start">
                                     <div
                                         class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
@@ -474,16 +497,16 @@ export default {
             }
         },
         getRecord(id) {
-            if(id != null) {
-            axios
-                .get("/api/record/" + id)
-                .then((response) => {
-                    this.recordList = response.data;
-                    console.log(this.recordList)
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            if (id != null) {
+                axios
+                    .get("/api/record/" + id)
+                    .then((response) => {
+                        this.recordList = response.data;
+                        console.log(this.recordList);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             }
         },
     },

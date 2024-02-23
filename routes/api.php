@@ -33,6 +33,7 @@ Route::get('timeMain', [MainController::class, 'timeMain']);
 Route::post('addReserve', [MainController::class, 'addReserve']);
 Route::get('reserveMain/{id}', [MainController::class, 'reserveMain']);
 Route::post('delReserve', [MainController::class, 'delReserve']);
+Route::get('holidayMain/{id}/{code}', [MainController::class, 'holidayMain']);
 
 Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login']);

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Location;
 use App\Models\Container;
+use App\Models\Holiday;
 use App\Models\Room;
 use App\Models\Time;
 use App\Models\Reserve;
@@ -37,6 +38,19 @@ class MainController extends Controller
     public function timeMain()
     {
         $data = Time::all();
+
+        return response()->json($data);
+    }
+
+    public function holidayMain(string $id, string $code)
+    {
+        $data = Holiday::Where('d', $id)->where('m', $code)->first();
+
+        if(empty($data)) {
+            $data = true;
+        } else {
+            $data = false;
+        }
 
         return response()->json($data);
     }
