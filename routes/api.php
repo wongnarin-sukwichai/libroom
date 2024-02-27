@@ -54,4 +54,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('roomStatus/{id}/{code}', [RoomController::class, 'roomStatus']);
     Route::resource('reserve', ReserveController::class);
     Route::resource('record', RecordController::class);
+    Route::get('chkRecord/{id}/{code}', [RecordController::class, 'chkRecord']);
 });

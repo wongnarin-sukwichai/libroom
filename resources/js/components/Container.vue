@@ -197,7 +197,7 @@
                                             กรุณาเลือก...
                                         </option>
                                         <option
-                                            v-for="(loc, index) in locationList"
+                                            v-for="(loc, index) in locList"
                                             :key="index"
                                             :value="loc.id"
                                         >
@@ -479,7 +479,7 @@
                                             กรุณาเลือก...
                                         </option>
                                         <option
-                                            v-for="(loc, index) in locationList"
+                                            v-for="(loc, index) in locList"
                                             :key="index"
                                             :value="loc.id"
                                         >

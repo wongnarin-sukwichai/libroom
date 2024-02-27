@@ -48,7 +48,7 @@ class RecordController extends Controller
         $res = Record::where('date', $request['today'])->where('res_id', $request['res_id'])->get();
 
         return response()->json($res);
-    }   
+    }
 
     /**
      * Display the specified resource.
@@ -60,10 +60,15 @@ class RecordController extends Controller
         return response()->json($data);
     }
 
+    public function chkRecord(Request $request)
+    {
+        // $data = Record::where('')
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $code, string $id)
     {
         //
     }
@@ -81,6 +86,7 @@ class RecordController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Record::find($id)->delete();
+        return response()->json();
     }
 }

@@ -141,9 +141,7 @@
                     <div
                         class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
                     >
-                        <div
-                            class="grid grid-cols-2 bg-white px-4 sm:p-4"
-                        >
+                        <div class="grid grid-cols-2 bg-white px-4 sm:p-4">
                             <div class="sm:flex sm:items-start">
                                 <div
                                     class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
@@ -216,7 +214,7 @@
                                 <div
                                     class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-200 sm:mx-0 sm:h-10 sm:w-10"
                                 >
-                                <box-icon name='check'></box-icon>
+                                    <box-icon name="check"></box-icon>
                                 </div>
                                 <div
                                     class="text-center sm:ml-4 sm:text-left w-full"
@@ -227,6 +225,12 @@
                                         {{ record.name }} {{ record.surname }}
                                     </div>
                                 </div>
+                            </div>
+                            <div
+                                class="border-dotted border-2 rounded-lg ml-4 w-12 hover:border-gray-300 cursor-pointer flex items-center justify-center"
+                                @click="delRecord(record.id, index)"
+                            >
+                                <box-icon name="x" color="#f87171"></box-icon>
                             </div>
                         </div>
 
@@ -484,6 +488,8 @@ export default {
         },
         async send() {
             try {
+                // var res = await axios.get("/api/chkRecord/" + this.data.uid + "/" + this.data.today);
+                // console.log(res)
                 await axios
                     .post("/api/record", this.data)
                     .then((response) => {
@@ -508,6 +514,33 @@ export default {
                         console.log(err);
                     });
             }
+        },
+        delRecord(id, index) {
+            Swal.fire({
+                title: "ยืนยันการลบ?",
+                text: "ต้องการลบข้อมูลผู้เข้าใช้งานหรือไม่?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .delete("/api/record/" + id)
+                        .then((response) => {
+                            this.recordList.splice(index, 1);
+                            Swal.fire({
+                                title: "ลบข้อมูล!",
+                                text: "ลบข้อมูลเรียบร้อย",
+                                icon: "success",
+                            });
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+            });
         },
     },
 };
