@@ -11,6 +11,7 @@ use App\Models\Holiday;
 use App\Models\Room;
 use App\Models\Time;
 use App\Models\Reserve;
+use App\Models\Record;
 
 class MainController extends Controller
 {
@@ -46,7 +47,7 @@ class MainController extends Controller
     {
         $data = Holiday::Where('d', $id)->where('m', $code)->first();
 
-        if(empty($data)) {
+        if (empty($data)) {
             $data = true;
         } else {
             $data = false;
@@ -77,11 +78,20 @@ class MainController extends Controller
             'code' => 'required'
         ]);
 
+        $res = Reserve::where('date', $request['date'])->where('uid', $request['uid'])->count();
+        $result = Record::where('date', $request['date'])->where('uid', $request['uid'])->count();
+
         if ($request['uid'] != '000') {
             return response()->json([
                 'icon' => 'error',
                 'title' => 'ผิดพลาด',
                 'text' => 'รหัสนิสิตไม่ถูกต้อง กรุณาตรวจสอบ'
+            ]);
+        } elseif ($res >= 3 || $result >= 3) {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'ผิดพลาด',
+                'text' => 'ท่านใช้บริการเกิน 3 ครั้ง/วัน กรุณาตรวจสอบ'
             ]);
         } else {
 
@@ -109,7 +119,7 @@ class MainController extends Controller
             return response()->json([
                 'icon' => "success",
                 'title' => $request['code'],
-                'text' => "** รหัสยกเลิกการจอง **"
+                'text' => "** รหัสสำหรับยกเลิกการจอง **"
             ]);
         }
     }
@@ -118,11 +128,24 @@ class MainController extends Controller
     {
         //  dd($request->all());
 
-        $data = Reserve::where('date', $request['today'])->where('room_id', $request['id'])->where('time', $request['time'])->first();
+        $data = Reserve::where('date', $request['today'])
+            ->where('room_id', $request['id'])
+            ->where('time', $request['time'])
+            ->where('code', $request['code'])
+            ->first();
 
-        if ($data->code == $request['code']) {
+        if (!empty($data)) {
 
-            $data->delete();
+            $res = Reserve::where('date', $request['today'])
+                ->where('uid', $data->uid)
+                ->where('code', $request['code'])
+                ->get();
+
+            if (!empty($res)) {
+                foreach ($res as $r) {
+                    Reserve::find($r->id)->delete();
+                }
+            }
 
             return response()->json([
                 'icon' => "success",
@@ -137,4 +160,28 @@ class MainController extends Controller
             ]);
         }
     }
+
+    // public function delReserve(Request $request)
+    // {
+    //     //  dd($request->all());
+
+    //     $data = Reserve::where('date', $request['today'])->where('room_id', $request['id'])->where('time', $request['time'])->first();
+
+    //     if ($data->code == $request['code']) {
+
+    //         $data->delete();
+
+    //         return response()->json([
+    //             'icon' => "success",
+    //             'title' => "ยกเลิกการจอง",
+    //             'text' => "ยกเลิกการจองเรียบร้อย"
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'icon' => "error",
+    //             'title' => "รหัสไม่ถูกต้อง",
+    //             'text' => "กรุณาตรวจสอบ"
+    //         ]);
+    //     }
+    // }
 }

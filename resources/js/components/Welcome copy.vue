@@ -3,7 +3,28 @@
         <img :src="banner" class="p-2 shadow-lg" />
     </div>
 
-    <div class="bg-white rounded-lg">
+    <div class="bg-white rounded-lg" v-if="!chkHoliday">
+        <div
+            class="mx-auto max-w-7xl px-6 lg:px-8 border-4 border-dashed border-rose-200 hover:border-rose-300 py-28 text-center hover:text-rose-500 text-4xl cursor-pointer text-rose-400"
+        >
+            <box-icon
+                type="solid"
+                name="quote-left"
+                class="mr-4"
+                color="#f43f5e"
+            >
+            </box-icon>
+            งดให้บริการในวันหยุดนักขัตฤกษ์
+            <box-icon
+                type="solid"
+                name="quote-right"
+                class="ml-4"
+                color="#f43f5e"
+            ></box-icon>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg" v-else>
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <!-- Location -->
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -18,7 +39,7 @@
                         >
                             <div
                                 class="relative h-80 w-full overflow-hidden rounded-lg sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 sm:h-64 hover:opacity-75"
-                                @click="pickCon(loc.id)"
+                                @click="pickLoc(loc.id)"
                                 :class="
                                     locActive === loc.id
                                         ? 'ring-2 ring-offset-2'
@@ -60,7 +81,12 @@
                                 <div
                                     class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg xl:aspect-h-8 xl:aspect-w-7"
                                     @click="
-                                        pickRoom(con.id, con.time_1, con.time_2)
+                                        pickCon(
+                                            con.id,
+                                            con.limited,
+                                            con.time_1,
+                                            con.time_2
+                                        )
                                     "
                                     :class="
                                         conActive === con.id
@@ -120,25 +146,25 @@
                                         v-for="(n, index) in isTime.total"
                                         :key="index"
                                     >
-                                        <template
-                                            v-for="(
-                                                reserve, key
-                                            ) in reserveList"
-                                            :key="key"
-                                        >
-                                            <td
-                                                v-if="
-                                                    room.id ===
-                                                        reserve.room_id &&
-                                                    index === reserve.time
-                                                "
-                                                class="border p-4 bg-rose-300"
-                                            ></td>
-                                            
-                                        </template>
                                         <td
+                                            v-if="
+                                                chkReserve(room.id, index) ===
+                                                true
+                                            "
+                                            class="border p-4 text-center cursor-pointer"
+                                            :class="
+                                                chkConfirm(room.id, index) === 0
+                                                    ? 'bg-rose-300'
+                                                    : 'bg-green-300'
+                                            "
+                                            @click="showReserve(room.id, index)"
+                                        ></td>
+                                        <td
+                                            v-else
                                             class="border p-4 cursor-pointer hover:bg-sky-50"
-                                            @click="showModal(room.id)"
+                                            @click="
+                                                showModal(room.id, room.title)
+                                            "
                                         ></td>
                                     </template>
                                 </template>
@@ -156,7 +182,6 @@
                 </div>
             </transition>
         </div>
-        <!-- {{ data.time }} {{ chkLength }} {{ type }} -->
     </div>
 
     <!-- Modal Show -->
@@ -230,6 +255,18 @@
                                             :key="index"
                                         >
                                             <input
+                                                v-if="
+                                                    chkReserve(
+                                                        this.data.room_id,
+                                                        index
+                                                    ) === true
+                                                "
+                                                type="checkbox"
+                                                class="mr-1"
+                                                disabled
+                                            />
+                                            <input
+                                                v-else
                                                 type="checkbox"
                                                 class="mr-1 cursor-pointer"
                                                 :value="index"
@@ -239,6 +276,7 @@
                                             }}{{ isTime.minute }}
                                         </label>
                                     </div>
+                                    <div>{{ chkLength }}</div>
                                     <transition name="fade" mode="out-in">
                                         <div
                                             class="pt-2 text-rose-500"
@@ -287,19 +325,124 @@
                                 ></div>
                             </div>
                         </div>
+                        <div class="grid grid-cols-2">
+                            <div
+                                class="grid grid-cols-2 px-4 py-4 sm:px-6 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100"
+                            >
+                                <div class="justify-start text-sm">
+                                    {{ this.roomTitle }}
+                                </div>
+                                <div class="flex justify-end text-sm">
+                                    จำนวนผู้ใช้
+                                    <span class="pl-1 pr-1">{{
+                                        this.conLimit
+                                    }}</span>
+                                    คน
+                                </div>
+                            </div>
+                            <div
+                                class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
+                            >
+                                <button
+                                    type="submit"
+                                    class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto"
+                                >
+                                    บันทึก
+                                </button>
+                                <button
+                                    type="button"
+                                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
+                                    @click="close()"
+                                >
+                                    ออก
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </transition>
+
+    <!-- Modal Name Reserve -->
+    <transition name="fade" mode="out-in">
+        <div
+            class="relative z-10"
+            aria-labelledby="modal-title"
+            role="dialog"
+            aria-modal="true"
+            v-show="showModalRes"
+        >
+            <div
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            ></div>
+
+            <div class="fixed inset-0 z-10 overflow-y-auto">
+                <div
+                    class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+                >
+                    <form
+                        class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                        @submit.prevent="cancel()"
+                    >
+                        <div
+                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                        >
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon name="user"></box-icon>
+                                </div>
+                                <div
+                                    class="text-center sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >ชื่อผู้จอง :
+                                    </label>
+                                    <div
+                                        class="border-dotted border-2 rounded-lg p-2"
+                                    >
+                                        วงศ์นรินทร์ สุขวิชัย
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="text-center sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >ยกเลิกการจอง :
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="form-control block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                        placeholder="** ใส่รหัสยกเลิก 4 หลัก **"
+                                        required
+                                        v-model="dataCancel.code"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
                         <div
                             class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
                         >
                             <button
                                 type="submit"
-                                class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto"
+                                class="inline-flex w-full justify-center rounded-md bg-rose-400 px-3 py-2 text-sm text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
                             >
-                                บันทึก
+                                ยกเลิก
                             </button>
                             <button
                                 type="button"
                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
-                                @click="close()"
+                                @click="closeReserve()"
                             >
                                 ออก
                             </button>
@@ -320,15 +463,19 @@ moment.locale("th");
 
 export default {
     mounted() {
+        this.getHoliday();
         this.getLocation();
         this.getContainer();
         this.isWeekend();
         this.getTime();
+        this.getReserve();
     },
     data() {
         return {
+            holiday: false,
             isModalShow: false,
             showAlert: false,
+            showModalRes: false,
             banner: "img/banner.jpg",
             locPath: "img/locations/",
             conPath: "storage/containers/",
@@ -341,9 +488,12 @@ export default {
             locGray: true, //ภาพ gray scale
             conActive: "",
             conGray: true,
+            conLimit: "",
+            conTime1: "",
+            conTime2: "",
             roomList: "",
             timeList: "",
-            reserveList: "",
+            reserveList: [],
             weekend: "",
             isTime: "",
             moment: moment,
@@ -357,9 +507,31 @@ export default {
                 code: "",
             },
             type: false,
+            active: false,
+            dataCancel: {
+                id: "",
+                time: "",
+                code: "",
+                today: moment().format("YYYY-MM-DD"),
+            },
+            roomTitle: "",
+            roomLimit: "",
         };
     },
     methods: {
+        getHoliday() {
+            var d = moment().format("DD");
+            var m = moment().format("MM");
+
+            axios
+                .get("/api/holidayMain/" + d + "/" + m)
+                .then((response) => {
+                    this.holiday = response.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
         getLocation() {
             axios
                 .get("/api/locMain")
@@ -390,7 +562,8 @@ export default {
                     console.log(err);
                 });
         },
-        pickCon(id) {
+        pickLoc(id) {
+            this.tableList = false;
             let arr = [];
             let i = 0;
             this.conList.forEach((showCon) => {
@@ -405,7 +578,7 @@ export default {
             this.conGray = true;
             this.data.loc_id = id;
         },
-        async pickRoom(id, time_1, time_2) {
+        async pickCon(id, code, time_1, time_2) {
             if (this.weekend == false) {
                 this.isTime = this.setTimer(time_1);
             } else {
@@ -422,23 +595,23 @@ export default {
                 });
             this.tableList = true;
             this.conActive = id;
+            this.conLimit = code;
+            this.conTime1 = time_1;
+            this.conTime2 = time_2;
             this.conGray = false;
             this.data.con_id = id;
-
+        },
+        getReserve() {
             var today = moment().format("YYYY-MM-DD");
 
-            await axios
-                .get("/api/reserveMain/" + id + "/" + today)
+            axios
+                .get("/api/reserveMain/" + today)
                 .then((response) => {
                     this.reserveList = response.data;
                 })
                 .catch((err) => {
                     console.log(err);
                 });
-
-            setTimeout(() => {
-                console.log("Delayed for 5 second.");
-            }, 5000);
         },
         isWeekend() {
             //เช็ค เสาร์-อาทิตย์
@@ -459,9 +632,10 @@ export default {
             });
             return result;
         },
-        showModal(id) {
+        showModal(id, code) {
             this.isModalShow = true;
             this.data.room_id = id;
+            this.roomTitle = code;
         },
         close() {
             this.isModalShow = false;
@@ -485,9 +659,15 @@ export default {
                 try {
                     this.data.code = await this.getCode();
                     await axios
-                        .post("/api/reserve", this.data)
+                        .post("/api/addReserve", this.data)
                         .then((response) => {
                             this.isModalShow = false;
+                            this.pickCon(
+                                this.conActive,
+                                this.conLimit,
+                                this.conTime1,
+                                this.conTime2
+                            );
                             Swal.fire({
                                 icon: response.data.icon,
                                 title: response.data.title,
@@ -508,11 +688,73 @@ export default {
             return Math.floor(Math.random() * 9000 + 1000);
         },
         chkReserve(id, code) {
-            this.reserveList.forEach((showRes) => {
-                if (showRes.room_id == id) {
-                    return true;
+            var res = this.reserveList.some(
+                (selection) =>
+                    selection["room_id"] == id && selection["time"] == code
+            );
+            return res;
+        },
+        chkConfirm(id, code) {
+            if (id != null && code != null) {
+                var res = this.reserveList.find(
+                    (selection) =>
+                        selection["room_id"] == id && selection["time"] == code
+                );
+                return res.status;
+            }
+        },
+        showReserve(id, time) {
+            this.showModalRes = true;
+            this.dataCancel.id = id;
+            this.dataCancel.time = time;
+        },
+        closeReserve() {
+            this.showModalRes = false;
+        },
+        cancel() {
+            Swal.fire({
+                title: "ยกเลิกการจอง?",
+                text: "ยืนยันการยกเลิก",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .post("/api/delReserve", this.dataCancel)
+                        .then((response) => {
+                            //console.log(res);
+                            Swal.fire({
+                                title: response.data.title,
+                                text: response.data.text,
+                                icon: response.data.icon,
+                            });
+                            this.showModalRes = false;
+                        })
+                        .catch((err) => {
+                            //console.log(err);
+                            Swal.fire({
+                                icon: "error",
+                                title: "ไม่สามารถยกเลิกได้",
+                                text: "กรุณาติดต่อเจ้าหน้าที่",
+                            });
+                        });
                 }
             });
+            setTimeout(() => {
+                window.location.reload();
+            }, "3000");
+        },
+        chkConfirm(id, code) {
+            if (id != null && code != null) {
+                var res = this.reserveList.find(
+                    (selection) =>
+                        selection["room_id"] == id && selection["time"] == code
+                );
+                return res.status;
+            }
         },
     },
     computed: {
@@ -522,6 +764,9 @@ export default {
             } else {
                 this.showAlert = false;
             }
+        },
+        chkHoliday() {
+            return this.holiday;
         },
     },
 };

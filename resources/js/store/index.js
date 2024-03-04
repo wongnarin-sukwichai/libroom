@@ -8,6 +8,7 @@ import container from "./modules/container";
 import room from "./modules/room";
 import reserve from "./modules/reserve";
 import record from "./modules/record";
+import main from "./modules/main";
 
 const store = createStore({
     plugins:[
@@ -21,7 +22,8 @@ const store = createStore({
         container,
         room,
         reserve,
-        record
+        record,
+        main
     }
 })
 

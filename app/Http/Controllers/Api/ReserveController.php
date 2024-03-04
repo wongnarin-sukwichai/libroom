@@ -55,6 +55,38 @@ class ReserveController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // public function update(Request $request, string $id)
+    // {
+
+    //     if ($request['status'] == 0) {
+    //         $result = 1;
+    //     } else {
+    //         $result = 0;
+    //     }
+
+    //     $data = Reserve::find($id);
+
+    //     $data->status = $result;
+
+    //     $data->update();
+
+    //     sleep(1);
+
+    //     if ($request['status'] == 0) {
+
+    //         $res = new Record();
+    //         $res->date = $data->date;
+    //         $res->res_id = $data->id;
+    //         $res->uid = $data->uid;
+    //         $res->name = $data->name;
+    //         $res->surname = $data->surname;
+
+    //         $res->save();
+    //     }
+
+    //     return response()->json($data);
+    // }
+
     public function update(Request $request, string $id)
     {
 
@@ -66,9 +98,17 @@ class ReserveController extends Controller
 
         $data = Reserve::find($id);
 
-        $data->status = $result;
+        $res = Reserve::where('date', $data->date)
+        ->where('uid', $data->uid)
+        ->where('code', $data->code)
+        ->get();
 
-        $data->update();
+         foreach($res AS $r) {
+            $data = Reserve::find($r->id);
+            $data->status = $result;
+            $data->update();
+         }
+
 
         sleep(1);
 
@@ -92,6 +132,21 @@ class ReserveController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        dd($id);
+        Reserve::find($id)->delete();
+
+        $res = Record::where('ref_id', $id)->get();
+
+        if (!empty($res)) {
+            foreach ($res as $r) {
+                Record::find($r->id)->delete();
+            }
+        }
+
+        return response()->json([
+            'icon' => "success",
+            'title' => "ยกเลิกการจอง",
+            'text' => "ยกเลิกการจองเรียบร้อย"
+        ]);
     }
 }

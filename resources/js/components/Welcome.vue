@@ -5,20 +5,21 @@
 
     <div class="bg-white rounded-lg" v-if="!chkHoliday">
         <div
-            class="mx-auto max-w-7xl px-6 lg:px-8 border-4 border-dashed border-gray-200 hover:border-gray-300 py-28 text-center text-gray-200 hover:text-gray-300 text-4xl cursor-pointer"
+            class="mx-auto max-w-7xl px-6 lg:px-8 border-4 border-dashed border-rose-200 hover:border-rose-300 py-28 text-center hover:text-rose-500 text-4xl cursor-pointer text-rose-400"
         >
-            <box-icon 
-            type="solid" 
-            name="quote-left" 
-            class="mr-4" 
-            color="#d1d5db">
+            <box-icon
+                type="solid"
+                name="quote-left"
+                class="mr-4"
+                color="#f43f5e"
+            >
             </box-icon>
             งดให้บริการในวันหยุดนักขัตฤกษ์
             <box-icon
                 type="solid"
                 name="quote-right"
                 class="ml-4"
-                color="#d1d5db"
+                color="#f43f5e"
             ></box-icon>
         </div>
     </div>
@@ -38,7 +39,7 @@
                         >
                             <div
                                 class="relative h-80 w-full overflow-hidden rounded-lg sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 sm:h-64 hover:opacity-75"
-                                @click="pickCon(loc.id)"
+                                @click="pickLoc(loc.id)"
                                 :class="
                                     locActive === loc.id
                                         ? 'ring-2 ring-offset-2'
@@ -80,7 +81,12 @@
                                 <div
                                     class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg xl:aspect-h-8 xl:aspect-w-7"
                                     @click="
-                                        pickRoom(con.id, con.time_1, con.time_2)
+                                        pickCon(
+                                            con.id,
+                                            con.limited,
+                                            con.time_1,
+                                            con.time_2
+                                        )
                                     "
                                     :class="
                                         conActive === con.id
@@ -321,9 +327,18 @@
                         </div>
                         <div class="grid grid-cols-2">
                             <div
-                                class="px-4 py-4 sm:px-6 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100"
+                                class="grid grid-cols-2 px-4 py-4 sm:px-6 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100"
                             >
-                                {{ this.roomTitle }}
+                                <div class="justify-start text-sm">
+                                    {{ this.roomTitle }}
+                                </div>
+                                <div class="flex justify-end text-sm">
+                                    จำนวนผู้ใช้
+                                    <span class="pl-1 pr-1">{{
+                                        this.conLimit
+                                    }}</span>
+                                    คน
+                                </div>
                             </div>
                             <div
                                 class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
@@ -444,6 +459,7 @@ import "boxicons";
 import Swal from "sweetalert2";
 import moment from "moment"; //format date thai
 import "moment/dist/locale/th";
+import axios from 'axios';
 moment.locale("th");
 
 export default {
@@ -473,8 +489,12 @@ export default {
             locGray: true, //ภาพ gray scale
             conActive: "",
             conGray: true,
+            conLimit: "",
+            conTime1: "",
+            conTime2: "",
             roomList: "",
             timeList: "",
+            recordList: "",
             reserveList: [],
             weekend: "",
             isTime: "",
@@ -497,6 +517,7 @@ export default {
                 today: moment().format("YYYY-MM-DD"),
             },
             roomTitle: "",
+            roomLimit: "",
         };
     },
     methods: {
@@ -543,7 +564,7 @@ export default {
                     console.log(err);
                 });
         },
-        pickCon(id) {
+        pickLoc(id) {
             this.tableList = false;
             let arr = [];
             let i = 0;
@@ -559,7 +580,7 @@ export default {
             this.conGray = true;
             this.data.loc_id = id;
         },
-        async pickRoom(id, time_1, time_2) {
+        async pickCon(id, code, time_1, time_2) {
             if (this.weekend == false) {
                 this.isTime = this.setTimer(time_1);
             } else {
@@ -576,6 +597,9 @@ export default {
                 });
             this.tableList = true;
             this.conActive = id;
+            this.conLimit = code;
+            this.conTime1 = time_1;
+            this.conTime2 = time_2;
             this.conGray = false;
             this.data.con_id = id;
         },
@@ -611,6 +635,10 @@ export default {
             return result;
         },
         showModal(id, code) {
+            var today = moment().format("YYYY-MM-DD")
+
+            // axios.get('/api/recordMain/' + today + '/' + )
+
             this.isModalShow = true;
             this.data.room_id = id;
             this.roomTitle = code;
@@ -640,6 +668,15 @@ export default {
                         .post("/api/addReserve", this.data)
                         .then((response) => {
                             this.isModalShow = false;
+
+                            var today = moment().format("YYYY-MM-DD");
+
+                            axios
+                                .get("/api/reserveMain/" + today)
+                                .then((response) => {
+                                    this.reserveList = response.data;
+                                });
+
                             Swal.fire({
                                 icon: response.data.icon,
                                 title: response.data.title,
@@ -698,6 +735,15 @@ export default {
                         .post("/api/delReserve", this.dataCancel)
                         .then((response) => {
                             //console.log(res);
+
+                            var today = moment().format("YYYY-MM-DD");
+
+                            axios
+                                .get("/api/reserveMain/" + today)
+                                .then((response) => {
+                                    this.reserveList = response.data;
+                                });
+
                             Swal.fire({
                                 title: response.data.title,
                                 text: response.data.text,
@@ -715,18 +761,6 @@ export default {
                         });
                 }
             });
-            setTimeout(() => {
-                window.location.reload();
-            }, "3000");
-        },
-        chkConfirm(id, code) {
-            if (id != null && code != null) {
-                var res = this.reserveList.find(
-                    (selection) =>
-                        selection["room_id"] == id && selection["time"] == code
-                );
-                return res.status;
-            }
         },
     },
     computed: {

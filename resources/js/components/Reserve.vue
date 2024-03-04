@@ -297,6 +297,7 @@
                                 <button
                                     type="button"
                                     class="inline-flex w-full justify-center rounded-md bg-rose-400 px-3 py-2 text-sm text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
+                                    @click="delReserve(this.roomID)"
                                 >
                                     ยกเลิกห้อง
                                 </button>
@@ -473,6 +474,12 @@ export default {
             axios
                 .put("../api/reserve/" + this.update.id, this.update)
                 .then((response) => {
+                    
+                    var today = moment().format("YYYY-MM-DD");
+                    axios.get("../api/reserve/" + today).then((response) => {
+                        this.reserveList = response.data;
+                    });
+
                     Swal.fire({
                         position: "top-end",
                         icon: "success",
@@ -530,6 +537,32 @@ export default {
                         .delete("/api/record/" + id)
                         .then((response) => {
                             this.recordList.splice(index, 1);
+                            Swal.fire({
+                                title: "ลบข้อมูล!",
+                                text: "ลบข้อมูลเรียบร้อย",
+                                icon: "success",
+                            });
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+            });
+        },
+        delReserve(id) {
+            Swal.fire({
+                title: "ยืนยันการลบ?",
+                text: "ต้องการลบข้อมูลจองห้องหรือไม่?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .delete("/api/reserve/" + id)
+                        .then((response) => {
                             Swal.fire({
                                 title: "ลบข้อมูล!",
                                 text: "ลบข้อมูลเรียบร้อย",
