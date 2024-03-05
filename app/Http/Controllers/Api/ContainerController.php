@@ -119,4 +119,11 @@ class ContainerController extends Controller
 
         return response()->json($data);
     }
+
+    public function getContainer(string $id)
+    {
+        $data = Container::where('loc_id', $id)->get();
+
+        return response()->json($data);
+    }
 }

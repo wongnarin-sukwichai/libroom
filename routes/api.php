@@ -49,10 +49,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('uploadPicRoom', [UploadController::class, 'uploadPicRoom']);
     Route::resource('location', LocationController::class);
     Route::resource('container', ContainerController::class);
+    Route::get('getContainer/{id}', [ContainerController::class, 'getContainer']);
     Route::resource('room', RoomController::class);
     Route::get('conStatus/{id}/{code}', [ContainerController::class, 'conStatus']);
     Route::get('roomStatus/{id}/{code}', [RoomController::class, 'roomStatus']);
     Route::resource('reserve', ReserveController::class);
+    Route::post('deleteReserve', [ReserveController::class, 'deleteReserve']);
     Route::resource('record', RecordController::class);
     Route::get('chkRecord/{id}/{code}', [RecordController::class, 'chkRecord']);
 });

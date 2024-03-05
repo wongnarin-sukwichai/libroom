@@ -99,15 +99,15 @@ class ReserveController extends Controller
         $data = Reserve::find($id);
 
         $res = Reserve::where('date', $data->date)
-        ->where('uid', $data->uid)
-        ->where('code', $data->code)
-        ->get();
+            ->where('uid', $data->uid)
+            ->where('code', $data->code)
+            ->get();
 
-         foreach($res AS $r) {
+        foreach ($res as $r) {
             $data = Reserve::find($r->id);
             $data->status = $result;
             $data->update();
-         }
+        }
 
 
         sleep(1);
@@ -130,17 +130,20 @@ class ReserveController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function deleteReserve(Request $request)
     {
-        dd($id);
-        Reserve::find($id)->delete();
 
-        $res = Record::where('ref_id', $id)->get();
+        $data = Reserve::where('date', $request['today'])
+            ->where('room_id', $request['room_id'])
+            ->where('time', $request['time'])
+            ->first()->code;
 
-        if (!empty($res)) {
-            foreach ($res as $r) {
-                Record::find($r->id)->delete();
-            }
+        $res = Reserve::where('date', $request['today'])
+            ->where('code', $data)
+            ->get();
+
+        foreach ($res as $r) {
+            Reserve::find($r->id)->delete();
         }
 
         return response()->json([

@@ -297,7 +297,7 @@
                                 <button
                                     type="button"
                                     class="inline-flex w-full justify-center rounded-md bg-rose-400 px-3 py-2 text-sm text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
-                                    @click="delReserve(this.roomID)"
+                                    @click="delReserve()"
                                 >
                                     ยกเลิกห้อง
                                 </button>
@@ -356,6 +356,11 @@ export default {
                 uid: "",
             },
             recordList: "",
+            dataCancel: {
+                today: moment().format("YYYY-MM-DD"),
+                room_id: "",
+                time: "",
+            },
         };
     },
     methods: {
@@ -368,6 +373,9 @@ export default {
 
             this.data.res_id = this.getResID(id, index);
             this.recordList = this.getRecord(this.getResID(id, index));
+
+            this.dataCancel.room_id = id;
+            this.dataCancel.time = index;
 
             this.isModalShow = true;
         },
@@ -474,7 +482,6 @@ export default {
             axios
                 .put("../api/reserve/" + this.update.id, this.update)
                 .then((response) => {
-                    
                     var today = moment().format("YYYY-MM-DD");
                     axios.get("../api/reserve/" + today).then((response) => {
                         this.reserveList = response.data;
@@ -549,7 +556,7 @@ export default {
                 }
             });
         },
-        delReserve(id) {
+        delReserve() {
             Swal.fire({
                 title: "ยืนยันการลบ?",
                 text: "ต้องการลบข้อมูลจองห้องหรือไม่?",
@@ -561,8 +568,12 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/api/reserve/" + id)
+                        .post("/api/deleteReserve", this.dataCancel)
                         .then((response) => {
+                            this.getReserve();
+
+                            this.isModalShow = false;
+
                             Swal.fire({
                                 title: "ลบข้อมูล!",
                                 text: "ลบข้อมูลเรียบร้อย",

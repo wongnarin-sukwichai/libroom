@@ -1,5 +1,5 @@
 <template>
-    <div class="container ">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
@@ -716,6 +716,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import "boxicons";
 import Swal from "sweetalert2";
 
@@ -738,6 +739,7 @@ export default {
             conList: "",
             showContainer: "",
             timeList: "",
+            conID: "",
             data: {
                 loc_id: "",
                 pic: "",
@@ -801,16 +803,29 @@ export default {
                 });
         },
         pickCon(id) {
-            let arr = [];
-            let i = 0;
-            this.conList.forEach((showCon) => {
-                if (showCon.loc_id === id) {
-                    arr[i] = showCon;
-                    i++;
-                }
-            });
-            this.showContainer = arr;
+            axios
+                .get("/api/getContainer/" + id)
+                .then((response) => {
+                    this.showContainer = response.data;
+                    this.conID = id;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
+        // pickCon(id) {
+        //     let arr = [];
+        //     let i = 0;
+        //     this.conList.forEach((showCon) => {
+        //         if (showCon.loc_id === id) {
+        //             arr[i] = showCon;
+        //             i++;
+        //         }
+        //     });
+        //     this.showContainer = arr;
+
+        //     this.conID = id;
+        // },
         resetFile() {
             this.$refs.fileInput.value = null; //clear ช่อง choose
             this.previewImage = "";
@@ -922,6 +937,8 @@ export default {
                     axios
                         .get("/api/conStatus/" + id + "/" + code)
                         .then((response) => {
+                            this.pickCon(this.conID);
+
                             Swal.fire({
                                 position: "top-end",
                                 icon: "success",
@@ -929,9 +946,6 @@ export default {
                                 showConfirmButton: false,
                                 timer: 1500,
                             });
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, "1500");
                         })
                         .catch((err) => {
                             //console.log(err);
