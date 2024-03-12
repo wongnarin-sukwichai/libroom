@@ -459,7 +459,7 @@ import "boxicons";
 import Swal from "sweetalert2";
 import moment from "moment"; //format date thai
 import "moment/dist/locale/th";
-import axios from 'axios';
+import axios from "axios";
 moment.locale("th");
 
 export default {
@@ -506,6 +506,8 @@ export default {
                 room_id: "",
                 time: [],
                 uid: "",
+                name: "",
+                surname: "",
                 code: "",
             },
             type: false,
@@ -635,7 +637,7 @@ export default {
             return result;
         },
         showModal(id, code) {
-            var today = moment().format("YYYY-MM-DD")
+            var today = moment().format("YYYY-MM-DD");
 
             // axios.get('/api/recordMain/' + today + '/' + )
 
@@ -647,51 +649,71 @@ export default {
             this.isModalShow = false;
         },
         async send() {
-            if (this.data.time.length > 3) {
-                Swal.fire({
-                    title: "ผิดพลาด",
-                    text: "ใช้บริการได้ไม่เกิน 3 ชั่วโมง/วัน",
-                    icon: "error",
+            var res =
+                'https://library.msu.ac.th/libapi/checkPatron/' + this.data.uid;
+            // console.log(res)
+            await fetch(res, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data)
+                    // (this.data.name = data[0].FNAMETHAI),
+                    //     (this.data.surname = data[0].LNAMETHAI);
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
-            } else {
-                if (this.type == true) {
-                    this.data.date = moment()
-                        .add("1", "days")
-                        .format("YYYY-MM-DD");
-                } else {
-                    this.data.date = moment().format("YYYY-MM-DD");
-                }
 
-                try {
-                    this.data.code = await this.getCode();
-                    await axios
-                        .post("/api/addReserve", this.data)
-                        .then((response) => {
-                            this.isModalShow = false;
+            console.log(this.data.name, this.data.surname);
 
-                            var today = moment().format("YYYY-MM-DD");
+            // if (this.data.time.length > 3) {
+            //     Swal.fire({
+            //         title: "ผิดพลาด",
+            //         text: "ใช้บริการได้ไม่เกิน 3 ชั่วโมง/วัน",
+            //         icon: "error",
+            //     });
+            // } else {
+            //     if (this.type == true) {
+            //         this.data.date = moment()
+            //             .add("1", "days")
+            //             .format("YYYY-MM-DD");
+            //     } else {
+            //         this.data.date = moment().format("YYYY-MM-DD");
+            //     }
 
-                            axios
-                                .get("/api/reserveMain/" + today)
-                                .then((response) => {
-                                    this.reserveList = response.data;
-                                });
+            //     try {
+            //         this.data.code = await this.getCode();
+            //         await axios
+            //             .post("/api/addReserve", this.data)
+            //             .then((response) => {
+            //                 this.isModalShow = false;
 
-                            Swal.fire({
-                                icon: response.data.icon,
-                                title: response.data.title,
-                                text: response.data.text,
-                            });
-                        });
-                } catch (err) {
-                    // console.log(err);
-                    Swal.fire({
-                        icon: "error",
-                        title: "ผิดพลาด",
-                        text: "ไม่สามารถบันทึกข้อมูลได้",
-                    });
-                }
-            }
+            //                 var today = moment().format("YYYY-MM-DD");
+
+            //                 axios
+            //                     .get("/api/reserveMain/" + today)
+            //                     .then((response) => {
+            //                         this.reserveList = response.data;
+            //                     });
+
+            //                 Swal.fire({
+            //                     icon: response.data.icon,
+            //                     title: response.data.title,
+            //                     text: response.data.text,
+            //                 });
+            //             });
+            //     } catch (err) {
+            //         // console.log(err);
+            //         Swal.fire({
+            //             icon: "error",
+            //             title: "ผิดพลาด",
+            //             text: "ไม่สามารถบันทึกข้อมูลได้",
+            //         });
+            //     }
+            // }
         },
         getCode() {
             return Math.floor(Math.random() * 9000 + 1000);
