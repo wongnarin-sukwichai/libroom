@@ -34,14 +34,16 @@ class RecordController extends Controller
             'today' => 'required',
             'res_id' => 'required',
             'uid' => 'required',
+            'name' => 'required',
+            'surname' => 'required'
         ]);
 
         $data = new Record();
         $data->date = $request['today'];
         $data->res_id = $request['res_id'];
         $data->uid = $request['uid'];
-        $data->name = 'วงศ์นรินทร์';
-        $data->surname = 'สุขวิชัย';
+        $data->name = $request['name'];
+        $data->surname = $request['surname'];
 
         $data->save();
 

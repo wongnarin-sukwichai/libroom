@@ -354,6 +354,8 @@ export default {
                 today: moment().format("YYYY-MM-DD"),
                 res_id: "",
                 uid: "",
+                name: "",
+                surname: "",
             },
             recordList: "",
             dataCancel: {
@@ -502,16 +504,36 @@ export default {
         },
         async send() {
             try {
-                // var res = await axios.get("/api/chkRecord/" + this.data.uid + "/" + this.data.today);
-                // console.log(res)
                 await axios
-                    .post("/api/record", this.data)
+                    .get(
+                        "https://library.msu.ac.th/libapi/api/checkPatron/" +
+                            this.data.uid
+                    )
                     .then((response) => {
-                        this.recordList = response.data;
+                        this.data.name = response.data[0].FNAMETHAI;
+                        this.data.surname = response.data[0].LNAMETHAI;
+                        // console.log(this.data.name);
                     })
                     .catch((err) => {
                         console.log(err);
                     });
+
+                if (this.data.name == null) {
+                    Swal.fire({
+                        title: "ผิดพลาด",
+                        text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
+                        icon: "error",
+                    });
+                } else {
+                    await axios
+                        .post("/api/record", this.data)
+                        .then((response) => {
+                            this.recordList = response.data;
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
             } catch (e) {
                 return e;
             }
