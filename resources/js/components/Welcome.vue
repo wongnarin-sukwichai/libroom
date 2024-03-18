@@ -649,71 +649,81 @@ export default {
             this.isModalShow = false;
         },
         async send() {
-            var res =
-                'https://library.msu.ac.th/libapi/checkPatron/' + this.data.uid;
-            // console.log(res)
-            await fetch(res, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data)
-                    // (this.data.name = data[0].FNAMETHAI),
-                    //     (this.data.surname = data[0].LNAMETHAI);
-                })
-                .catch((err) => {
-                    console.log(err);
+            if (this.data.time.length < 1) {
+                Swal.fire({
+                    title: "ผิดพลาด",
+                    text: "กรุณาเลือกเวลา",
+                    icon: "error",
                 });
+            }
+            else if (this.data.time.length > 3) {
+                Swal.fire({
+                    title: "ผิดพลาด",
+                    text: "ใช้บริการได้ไม่เกิน 3 ชั่วโมง/วัน",
+                    icon: "error",
+                });
+            } else {
+                if (this.type == true) {
+                    this.data.date = moment()
+                        .add("1", "days")
+                        .format("YYYY-MM-DD");
+                } else {
+                    this.data.date = moment().format("YYYY-MM-DD");
+                }
 
-            console.log(this.data.name, this.data.surname);
+                // 'https://library.msu.ac.th/libapi/api/apitest';
+                //  https://library.msu.ac.th/libapi/api/checkPatron/" + this.data.uid
+                await axios
+                    .get(
+                        "https://library.msu.ac.th/libapi/api/checkPatron/" + this.data.uid
+                    )
+                    .then((response) => {
+                        this.data.name = response.data[0].FNAMETHAI;
+                        this.data.surname = response.data[0].LNAMETHAI;                    
+                        // console.log(this.data.name);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
 
-            // if (this.data.time.length > 3) {
-            //     Swal.fire({
-            //         title: "ผิดพลาด",
-            //         text: "ใช้บริการได้ไม่เกิน 3 ชั่วโมง/วัน",
-            //         icon: "error",
-            //     });
-            // } else {
-            //     if (this.type == true) {
-            //         this.data.date = moment()
-            //             .add("1", "days")
-            //             .format("YYYY-MM-DD");
-            //     } else {
-            //         this.data.date = moment().format("YYYY-MM-DD");
-            //     }
+                if (this.data.name == null) {
+                    Swal.fire({
+                        title: "ผิดพลาด",
+                        text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
+                        icon: "error",
+                    });
+                } else {
+                    try {
+                        this.data.code = await this.getCode();
+                        await axios
+                            .post("/api/addReserve", this.data)
+                            .then((response) => {
+                                this.isModalShow = false;
 
-            //     try {
-            //         this.data.code = await this.getCode();
-            //         await axios
-            //             .post("/api/addReserve", this.data)
-            //             .then((response) => {
-            //                 this.isModalShow = false;
+                                var today = moment().format("YYYY-MM-DD");
 
-            //                 var today = moment().format("YYYY-MM-DD");
+                                axios
+                                    .get("/api/reserveMain/" + today)
+                                    .then((response) => {
+                                        this.reserveList = response.data;
+                                    });
 
-            //                 axios
-            //                     .get("/api/reserveMain/" + today)
-            //                     .then((response) => {
-            //                         this.reserveList = response.data;
-            //                     });
-
-            //                 Swal.fire({
-            //                     icon: response.data.icon,
-            //                     title: response.data.title,
-            //                     text: response.data.text,
-            //                 });
-            //             });
-            //     } catch (err) {
-            //         // console.log(err);
-            //         Swal.fire({
-            //             icon: "error",
-            //             title: "ผิดพลาด",
-            //             text: "ไม่สามารถบันทึกข้อมูลได้",
-            //         });
-            //     }
-            // }
+                                Swal.fire({
+                                    icon: response.data.icon,
+                                    title: response.data.title,
+                                    text: response.data.text,
+                                });
+                            });
+                    } catch (err) {
+                        // console.log(err);
+                        Swal.fire({
+                            icon: "error",
+                            title: "ผิดพลาด",
+                            text: "ไม่สามารถบันทึกข้อมูลได้",
+                        });
+                    }
+                }
+            }
         },
         getCode() {
             return Math.floor(Math.random() * 9000 + 1000);

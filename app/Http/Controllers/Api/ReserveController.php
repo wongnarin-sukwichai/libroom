@@ -15,7 +15,7 @@ class ReserveController extends Controller
      */
     public function index()
     {
-        dd('666');
+        //
     }
 
     /**
