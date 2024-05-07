@@ -43,6 +43,7 @@
                         <th class="border p-4">สิ้นสุด</th>
                         <th class="border p-4">แก้ไขล่าสุด</th>
                         <th class="border p-4">วันที่แก้ไข</th>
+                        <th class="border p-4">เวลาแก้ไข</th>
                         <th class="border p-4">#</th>
                     </tr>
                 </thead>
@@ -60,6 +61,9 @@
                         <td class="border p-4">{{ time.created }}</td>
                         <td class="border p-4">
                             {{ moment(time.created_at).format("LL") }}
+                        </td>
+                        <td class="border p-4">
+                            {{ moment(time.created_at).format("LTS") }} น.
                         </td>
                         <td class="border p-4">
                             <div class="flex justify-center">

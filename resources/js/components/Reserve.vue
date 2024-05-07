@@ -325,9 +325,9 @@ import "moment/dist/locale/th";
 moment.locale("th");
 
 export default {
-    mounted() {
+    async mounted() {
+        await this.getTime();
         this.getContainer();
-        this.getTime();
         this.getRoom();
         this.isWeekend();
         this.getReserve();
@@ -517,6 +517,29 @@ export default {
                     .catch((err) => {
                         console.log(err);
                     });
+
+                let timerInterval;
+                await Swal.fire({
+                    title: "กำลังตรวจสอบ...",
+                    html: "กรุณารอ... <b></b>",
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        const timer = Swal.getPopup().querySelector("b");
+                        timerInterval = setInterval(() => {
+                            timer.textContent = `${Swal.getTimerLeft()}`;
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    },
+                }).then((result) => {
+                    /* Read more about handling dismissals below */
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        // console.log("I was closed by the timer");
+                    }
+                });
 
                 if (this.data.name == null) {
                     Swal.fire({

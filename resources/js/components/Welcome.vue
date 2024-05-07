@@ -655,8 +655,7 @@ export default {
                     text: "กรุณาเลือกเวลา",
                     icon: "error",
                 });
-            }
-            else if (this.data.time.length > 3) {
+            } else if (this.data.time.length > 3) {
                 Swal.fire({
                     title: "ผิดพลาด",
                     text: "ใช้บริการได้ไม่เกิน 3 ชั่วโมง/วัน",
@@ -673,18 +672,43 @@ export default {
 
                 // 'https://library.msu.ac.th/libapi/api/apitest';
                 //  https://library.msu.ac.th/libapi/api/checkPatron/" + this.data.uid
+
                 await axios
                     .get(
-                        "https://library.msu.ac.th/libapi/api/checkPatron/" + this.data.uid
+                        "https://library.msu.ac.th/libapi/api/checkPatron/" +
+                            this.data.uid
                     )
                     .then((response) => {
                         this.data.name = response.data[0].FNAMETHAI;
-                        this.data.surname = response.data[0].LNAMETHAI;                    
+                        this.data.surname = response.data[0].LNAMETHAI;
                         // console.log(this.data.name);
                     })
                     .catch((err) => {
                         console.log(err);
                     });
+
+                let timerInterval;
+                await Swal.fire({
+                    title: "กำลังตรวจสอบ...",
+                    html: "กรุณารอ... <b></b>",
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        const timer = Swal.getPopup().querySelector("b");
+                        timerInterval = setInterval(() => {
+                            timer.textContent = `${Swal.getTimerLeft()}`;
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    },
+                }).then((result) => {
+                    /* Read more about handling dismissals below */
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        // console.log("I was closed by the timer");
+                    }
+                });
 
                 if (this.data.name == null) {
                     Swal.fire({
@@ -693,11 +717,15 @@ export default {
                         icon: "error",
                     });
                 } else {
+                    console.log(this.data.name);
                     try {
                         this.data.code = await this.getCode();
                         await axios
                             .post("/api/addReserve", this.data)
                             .then((response) => {
+                                this.data.uid = "";
+                                this.data.name = "";
+                                this.data.surname = "";
                                 this.isModalShow = false;
 
                                 var today = moment().format("YYYY-MM-DD");
@@ -717,9 +745,9 @@ export default {
                     } catch (err) {
                         // console.log(err);
                         Swal.fire({
-                            icon: "error",
                             title: "ผิดพลาด",
-                            text: "ไม่สามารถบันทึกข้อมูลได้",
+                            text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
+                            icon: "error",
                         });
                     }
                 }
