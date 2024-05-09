@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\MainController;
 use App\Http\Controllers\Api\RecordController;
 use App\Http\Controllers\Api\ReserveController;
+use App\Http\Controllers\Api\MemberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,7 @@ Route::post('addReserve', [MainController::class, 'addReserve']);
 Route::get('reserveMain/{id}', [MainController::class, 'reserveMain']);
 Route::post('delReserve', [MainController::class, 'delReserve']);
 Route::get('holidayMain/{id}/{code}', [MainController::class, 'holidayMain']);
+Route::resource('member', MemberController::class);
 
 Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login']);

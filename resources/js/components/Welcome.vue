@@ -674,17 +674,38 @@ export default {
                 //  https://library.msu.ac.th/libapi/api/checkPatron/" + this.data.uid
 
                 await axios
-                    .get(
-                        "https://library.msu.ac.th/libapi/api/checkPatron/" +
-                            this.data.uid
-                    )
+                    .get("/api/member/" + this.data.uid)
                     .then((response) => {
-                        this.data.name = response.data[0].FNAMETHAI;
-                        this.data.surname = response.data[0].LNAMETHAI;
-                        // console.log(this.data.name);
-                    })
-                    .catch((err) => {
-                        console.log(err);
+                        if (response.data == "false") {
+                            axios
+                                .get(
+                                    "https://library.msu.ac.th/libapi/api/checkPatron/" +
+                                        this.data.uid
+                                )
+                                .then((response) => {
+                                    axios
+                                        .post("/api/member", response.data)
+                                        .then(() => {
+                                            // console.log("success");
+                                        })
+                                        .catch((err) => {
+                                            console.log(err);
+                                        });
+
+                                    this.data.name = response.data[0].FNAMETHAI;
+                                    this.data.surname =
+                                        response.data[0].LNAMETHAI;
+                                    // console.log(this.data.name);
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
+                        } else {
+                            // this.data.name = response.data[0].FNAMETHAI;
+                            // this.data.surname = response.data[0].LNAMETHAI;
+                            this.data.name = response.data.name;
+                            this.data.surname = response.data.surname;
+                        }
                     });
 
                 let timerInterval;
@@ -717,12 +738,13 @@ export default {
                         icon: "error",
                     });
                 } else {
-                    console.log(this.data.name);
+                    // console.log(this.data.name);
                     try {
                         this.data.code = await this.getCode();
                         await axios
                             .post("/api/addReserve", this.data)
                             .then((response) => {
+                                this.data.time = [];
                                 this.data.uid = "";
                                 this.data.name = "";
                                 this.data.surname = "";
