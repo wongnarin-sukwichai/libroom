@@ -44,6 +44,14 @@ class ReserveController extends Controller
         return response()->json($data);
     }
 
+    public function checkReserve(string $code, string $id)
+    {
+        $data = Reserve::where('date', $code)->where('uid', $id)->count();
+        $data = 3 - $data;
+
+        return response()->json($data);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -99,7 +107,6 @@ class ReserveController extends Controller
         $data = Reserve::find($id);
 
         $res = Reserve::where('date', $data->date)
-            ->where('uid', $data->uid)
             ->where('code', $data->code)
             ->get();
 

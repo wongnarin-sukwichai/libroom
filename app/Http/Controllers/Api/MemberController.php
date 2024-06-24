@@ -30,23 +30,24 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request[0]['BARCODE']);
+        //dd($request['BARCODE']);
 
-        $res = Member::where('uid', $request[0]['BARCODE'])->first();
+        $res = Member::where('uid', $request['BARCODE'])->first();
 
         if(empty($res)) {
             $data = new Member();
 
-            $data->uid = $request[0]['BARCODE'];
-            $data->name = $request[0]['FNAMETHAI'];
-            $data->surname = $request[0]['LNAMETHAI'];
+            $data->uid = $request['BARCODE'];
+            $data->name = $request['FNAMETHAI'];
+            $data->surname = $request['LNAMETHAI'];
     
             $data->save();
         }
 
-        return response()->json([
-            'message' => 'บันทึกข้อมูลเรียบร้อย'
-        ]);
+        return response()->json($data);
+        // return response()->json([
+        //     'message' => 'บันทึกข้อมูลเรียบร้อย'
+        // ]);
     }
 
     /**
@@ -54,7 +55,8 @@ class MemberController extends Controller
      */
     public function show(string $id)
     {
-        $data = Member::find($id);
+
+        $data = Member::where('uid', $id)->first();
 
         if(empty($data)) {
             return response()->json('false');

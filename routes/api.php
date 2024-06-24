@@ -34,8 +34,9 @@ Route::get('timeMain', [MainController::class, 'timeMain']);
 Route::post('addReserve', [MainController::class, 'addReserve']);
 Route::get('reserveMain/{id}', [MainController::class, 'reserveMain']);
 Route::post('delReserve', [MainController::class, 'delReserve']);
-Route::get('holidayMain/{id}/{code}', [MainController::class, 'holidayMain']);
+Route::get('holidayMain/{id}/{code}/{next}/{to}', [MainController::class, 'holidayMain']);
 Route::resource('member', MemberController::class);
+Route::get('checkReserve/{code}/{id}', [ReserveController::class, 'checkReserve']);
 
 Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login']);

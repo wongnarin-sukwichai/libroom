@@ -91,9 +91,20 @@ class MainController extends Controller
             'code' => 'required'
         ]);
 
-        for ($i = 0; $i < count($request['time']); $i++) {
+        dd($request->all());
 
-            for ($j = 0; $j < count($request['uid']); $j++) {
+        $res = Reserve::where('date', $request['date'])->where('uid', $request['uid'])->count();
+        $result = Record::where('date', $request['date'])->where('uid', $request['uid'])->count();
+
+        if ($res >= 3 || $result >= 3) {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'ผิดพลาด',
+                'text' => 'ท่านใช้บริการเกิน 3 ครั้ง/วัน กรุณาตรวจสอบ'
+            ]);
+        } else {
+
+            for ($j = 0; $j < count($request['time']); $j++) {
 
                 $data = new Reserve();
 
@@ -101,22 +112,22 @@ class MainController extends Controller
                 $data->loc_id = $request['loc_id'];
                 $data->con_id = $request['con_id'];
                 $data->room_id = $request['room_id'];
-                $data->time = $request['time'][$i];
-                $data->uid = $request['uid'][$j];
-                $data->name = $request['name'][$j];
-                $data->surname = $request['surname'][$j];
+                $data->time = $request['time'][$j];
+                $data->uid = $request['uid'];
+                $data->name = $request['name'];
+                $data->surname = $request['surname'];
                 $data->code = $request['code'];
                 $data->status = 0;
 
                 $data->save();
             }
-        }
 
-        return response()->json([
-            'icon' => "success",
-            'title' => $request['code'],
-            'text' => "** กรุณาจดจำรหัส สำหรับใช้ในการยกเลิกการจอง **"
-        ]);
+            return response()->json([
+                'icon' => "success",
+                'title' => $request['code'],
+                'text' => "** กรุณาจดจำรหัส สำหรับใช้ในการยกเลิกการจอง **"
+            ]);
+        }
     }
 
     public function delReserve(Request $request)

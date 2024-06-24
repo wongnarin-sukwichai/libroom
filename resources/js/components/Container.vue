@@ -305,7 +305,7 @@
                                             กรุณาเลือก...
                                         </option>
                                         <option
-                                            v-for="n in 15"
+                                            v-for="n in 5"
                                             :key="n"
                                             :value="n"
                                         >
@@ -587,7 +587,7 @@
                                             กรุณาเลือก...
                                         </option>
                                         <option
-                                            v-for="n in 15"
+                                            v-for="n in 5"
                                             :key="n"
                                             :value="n"
                                         >

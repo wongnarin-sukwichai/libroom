@@ -157,9 +157,12 @@
                                         >ชื่อผู้จอง :
                                     </label>
                                     <div
-                                        class="border-dotted border-2 rounded-lg p-2"
+                                        class="border-dotted border-2 rounded-lg p-2 mb-1"
+                                        v-for="(nameRes, index) in this
+                                            .nameReserve"
+                                        :key="index"
                                     >
-                                        วงศ์นรินทร์ สุขวิชัย
+                                        {{ nameRes }}
                                     </div>
                                 </div>
                             </div>
@@ -175,13 +178,13 @@
                                     </label>
                                     <button
                                         class="relative inline-flex items-center justify-center p-4 px-6 py-2 overflow-hidden font-medium text-green-500 transition duration-300 ease-out border-2 border-green-400 rounded-full shadow-md group"
-                                        :disabled="this.update.status === 1"
+                                        :disabled="this.data.status === 1"
                                         @click="sendConfirm()"
                                     >
                                         <span
                                             class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 bg-green-400 group-hover:translate-x-0 ease"
                                             :class="
-                                                this.update.status === 0
+                                                this.data.status === 0
                                                     ? '-translate-x-full'
                                                     : ''
                                             "
@@ -194,7 +197,7 @@
                                         </span>
                                         <span
                                             class="absolute flex items-center justify-center w-full h-full text-gray-400 transition-all duration-300 transform group-hover:translate-x-full ease"
-                                            v-if="this.update.status === 0"
+                                            v-if="this.data.status === 0"
                                             >ยืนยัน</span
                                         >
                                         <span class="relative invisible"
@@ -204,86 +207,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div
-                            class="grid grid-cols-2 bg-white px-4 pt-2"
-                            v-for="(record, index) in recordList"
-                            :key="index"
-                        >
-                            <div class="sm:flex sm:items-start">
-                                <div
-                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-200 sm:mx-0 sm:h-10 sm:w-10"
-                                >
-                                    <box-icon name="check"></box-icon>
-                                </div>
-                                <div
-                                    class="text-center sm:ml-4 sm:text-left w-full"
-                                >
-                                    <div
-                                        class="border-dotted border-2 rounded-lg p-2"
-                                    >
-                                        {{ record.name }} {{ record.surname }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="border-dotted border-2 rounded-lg ml-4 w-12 hover:border-gray-300 cursor-pointer flex items-center justify-center"
-                                @click="delRecord(record.id, index)"
-                            >
-                                <box-icon name="x" color="#f87171"></box-icon>
-                            </div>
-                        </div>
-
-                        <form @submit.prevent="send()">
-                            <div class="bg-white px-4 sm:pt-4">
-                                <div class="sm:flex sm:items-start">
-                                    <div
-                                        class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
-                                    >
-                                        <box-icon
-                                            type="logo"
-                                            name="ok-ru"
-                                        ></box-icon>
-                                    </div>
-                                    <div
-                                        class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
-                                    >
-                                        <label
-                                            id="listbox-label"
-                                            class="block text-sm font-medium leading-6 text-gray-900"
-                                        >
-                                            ผู้เข้าร่วม :</label
-                                        >
-
-                                        <div
-                                            x-show="open"
-                                            class="flex items-center justify-between"
-                                        >
-                                            <input
-                                                type="text"
-                                                class="form-control block w-full px-3 py-1.5 rounded-l-lg text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-sky-300 focus:outline-none"
-                                                placeholder="** รหัสนิสิต"
-                                                required
-                                                v-model="data.uid"
-                                                :disabled="
-                                                    this.update.status === 0
-                                                "
-                                            />
-                                            <div
-                                                class="flex items-center justify-center space-x-2"
-                                            >
-                                                <button
-                                                    type="submit"
-                                                    class="btn bg-sky-400 px-3 py-2.5 text-sm text-white hover:bg-sky-500 rounded-r-lg"
-                                                >
-                                                    บันทึก
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
 
                         <div class="grid grid-cols-2 mt-4">
                             <div
@@ -297,7 +220,8 @@
                                 <button
                                     type="button"
                                     class="inline-flex w-full justify-center rounded-md bg-rose-400 px-3 py-2 text-sm text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
-                                    @click="delReserve()"
+                                    v-if="data.status === 0"
+                                    @click="del()"
                                 >
                                     ยกเลิกห้อง
                                 </button>
@@ -334,6 +258,7 @@ export default {
     },
     data() {
         return {
+            today: moment().format("YYYY-MM-DD"),
             isModalShow: false,
             conPath: "../storage/containers/",
             roomPath: "../storage/rooms/",
@@ -343,38 +268,29 @@ export default {
             reserveList: "",
             weekend: "",
             isTime: "",
-            update: {
-                id: "",
-                status: "",
-            },
-            roomID: "",
-            roomTitle: "",
-            reserveTime: "",
             data: {
                 today: moment().format("YYYY-MM-DD"),
-                res_id: "",
-                uid: "",
-                name: "",
-                surname: "",
+                id: "",
+                time: "",
+                status: "",
+                code: "",
             },
-            recordList: "",
+            roomTitle: "",
             dataCancel: {
                 today: moment().format("YYYY-MM-DD"),
                 room_id: "",
                 time: "",
             },
+            nameReserve: [],
         };
     },
     methods: {
         showModal(id, code, index) {
-            this.roomID = id;
+            console.log(id, code, index);
             this.roomTitle = code;
-            this.reserveTime = index;
-            this.update.id = this.getResID(id, index);
-            this.update.status = this.chkConfirm(id, index);
 
-            this.data.res_id = this.getResID(id, index);
-            this.recordList = this.getRecord(this.getResID(id, index));
+            this.showReserve(id, index);
+            this.getResID(id, index);
 
             this.dataCancel.room_id = id;
             this.dataCancel.time = index;
@@ -454,7 +370,6 @@ export default {
             });
             return result;
         },
-
         chkReserve(id, code) {
             var res = this.reserveList.some(
                 (selection) =>
@@ -477,108 +392,30 @@ export default {
                     (selection) =>
                         selection["room_id"] == id && selection["time"] == code
                 );
-                return res.id;
+                this.data.id = res.id;
+                this.data.time = res.time;
+                this.data.status = res.status;
+                this.data.code = res.code;
+                console.log(this.data);
+            }
+        },
+        showReserve(id, time) {
+            if (id != null && time != null) {
+                var res = this.reserveList.filter(
+                    (selection) =>
+                        selection["room_id"] == id && selection["time"] == time
+                );
+
+                for (var i = 0; i < res.length; i++) {
+                    this.nameReserve[i] = res[i].name + " " + res[i].surname;
+                }
             }
         },
         sendConfirm() {
-            axios
-                .put("../api/reserve/" + this.update.id, this.update)
-                .then((response) => {
-                    var today = moment().format("YYYY-MM-DD");
-                    axios.get("../api/reserve/" + today).then((response) => {
-                        this.reserveList = response.data;
-                    });
-
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "บันทึกข้อมูลเรียบร้อย",
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
-                    this.update.status = response.data.status;
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        },
-        async send() {
-            try {
-                await axios
-                    .get(
-                        "https://library.msu.ac.th/libapi/api/checkPatron/" +
-                            this.data.uid
-                    )
-                    .then((response) => {
-                        this.data.name = response.data[0].FNAMETHAI;
-                        this.data.surname = response.data[0].LNAMETHAI;
-                        // console.log(this.data.name);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-
-                let timerInterval;
-                await Swal.fire({
-                    title: "กำลังตรวจสอบ...",
-                    html: "กรุณารอ... <b></b>",
-                    timer: 2000,
-                    timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading();
-                        const timer = Swal.getPopup().querySelector("b");
-                        timerInterval = setInterval(() => {
-                            timer.textContent = `${Swal.getTimerLeft()}`;
-                        }, 100);
-                    },
-                    willClose: () => {
-                        clearInterval(timerInterval);
-                    },
-                }).then((result) => {
-                    /* Read more about handling dismissals below */
-                    if (result.dismiss === Swal.DismissReason.timer) {
-                        // console.log("I was closed by the timer");
-                    }
-                });
-
-                if (this.data.name == null) {
-                    Swal.fire({
-                        title: "ผิดพลาด",
-                        text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
-                        icon: "error",
-                    });
-                } else {
-                    await axios
-                        .post("/api/record", this.data)
-                        .then((response) => {
-                            this.recordList = response.data;
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                }
-            } catch (e) {
-                return e;
-            }
-        },
-        getRecord(id) {
-            if (id != null) {
-                axios
-                    .get("/api/record/" + id)
-                    .then((response) => {
-                        this.recordList = response.data;
-                        console.log(this.recordList);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            }
-        },
-        delRecord(id, index) {
             Swal.fire({
-                title: "ยืนยันการลบ?",
-                text: "ต้องการลบข้อมูลผู้เข้าใช้งานหรือไม่?",
-                icon: "warning",
+                title: "ยืนยันการจอง?",
+                text: "ต้องกายืนยันการจองห้องหรือไม่?",
+                icon: "success",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
@@ -586,22 +423,26 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/api/record/" + id)
+                        .put("../api/reserve/" + this.data.id, this.data)
                         .then((response) => {
-                            this.recordList.splice(index, 1);
+                            this.getReserve();
+
                             Swal.fire({
-                                title: "ลบข้อมูล!",
-                                text: "ลบข้อมูลเรียบร้อย",
+                                position: "top-end",
                                 icon: "success",
+                                title: "บันทึกข้อมูลเรียบร้อย",
+                                showConfirmButton: false,
+                                timer: 1500,
                             });
+                            this.isModalShow = false;
                         })
                         .catch((err) => {
-                            console.log(err);
+                            // console.log(err);
                         });
                 }
             });
         },
-        delReserve() {
+        del() {
             Swal.fire({
                 title: "ยืนยันการลบ?",
                 text: "ต้องการลบข้อมูลจองห้องหรือไม่?",

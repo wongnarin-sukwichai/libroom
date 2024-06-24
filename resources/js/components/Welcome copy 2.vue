@@ -205,11 +205,7 @@
                         class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
                         @submit.prevent="send()"
                     >
-                        <div
-                            class="bg-white px-4 pt-5 sm:p-4 sm:pb-2"
-                            v-for="(lim, index) in this.conLimit"
-                            :key="index"
-                        >
+                        <div class="bg-white px-4 pt-5 sm:p-4 sm:pb-4">
                             <div class="sm:flex sm:items-start">
                                 <div
                                     class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
@@ -217,51 +213,22 @@
                                     <box-icon name="user"></box-icon>
                                 </div>
                                 <div
-                                    class="mt-0 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
                                 >
                                     <label
                                         id="listbox-label"
                                         class="block text-sm font-medium leading-6 text-gray-900"
                                     >
-                                        รหัสนิสิต : {{ index }}</label
+                                        รหัสนิสิต :</label
                                     >
                                     <input
                                         type="text"
                                         class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                         required
-                                        v-model="data.uid[index]"
+                                        v-model="data.uid"
                                     />
                                 </div>
                             </div>
-
-                            <!-- <div class="flex items-center justify-center mt-5">
-                                <div
-                                    class="border-dotted border-2 rounded-lg p-2"
-                                >
-                                    วงศ์นรินทร์
-                                </div>
-                            </div> -->
-
-                            <!-- <div class="sm:flex sm:items-start">
-                                <div
-                                    class="text-center sm:text-left w-full"
-                                >
-                                    <label
-                                        id="listbox-label"
-                                        class="block py-3 text-sm font-medium leading-6 text-gray-900"
-                                    >
-                                    </label>
-                                    <button
-                                        class="relative inline-flex items-center justify-center p-4 px-6 py-2 font-medium border-2 border-green-400 rounded-full shadow-md group text-gray-400 hover:text-black hover:bg-green-200"
-                                    
-                                        >
-                                        <span
-                                            class="flex items-center justify-center w-full h-full text-xs"
-                                            >Check</span
-                                        >
-                                    </button>
-                                </div>
-                            </div> -->
                         </div>
 
                         <div class="bg-white px-4 pt-5 sm:p-4 sm:pb-4">
@@ -339,10 +306,7 @@
                                         class="block text-sm font-medium leading-6 text-gray-900"
                                         >จองข้ามวัน
                                     </label>
-                                    <div
-                                        class="border p-4 rounded-lg"
-                                        v-if="chkNextHol"
-                                    >
+                                    <div class="border p-4 rounded-lg">
                                         <label>
                                             <input
                                                 type="checkbox"
@@ -350,20 +314,6 @@
                                                 v-model="type"
                                             />
                                             วันพรุ่งนี้
-                                        </label>
-                                    </div>
-                                    <div class="border p-4 rounded-lg" v-else>
-                                        <label
-                                            class="flex items-center justify-center"
-                                        >
-                                            <box-icon
-                                                name="x"
-                                                color="#f87171"
-                                                class="mr-1"
-                                            ></box-icon>
-                                            <span class="text-sm"
-                                                >พรุ่งนี้งดให้บริการ</span
-                                            >
                                         </label>
                                     </div>
                                 </div>
@@ -709,9 +659,6 @@ export default {
             this.isModalShow = false;
         },
         async send() {
-
-            console.log(this.data.uid)
-
             if (this.data.time.length < 1) {
                 Swal.fire({
                     title: "ผิดพลาด",
@@ -733,112 +680,111 @@ export default {
                     this.data.date = moment().format("YYYY-MM-DD");
                 }
 
-                
                 // 'https://library.msu.ac.th/libapi/api/apitest';
                 //  https://library.msu.ac.th/libapi/api/checkPatron/" + this.data.uid
 
-                // await axios
-                //     .get("/api/member/" + this.data.uid)
-                //     .then((response) => {
-                //         if (response.data == "false") {
-                //             axios
-                //                 .get(
-                //                     "https://library.msu.ac.th/libapi/api/checkPatron/" +
-                //                         this.data.uid
-                //                 )
-                //                 .then((response) => {
-                //                     axios
-                //                         .post("/api/member", response.data)
-                //                         .then(() => {
-                //                             // console.log("success");
-                //                         })
-                //                         .catch((err) => {
-                //                             console.log(err);
-                //                         });
+                await axios
+                    .get("/api/member/" + this.data.uid)
+                    .then((response) => {
+                        if (response.data == "false") {
+                            axios
+                                .get(
+                                    "https://library.msu.ac.th/libapi/api/checkPatron/" +
+                                        this.data.uid
+                                )
+                                .then((response) => {
+                                    axios
+                                        .post("/api/member", response.data)
+                                        .then(() => {
+                                            // console.log("success");
+                                        })
+                                        .catch((err) => {
+                                            console.log(err);
+                                        });
 
-                //                     this.data.name = response.data[0].FNAMETHAI;
-                //                     this.data.surname =
-                //                         response.data[0].LNAMETHAI;
-                //                     // console.log(this.data.name);
-                //                 })
-                //                 .catch((err) => {
-                //                     console.log(err);
-                //                 });
-                //         } else {
-                //             // this.data.name = response.data[0].FNAMETHAI;
-                //             // this.data.surname = response.data[0].LNAMETHAI;
-                //             this.data.name = response.data.name;
-                //             this.data.surname = response.data.surname;
-                //         }
-                //     });
+                                    this.data.name = response.data[0].FNAMETHAI;
+                                    this.data.surname =
+                                        response.data[0].LNAMETHAI;
+                                    // console.log(this.data.name);
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
+                        } else {
+                            // this.data.name = response.data[0].FNAMETHAI;
+                            // this.data.surname = response.data[0].LNAMETHAI;
+                            this.data.name = response.data.name;
+                            this.data.surname = response.data.surname;
+                        }
+                    });
 
-                // let timerInterval;
-                // await Swal.fire({
-                //     title: "กำลังตรวจสอบ...",
-                //     html: "กรุณารอ... <b></b>",
-                //     timer: 2000,
-                //     timerProgressBar: true,
-                //     didOpen: () => {
-                //         Swal.showLoading();
-                //         const timer = Swal.getPopup().querySelector("b");
-                //         timerInterval = setInterval(() => {
-                //             timer.textContent = `${Swal.getTimerLeft()}`;
-                //         }, 100);
-                //     },
-                //     willClose: () => {
-                //         clearInterval(timerInterval);
-                //     },
-                // }).then((result) => {
-                //     /* Read more about handling dismissals below */
-                //     if (result.dismiss === Swal.DismissReason.timer) {
-                //         // console.log("I was closed by the timer");
-                //     }
-                // });
+                let timerInterval;
+                await Swal.fire({
+                    title: "กำลังตรวจสอบ...",
+                    html: "กรุณารอ... <b></b>",
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        const timer = Swal.getPopup().querySelector("b");
+                        timerInterval = setInterval(() => {
+                            timer.textContent = `${Swal.getTimerLeft()}`;
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    },
+                }).then((result) => {
+                    /* Read more about handling dismissals below */
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        // console.log("I was closed by the timer");
+                    }
+                });
 
-                // if (this.data.name == null) {
-                //     Swal.fire({
-                //         title: "ผิดพลาด",
-                //         text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
-                //         icon: "error",
-                //     });
-                // } else {
-                //     // console.log(this.data.name);
-                //     try {
-                //         this.data.code = await this.getCode();
-                //         await axios
-                //             .post("/api/addReserve", this.data)
-                //             .then((response) => {
-                //                 this.data.time = [];
-                //                 this.data.uid = "";
-                //                 this.data.name = "";
-                //                 this.data.surname = "";
-                //                 this.isModalShow = false;
+                if (this.data.name == null) {
+                    Swal.fire({
+                        title: "ผิดพลาด",
+                        text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
+                        icon: "error",
+                    });
+                } else {
+                    // console.log(this.data.name);
+                    try {
+                        this.data.code = await this.getCode();
+                        await axios
+                            .post("/api/addReserve", this.data)
+                            .then((response) => {
+                                this.data.time = [];
+                                this.data.uid = "";
+                                this.data.name = "";
+                                this.data.surname = "";
+                                this.isModalShow = false;
 
-                //                 var today = moment().format("YYYY-MM-DD");
+                                var today = moment().format("YYYY-MM-DD");
 
-                //                 axios
-                //                     .get("/api/reserveMain/" + today)
-                //                     .then((response) => {
-                //                         this.reserveList = response.data;
-                //                     });
+                                axios
+                                    .get("/api/reserveMain/" + today)
+                                    .then((response) => {
+                                        this.reserveList = response.data;
+                                    });
 
-                //                 Swal.fire({
-                //                     icon: response.data.icon,
-                //                     title: response.data.title,
-                //                     text: response.data.text,
-                //                 });
-                //             });
-                //     } catch (err) {
-                //         // console.log(err);
-                //         Swal.fire({
-                //             title: "ผิดพลาด",
-                //             text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
-                //             icon: "error",
-                //         });
-                //     }
-                // }
+                                Swal.fire({
+                                    icon: response.data.icon,
+                                    title: response.data.title,
+                                    text: response.data.text,
+                                });
+                            });
+                    } catch (err) {
+                        // console.log(err);
+                        Swal.fire({
+                            title: "ผิดพลาด",
+                            text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
+                            icon: "error",
+                        });
+                    }
+                }
             }
-        }, 
+        },
         getCode() {
             return Math.floor(Math.random() * 9000 + 1000);
         },
