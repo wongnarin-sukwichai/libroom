@@ -364,7 +364,7 @@
                             </div>
                         </div>
 
-                        <div
+                        <!-- <div
                             class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
                         >
                             <div class="sm:flex sm:items-start">
@@ -416,8 +416,9 @@
                                     class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
                                 ></div>
                             </div>
-                        </div>
-                        <div class="grid grid-cols-2">
+                        </div> -->
+
+                        <div class="grid grid-cols-2 pt-3">
                             <div
                                 class="grid grid-cols-2 px-4 py-4 sm:px-6 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100"
                             >
@@ -505,7 +506,10 @@
                                 </div>
                             </div>
 
-                            <div class="sm:flex sm:items-start">
+                            <div
+                                class="sm:flex sm:items-start"
+                                v-if="this.chkStatus === 0"
+                            >
                                 <div
                                     class="text-center sm:ml-4 sm:text-left w-full"
                                 >
@@ -529,6 +533,7 @@
                             class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
                         >
                             <button
+                                v-if="this.chkStatus === 0"
                                 type="submit"
                                 class="inline-flex w-full justify-center rounded-md bg-rose-400 px-3 py-2 text-sm text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
                             >
@@ -619,6 +624,7 @@ export default {
             },
             roomTitle: "",
             nameReserve: [],
+            chkStatus: "",
             chkRule: "",
         };
     },
@@ -892,6 +898,7 @@ export default {
 
                 for (var i = 0; i < res.length; i++) {
                     this.nameReserve[i] = res[i].name + " " + res[i].surname;
+                    this.chkStatus = res[i].status;
                 }
 
                 this.showModalRes = true;
@@ -900,6 +907,7 @@ export default {
             }
         },
         closeReserve() {
+            this.chkStatus = "";
             this.showModalRes = false;
         },
         cancel() {
@@ -964,19 +972,20 @@ export default {
                                         "faBQcYKZ9K3pVvJ5aux2itYSifFOrUiGXyVBCitqg49VbLpxfYOOaquM8DhZwdMZ";
                                     const config = {
                                         headers: {
-                                            'Accept': 'application/x-www-form-urlencode; charset=UTF-8',
-                                            'token': token
+                                            Accept: "application/x-www-form-urlencode; charset=UTF-8",
+                                            token: token,
                                         },
                                     };
                                     axios
-                                        // .get(
-                                        //     "https://library.msu.ac.th/libapi/api/checkPatron/" +
-                                        //         this.data.uid[i], config
-                                        // )
                                         .get(
-                                            "https://library.msu.ac.th/libapi/api/apitest",
+                                            "https://library.msu.ac.th/libapi/api/checkPatron/" +
+                                                this.data.uid[i],
                                             config
                                         )
+                                        // .get(
+                                        //     "https://library.msu.ac.th/libapi/api/apitest",
+                                        //     config
+                                        // )
                                         .then((response) => {
                                             // console.log(response);
                                             axios
@@ -985,8 +994,10 @@ export default {
                                                     response.data
                                                 )
                                                 .then((result) => {
-                                                    this.data.name[i-1] = result.data.name;
-                                                    this.data.surname[i-1] = result.data.surname;
+                                                    this.data.name[i - 1] =
+                                                        result.data.name;
+                                                    this.data.surname[i - 1] =
+                                                        result.data.surname;
                                                     console.log(this.data);
                                                 })
                                                 .catch((err) => {
@@ -1007,7 +1018,8 @@ export default {
                                         });
                                 } else {
                                     this.data.name[i] = response.data.name;
-                                    this.data.surname[i] = response.data.surname;
+                                    this.data.surname[i] =
+                                        response.data.surname;
                                 }
                                 axios
                                     .get(

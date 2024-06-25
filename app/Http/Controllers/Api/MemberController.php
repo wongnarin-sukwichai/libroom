@@ -32,14 +32,14 @@ class MemberController extends Controller
     {
         //dd($request['BARCODE']);
 
-        $res = Member::where('uid', $request['BARCODE'])->first();
+        $res = Member::where('uid', $request[0]['BARCODE'])->first();
 
         if(empty($res)) {
             $data = new Member();
 
-            $data->uid = $request['BARCODE'];
-            $data->name = $request['FNAMETHAI'];
-            $data->surname = $request['LNAMETHAI'];
+            $data->uid = $request[0]['BARCODE'];
+            $data->name = $request[0]['FNAMETHAI'];
+            $data->surname = $request[0]['LNAMETHAI'];
     
             $data->save();
         }
