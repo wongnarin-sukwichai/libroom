@@ -603,7 +603,7 @@ export default {
             isTime: "",
             moment: moment,
             data: {
-                date: "",
+                date: moment().format("YYYY-MM-DD"),
                 loc_id: "",
                 con_id: "",
                 room_id: "",
@@ -791,13 +791,13 @@ export default {
                     icon: "error",
                 });
             } else {
-                if (this.type == true) {
-                    this.data.date = moment()
-                        .add("1", "days")
-                        .format("YYYY-MM-DD");
-                } else {
-                    this.data.date = moment().format("YYYY-MM-DD");
-                }
+                // if (this.type == true) {
+                //     this.data.date = moment()
+                //         .add("1", "days")
+                //         .format("YYYY-MM-DD");
+                // } else {
+                //     this.data.date = moment().format("YYYY-MM-DD");
+                // }
 
                 let timerInterval;
                 await Swal.fire({
