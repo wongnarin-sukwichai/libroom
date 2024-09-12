@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('uid');
             $table->string('name');
             $table->string('surname');
+            $table->string('type')->nullable()->comment('ประเภทผู้ใช้');
             $table->string('faculty')->nullable()->comment('คณะ');
-            $table->string('major')->nullable()->comment('สาขาวิชา');
+            $table->string('branch')->nullable()->comment('สาขาวิชา');
             $table->string('code')->comment('code ยกเลิกห้อง');
             $table->integer('status')->nullable()->comment('0=จอง, 1=ยืนยัน');
             $table->timestamps();

@@ -611,6 +611,9 @@ export default {
                 uid: [],
                 name: [],
                 surname: [],
+                type: [],
+                faculty: [],
+                branch: [],
                 rule: [],
                 code: "",
             },
@@ -839,6 +842,9 @@ export default {
                                 this.data.uid = [];
                                 this.data.name = [];
                                 this.data.surname = [];
+                                this.data.type = [];
+                                this.data.faculty = [];
+                                this.data.branch = [];
                                 this.data.rule = [];
                                 this.data.code = "";
 
@@ -998,10 +1004,16 @@ export default {
                                                         result.data.name;
                                                     this.data.surname[i - 1] =
                                                         result.data.surname;
-                                                    console.log(this.data);
+                                                    this.data.type[i - 1] =
+                                                        result.data.type;
+                                                    this.data.faculty[i - 1] =
+                                                        result.data.faculty;
+                                                    this.data.branch[i - 1] =
+                                                        result.data.branch;
+                                                    // console.log(this.data);
                                                 })
                                                 .catch((err) => {
-                                                    console.log(err);
+                                                    // console.log(err);
                                                 });
 
                                             // this.data.name[i] = response.data[0].FNAMETHAI;
@@ -1018,8 +1030,10 @@ export default {
                                         });
                                 } else {
                                     this.data.name[i] = response.data.name;
-                                    this.data.surname[i] =
-                                        response.data.surname;
+                                    this.data.surname[i] = response.data.surname;
+                                    this.data.type[i] = response.data.type;
+                                    this.data.faculty[i] = response.data.faculty;
+                                    this.data.branch[i] = response.data.branch;
                                 }
                                 axios
                                     .get(

@@ -41,8 +41,8 @@ class MemberController extends Controller
             $data->name = $request[0]['FNAMETHAI'];
             $data->surname = $request[0]['LNAMETHAI'];
             $data->type = $request[0]['PTTYPENAMETHAI'];
-            $data->faculty = $request[0]['AGENCIESNAME'];
-            $data->branch = $request[0]['CAGENCIESNAME'];
+            $data->faculty = $request[0]['FACULTYNAMETHAI'];
+            $data->branch = $request[0]['PROGRAMNAMETHAI'];
     
             $data->save();
         }

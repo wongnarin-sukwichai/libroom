@@ -88,35 +88,75 @@ class MainController extends Controller
             'uid' => 'required',
             'name' => 'required',
             'surname' => 'required',
+            'type' => 'required',
             'code' => 'required'
         ]);
 
-        for ($i = 0; $i < count($request['time']); $i++) {
+        for ($k = 0; $k < count($request['time']); $k++) {
 
-            for ($j = 0; $j < count($request['uid']); $j++) {
+            $chk = Reserve::where('date', $request['date'])
+                ->where('loc_id', $request['loc_id'])
+                ->where('con_id', $request['con_id'])
+                ->where('room_id', $request['room_id'])
+                ->where('time', $request['time'][$k])
+                ->count();
 
-                $data = new Reserve();
-
-                $data->date = $request['date'];
-                $data->loc_id = $request['loc_id'];
-                $data->con_id = $request['con_id'];
-                $data->room_id = $request['room_id'];
-                $data->time = $request['time'][$i];
-                $data->uid = $request['uid'][$j];
-                $data->name = $request['name'][$j];
-                $data->surname = $request['surname'][$j];
-                $data->code = $request['code'];
-                $data->status = 0;
-
-                $data->save();
+            if ($chk == 0) {
+                $res = true;
+            } else {
+                $res = false;
             }
         }
 
-        return response()->json([
-            'icon' => "success",
-            'title' => $request['code'],
-            'text' => "** กรุณาจดจำรหัส สำหรับใช้ในการยกเลิกการจอง **"
-        ]);
+        if ($res == true) {
+
+            for ($i = 0; $i < count($request['time']); $i++) {
+
+                if ($chk == 0) {
+
+                    for ($j = 0; $j < count($request['uid']); $j++) {
+
+                        $data = new Reserve();
+
+                        $data->date = $request['date'];
+                        $data->loc_id = $request['loc_id'];
+                        $data->con_id = $request['con_id'];
+                        $data->room_id = $request['room_id'];
+                        $data->time = $request['time'][$i];
+                        $data->uid = $request['uid'][$j];
+                        $data->name = $request['name'][$j];
+                        $data->surname = $request['surname'][$j];
+                        if (!empty($request['type'][$j])) {
+                            $data->type = $request['type'][$j];
+                        }
+                        if (!empty($request['faculty'][$j])) {
+                            $data->faculty = $request['faculty'][$j];
+                        }
+                        if (!empty($request['branch'][$j])) {
+                            $data->branch = $request['branch'][$j];
+                        }
+                        $data->code = $request['code'];
+                        $data->status = 0;
+
+                        $data->save();
+                    }
+                }
+
+                return response()->json([
+                    'icon' => "success",
+                    'title' => $request['code'],
+                    'text' => "** กรุณาจดจำรหัส สำหรับใช้ในการยกเลิกการจอง **"
+                ]);
+            }
+
+        } else {
+
+            return response()->json([
+                'icon' => "error",
+                'title' => "ผิดพลาด",
+                'text' => "** ค้นพบข้อมูลการจองซ้ำ กรุณาตรวจสอบอีกครั้ง **"
+            ]);
+        }
     }
 
     public function delReserve(Request $request)
