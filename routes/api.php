@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\MainController;
 use App\Http\Controllers\Api\RecordController;
 use App\Http\Controllers\Api\ReserveController;
 use App\Http\Controllers\Api\MemberController;
+use App\Http\Controllers\Api\ApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,4 +61,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('deleteReserve', [ReserveController::class, 'deleteReserve']);
     Route::resource('record', RecordController::class);
     Route::get('chkRecord/{id}/{code}', [RecordController::class, 'chkRecord']);
-});
+
+    /** Libboard */
+    Route::get('getService', [ApiController::class, 'getService']);
+    Route::get('getMost', [ApiController::class, 'getMost']);
+
+    /** Pen1 Access Control */
+    Route::get('getAccess', [ApiController::class, 'getAccess']);
+}); 

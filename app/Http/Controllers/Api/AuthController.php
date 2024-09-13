@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\User;
+
 class AuthController extends Controller
 {
     public function login(Request $request)
@@ -18,8 +20,13 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
+            $user = User::where('email', $credentials['email'])->first();
+            $user->token()->delete();
+            $token = $user->createToken($request['email']);
+
             return response()->json([
-                'message' => 'Login Success!'
+                'message' => 'Login Success!',
+                'token' => $token->plainTextToken
             ]);
         } else {
             return response()->json([
