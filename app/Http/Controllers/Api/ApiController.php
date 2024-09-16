@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 use App\Models\Reserve;
 
@@ -42,7 +43,18 @@ class ApiController extends Controller
         return response()->json($data);
     }
 
-    public function getAccess() {}
+    public function getAccess(string $id) {
+
+        $res = Carbon::now()->format('Y-m-d');
+
+        $data = Reserve::where('date', $res)
+        ->where('uid', $id)
+        ->where('status', 1)
+        ->select('date', 'loc_id', 'con_id', 'room_id', 'time', 'uid', 'status')
+        ->get();
+
+        return response()->json($data);
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -67,5 +67,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('getMost', [ApiController::class, 'getMost']);
 
     /** Pen1 Access Control */
-    Route::get('getAccess', [ApiController::class, 'getAccess']);
+    Route::get('getAccess/{id}', [ApiController::class, 'getAccess']);
 }); 
