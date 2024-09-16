@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Reserve;
 
@@ -31,12 +32,17 @@ class ApiController extends Controller
     public function getMost()
     {
 
+        $data = DB::table('Reserves')
+        ->select('faculty', DB::raw('COUNT(*) AS count'))
+        ->groupBy('faculty')
+        ->orderByRaw('COUNT(*) DESC')
+        ->take(5)
+        ->get();
+
+        return response()->json($data);
     }
 
-    public function getAccess()
-    {
-
-    }
+    public function getAccess() {}
 
     /**
      * Show the form for creating a new resource.
