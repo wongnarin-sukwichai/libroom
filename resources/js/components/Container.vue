@@ -207,7 +207,7 @@
                                 </div>
                             </div>
 
-                            <div class="sm:flex sm:items-start">
+                            <!-- <div class="sm:flex sm:items-start">
                                 <div
                                     class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
                                 >
@@ -245,10 +245,10 @@
                                         </div>
                                     </transition>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
-                        <div class="flex px-4 justify-center">
+                        <!-- <div class="flex px-4 justify-center">
                             <transition name="fade" mode="out-in">
                                 <div
                                     v-if="previewImage"
@@ -259,7 +259,7 @@
                                     @click="selectImage"
                                 ></div>
                             </transition>
-                        </div>
+                        </div> -->
 
                         <div
                             class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
@@ -489,7 +489,7 @@
                                 </div>
                             </div>
 
-                            <div class="sm:flex sm:items-start">
+                            <!-- <div class="sm:flex sm:items-start">
                                 <div
                                     class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
                                 >
@@ -527,10 +527,10 @@
                                         </div>
                                     </transition>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
-                        <div class="flex px-4 justify-center">
+                        <!-- <div class="flex px-4 justify-center">
                             <transition name="fade" mode="out-in">
                                 <div
                                     v-if="previewImage"
@@ -541,7 +541,7 @@
                                     @click="selectImage"
                                 ></div>
                             </transition>
-                        </div>
+                        </div> -->
 
                         <div
                             class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
@@ -850,30 +850,45 @@ export default {
             }
         },
         async send() {
-            if (this.file == null) {
-                this.chkPic = false;
-            } else {
-                let formData = new FormData(); //สร้าง FromData เพื่อรองรับข้อมูลประเภท File
-                formData.append("file", this.file[0]);
-                // console.log(formData);
-
-                await this.$store.dispatch("uploadPicContainer", formData);
-                this.data.pic = await this.$store.getters.picName;
-
-                await this.$store.dispatch("storeContainer", this.data);
-                await Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "บันทึกข้อมูลเรียบร้อย",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                this.isModalShow = false;
-                setTimeout(() => {
-                    window.location.reload();
-                }, "1500");
-            }
+            await this.$store.dispatch("storeContainer", this.data);
+            await Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "บันทึกข้อมูลเรียบร้อย",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            this.isModalShow = false;
+            setTimeout(() => {
+                window.location.reload();
+            }, "1500");
         },
+        // แบบบังคับ upload รูปภาพ
+        // async send() {
+        //     if (this.file == null) {
+        //         this.chkPic = false;
+        //     } else {
+        //         let formData = new FormData(); //สร้าง FromData เพื่อรองรับข้อมูลประเภท File
+        //         formData.append("file", this.file[0]);
+        //         // console.log(formData);
+
+        //         await this.$store.dispatch("uploadPicContainer", formData);
+        //         this.data.pic = await this.$store.getters.picName;
+
+        //         await this.$store.dispatch("storeContainer", this.data);
+        //         await Swal.fire({
+        //             position: "top-end",
+        //             icon: "success",
+        //             title: "บันทึกข้อมูลเรียบร้อย",
+        //             showConfirmButton: false,
+        //             timer: 1500,
+        //         });
+        //         this.isModalShow = false;
+        //         setTimeout(() => {
+        //             window.location.reload();
+        //         }, "1500");
+        //     }
+        // },
         getEdit(id) {
             this.isModalEdit = true;
             axios
@@ -896,14 +911,6 @@ export default {
         },
         async update() {
             try {
-                if (this.file != null) {
-                    let formData = new FormData(); //สร้าง FromData เพื่อรองรับข้อมูลประเภท File
-                    formData.append("file", this.file[0]);
-
-                    await this.$store.dispatch("uploadPicContainer", formData);
-                    this.dataEdit.pic = await this.$store.getters.picName;
-                }
-
                 await this.$store.dispatch("updateContainer", this.dataEdit);
                 await Swal.fire({
                     position: "top-end",
@@ -920,6 +927,33 @@ export default {
                 console.log(err);
             }
         },
+        // บังคับ upload รูปภาพ
+        // async update() {
+        //     try {
+        //         if (this.file != null) {
+        //             let formData = new FormData(); //สร้าง FromData เพื่อรองรับข้อมูลประเภท File
+        //             formData.append("file", this.file[0]);
+
+        //             await this.$store.dispatch("uploadPicContainer", formData);
+        //             this.dataEdit.pic = await this.$store.getters.picName;
+        //         }
+
+        //         await this.$store.dispatch("updateContainer", this.dataEdit);
+        //         await Swal.fire({
+        //             position: "top-end",
+        //             icon: "success",
+        //             title: "บันทึกข้อมูลเรียบร้อย",
+        //             showConfirmButton: false,
+        //             timer: 1500,
+        //         });
+        //         this.isModalEdit = false;
+        //         setTimeout(() => {
+        //             window.location.reload();
+        //         }, "1500");
+        //     } catch (err) {
+        //         console.log(err);
+        //     }
+        // },
         getRoom(id) {
             this.$router.push("/room/" + id);
         },

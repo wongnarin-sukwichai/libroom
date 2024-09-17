@@ -37,7 +37,7 @@ class ContainerController extends Controller
 
         $request->validate([
             'loc_id' => 'required',
-            'pic' => 'required',
+            // 'pic' => 'required',
             'title' => 'required',
             'limited' => 'required',
             'time_1' => 'required',
@@ -47,7 +47,7 @@ class ContainerController extends Controller
 
         $data = new Container();
         $data->loc_id = $request['loc_id'];
-        $data->pic = $request['pic'];
+        // $data->pic = $request['pic'];
         $data->title = $request['title'];
         $data->limited = $request['limited'];
         $data->time_1 = $request['time_1'];

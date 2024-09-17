@@ -32,14 +32,14 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'pic' => 'required',
+            // 'pic' => 'required',
             'loc_id' => 'required',
             'con_id' => 'required',
             'title' => 'required',
         ]);
 
         $data = new Room();
-        $data->pic = $request['pic'];
+        // $data->pic = $request['pic'];
         $data->loc_id = $request['loc_id'];
         $data->con_id = $request['con_id'];
         $data->title = $request['title'];
