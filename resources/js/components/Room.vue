@@ -455,8 +455,8 @@ export default {
         return {
             isModalShow: false,
             isModalEdit: false,
-            conPath: "../storage/containers/",
-            roomPath: "../storage/rooms/",
+            conPath: "../img/containers/",
+            roomPath: "../img/rooms/",
             previewImage: "",
             file: null,
             chkPic: true,

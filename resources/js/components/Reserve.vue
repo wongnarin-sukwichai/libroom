@@ -260,8 +260,8 @@ export default {
         return {
             today: moment().format("YYYY-MM-DD"),
             isModalShow: false,
-            conPath: "../storage/containers/",
-            roomPath: "../storage/rooms/",
+            conPath: "../img/containers/",
+            roomPath: "../img/rooms/",
             conList: "",
             roomList: "",
             timeList: "",

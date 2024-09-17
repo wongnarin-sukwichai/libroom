@@ -21,7 +21,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = User::where('email', $credentials['email'])->first();
-            $user->token()->delete();
+            // $user->token()->delete();
             $token = $user->createToken($request['email']);
 
             return response()->json([

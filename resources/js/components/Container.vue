@@ -731,7 +731,7 @@ export default {
             isModalShow: false,
             isModalEdit: false,
             locPath: "img/locations/",
-            conPath: "storage/containers/",
+            conPath: "img/containers/",
             previewImage: "",
             file: null,
             chkPic: true,

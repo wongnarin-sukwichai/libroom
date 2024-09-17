@@ -83,7 +83,7 @@ export default {
     data() {
         return {
             locPath: "img/locations/",
-            conPath: "storage/containers/",
+            conPath: "img/containers/",
             locList: "",
             conList: ""
         };
