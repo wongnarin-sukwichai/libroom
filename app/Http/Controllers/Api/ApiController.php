@@ -59,7 +59,7 @@ class ApiController extends Controller
     public function getPatron(string $id)
     {
         $url = 'https://libapp.msu.ac.th/v1/api/GetPatronDetail/' . $id .'';
-        $sToken = 'RqG9I+wk/cB9TiCgCbSOGFq7exTxD6fLMoVeCNtLNrj8XTJdVnNMov9mAgLOEqTBKikM6id3P7ELFjt3gqyCjA==';
+        $sToken = 'token';
 
         $chOne = curl_init();
         curl_setopt($chOne, CURLOPT_URL, ''. $url .'');
