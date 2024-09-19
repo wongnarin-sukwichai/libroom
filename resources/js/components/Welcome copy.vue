@@ -201,16 +201,16 @@
                 <div
                     class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
                 >
-                    <form
+                    <div
                         class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
-                        @submit.prevent="send()"
                     >
+                        <br />
                         <div
-                            class="bg-white px-4 pt-5 sm:p-4 sm:pb-2"
+                            class="grid grid-cols-5 bg-white px-4"
                             v-for="(lim, index) in this.conLimit"
                             :key="index"
                         >
-                            <div class="sm:flex sm:items-start">
+                            <div class="col-span-3 sm:flex sm:items-start">
                                 <div
                                     class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
                                 >
@@ -223,7 +223,7 @@
                                         id="listbox-label"
                                         class="block text-sm font-medium leading-6 text-gray-900"
                                     >
-                                        รหัสนิสิต : {{ index }}</label
+                                        รหัสนิสิต :</label
                                     >
                                     <input
                                         type="text"
@@ -234,34 +234,67 @@
                                 </div>
                             </div>
 
-                            <!-- <div class="flex items-center justify-center mt-5">
+                            <div
+                                class="col-span-2 flex items-left justify-left mx-5 py-5"
+                            >
                                 <div
-                                    class="border-dotted border-2 rounded-lg p-2"
+                                    class="border-dotted border-2 border-sky-500 rounded-lg p-3 text-xs"
                                 >
-                                    วงศ์นรินทร์
+                                    {{ this.data.name[index] }} : เหลือ
+                                    {{ this.data.rule[index] }} สิทธิ์
                                 </div>
-                            </div> -->
+                            </div>
+                        </div>
 
-                            <!-- <div class="sm:flex sm:items-start">
+                        <transition name="fade" mode="out-in">
+                            <div
+                                class="text-rose-500 mx-20"
+                                v-show="showAlertInput"
+                            >
+                                ** กรุณากรอกข้อมูลให้ครบ
+                            </div>
+                        </transition>
+
+                        <div class="bg-white px-4 pb-4 sm:p-4 sm:pb-4">
+                            <div class="sm:flex sm:items-start">
                                 <div
-                                    class="text-center sm:text-left w-full"
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon name="check"></box-icon>
+                                </div>
+                                <div
+                                    class="text-center sm:ml-4 sm:text-left w-full"
                                 >
                                     <label
                                         id="listbox-label"
-                                        class="block py-3 text-sm font-medium leading-6 text-gray-900"
-                                    >
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >ตรวจสอบรหัสและสิทธิ์ :
                                     </label>
-                                    <button
-                                        class="relative inline-flex items-center justify-center p-4 px-6 py-2 font-medium border-2 border-green-400 rounded-full shadow-md group text-gray-400 hover:text-black hover:bg-green-200"
-                                    
+
+                                    <div class="text-center w-full pt-2">
+                                        <label
+                                            id="listbox-label"
+                                            class="text-sm font-medium leading-6 text-gray-900"
                                         >
-                                        <span
-                                            class="flex items-center justify-center w-full h-full text-xs"
-                                            >Check</span
+                                        </label>
+                                        <button
+                                            class="block w-full items-center justify-center p-4 px-6 py-2 font-medium border-2 border-green-400 rounded-full shadow-md group text-gray-400 hover:text-black hover:bg-green-200"
+                                            @click="chkMem(this.conLimit)"
                                         >
-                                    </button>
+                                            <span
+                                                class="flex items-center justify-center w-full h-full text-xs"
+                                                >ตรวจสอบ</span
+                                            >
+                                        </button>
+                                    </div>
                                 </div>
-                            </div> -->
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                ></div>
+                            </div>
                         </div>
 
                         <div class="bg-white px-4 pt-5 sm:p-4 sm:pb-4">
@@ -318,11 +351,20 @@
                                             ** ใช้บริการได้ไม่เกิน 3 ชั่วโมง/วัน
                                         </div>
                                     </transition>
+                                    <transition name="fade" mode="out-in">
+                                        <div
+                                            class="pt-2 text-rose-500"
+                                            v-show="showAlertRule"
+                                        >
+                                            **
+                                            ใช้บริการต่อคนได้ไม่เกินสิทธิ์คงเหลือ
+                                        </div>
+                                    </transition>
                                 </div>
                             </div>
                         </div>
 
-                        <div
+                        <!-- <div
                             class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
                         >
                             <div class="sm:flex sm:items-start">
@@ -337,7 +379,7 @@
                                     <label
                                         id="listbox-label"
                                         class="block text-sm font-medium leading-6 text-gray-900"
-                                        >จองข้ามวัน
+                                        >จองข้ามวัน :
                                     </label>
                                     <div
                                         class="border p-4 rounded-lg"
@@ -374,8 +416,9 @@
                                     class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
                                 ></div>
                             </div>
-                        </div>
-                        <div class="grid grid-cols-2">
+                        </div> -->
+
+                        <div class="grid grid-cols-2 pt-3">
                             <div
                                 class="grid grid-cols-2 px-4 py-4 sm:px-6 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100"
                             >
@@ -394,8 +437,8 @@
                                 class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
                             >
                                 <button
-                                    type="submit"
                                     class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto"
+                                    @click="send()"
                                 >
                                     บันทึก
                                 </button>
@@ -408,7 +451,7 @@
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -453,14 +496,20 @@
                                         >ชื่อผู้จอง :
                                     </label>
                                     <div
-                                        class="border-dotted border-2 rounded-lg p-2"
+                                        class="border-dotted border-2 rounded-lg p-2 mb-1"
+                                        v-for="(nameRes, index) in this
+                                            .nameReserve"
+                                        :key="index"
                                     >
-                                        วงศ์นรินทร์ สุขวิชัย
+                                        {{ nameRes }}
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="sm:flex sm:items-start">
+                            <div
+                                class="sm:flex sm:items-start"
+                                v-if="this.chkStatus === 0"
+                            >
                                 <div
                                     class="text-center sm:ml-4 sm:text-left w-full"
                                 >
@@ -484,6 +533,7 @@
                             class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
                         >
                             <button
+                                v-if="this.chkStatus === 0"
                                 type="submit"
                                 class="inline-flex w-full justify-center rounded-md bg-rose-400 px-3 py-2 text-sm text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
                             >
@@ -527,11 +577,13 @@ export default {
             nextHol: false,
             isModalShow: false,
             showAlert: false,
+            showAlertRule: false,
             showModalRes: false,
+            showAlertInput: false,
             banner: "img/banner.jpg",
             locPath: "img/locations/",
-            conPath: "storage/containers/",
-            roomPath: "storage/rooms/",
+            conPath: "img/containers/",
+            roomPath: "img/rooms/",
             tableList: false,
             locList: "",
             conList: "",
@@ -551,7 +603,7 @@ export default {
             isTime: "",
             moment: moment,
             data: {
-                date: "",
+                date: moment().format("YYYY-MM-DD"),
                 loc_id: "",
                 con_id: "",
                 room_id: "",
@@ -559,6 +611,10 @@ export default {
                 uid: [],
                 name: [],
                 surname: [],
+                type: [],
+                faculty: [],
+                branch: [],
+                rule: [],
                 code: "",
             },
             type: false,
@@ -570,7 +626,9 @@ export default {
                 today: moment().format("YYYY-MM-DD"),
             },
             roomTitle: "",
-            roomLimit: "",
+            nameReserve: [],
+            chkStatus: "",
+            chkRule: "",
         };
     },
     methods: {
@@ -603,7 +661,7 @@ export default {
                     this.locList = response.data;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    // console.log(err);
                 });
         },
         getContainer() {
@@ -613,7 +671,7 @@ export default {
                     this.conList = response.data;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    // console.log(err);
                 });
         },
         getTime() {
@@ -623,7 +681,7 @@ export default {
                     this.timeList = response.data;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    // console.log(err);
                 });
         },
         pickLoc(id) {
@@ -655,7 +713,7 @@ export default {
                     this.roomList = response.data;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    // console.log(err);
                 });
             this.tableList = true;
             this.conActive = id;
@@ -674,7 +732,7 @@ export default {
                     this.reserveList = response.data;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    // console.log(err);
                 });
         },
         isWeekend() {
@@ -709,10 +767,21 @@ export default {
             this.isModalShow = false;
         },
         async send() {
+            //console.log(this.data);
 
-            console.log(this.data.uid)
-
-            if (this.data.time.length < 1) {
+            if (this.data.uid.length != this.conLimit) {
+                Swal.fire({
+                    title: "ผิดพลาด",
+                    text: "กรุณากรอกข้อมูลให้ครบและตรวจสอบข้อมูล",
+                    icon: "error",
+                });
+            } else if (this.data.time.length > this.chkRule) {
+                Swal.fire({
+                    title: "ผิดพลาด",
+                    text: "ใช้บริการต่อคนได้ไม่เกินสิทธิ์คงเหลือ",
+                    icon: "error",
+                });
+            } else if (this.data.time.length < 1) {
                 Swal.fire({
                     title: "ผิดพลาด",
                     text: "กรุณาเลือกเวลา",
@@ -725,120 +794,88 @@ export default {
                     icon: "error",
                 });
             } else {
-                if (this.type == true) {
-                    this.data.date = moment()
-                        .add("1", "days")
-                        .format("YYYY-MM-DD");
-                } else {
-                    this.data.date = moment().format("YYYY-MM-DD");
-                }
-
-                
-                // 'https://library.msu.ac.th/libapi/api/apitest';
-                //  https://library.msu.ac.th/libapi/api/checkPatron/" + this.data.uid
-
-                // await axios
-                //     .get("/api/member/" + this.data.uid)
-                //     .then((response) => {
-                //         if (response.data == "false") {
-                //             axios
-                //                 .get(
-                //                     "https://library.msu.ac.th/libapi/api/checkPatron/" +
-                //                         this.data.uid
-                //                 )
-                //                 .then((response) => {
-                //                     axios
-                //                         .post("/api/member", response.data)
-                //                         .then(() => {
-                //                             // console.log("success");
-                //                         })
-                //                         .catch((err) => {
-                //                             console.log(err);
-                //                         });
-
-                //                     this.data.name = response.data[0].FNAMETHAI;
-                //                     this.data.surname =
-                //                         response.data[0].LNAMETHAI;
-                //                     // console.log(this.data.name);
-                //                 })
-                //                 .catch((err) => {
-                //                     console.log(err);
-                //                 });
-                //         } else {
-                //             // this.data.name = response.data[0].FNAMETHAI;
-                //             // this.data.surname = response.data[0].LNAMETHAI;
-                //             this.data.name = response.data.name;
-                //             this.data.surname = response.data.surname;
-                //         }
-                //     });
-
-                // let timerInterval;
-                // await Swal.fire({
-                //     title: "กำลังตรวจสอบ...",
-                //     html: "กรุณารอ... <b></b>",
-                //     timer: 2000,
-                //     timerProgressBar: true,
-                //     didOpen: () => {
-                //         Swal.showLoading();
-                //         const timer = Swal.getPopup().querySelector("b");
-                //         timerInterval = setInterval(() => {
-                //             timer.textContent = `${Swal.getTimerLeft()}`;
-                //         }, 100);
-                //     },
-                //     willClose: () => {
-                //         clearInterval(timerInterval);
-                //     },
-                // }).then((result) => {
-                //     /* Read more about handling dismissals below */
-                //     if (result.dismiss === Swal.DismissReason.timer) {
-                //         // console.log("I was closed by the timer");
-                //     }
-                // });
-
-                // if (this.data.name == null) {
-                //     Swal.fire({
-                //         title: "ผิดพลาด",
-                //         text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
-                //         icon: "error",
-                //     });
+                // if (this.type == true) {
+                //     this.data.date = moment()
+                //         .add("1", "days")
+                //         .format("YYYY-MM-DD");
                 // } else {
-                //     // console.log(this.data.name);
-                //     try {
-                //         this.data.code = await this.getCode();
-                //         await axios
-                //             .post("/api/addReserve", this.data)
-                //             .then((response) => {
-                //                 this.data.time = [];
-                //                 this.data.uid = "";
-                //                 this.data.name = "";
-                //                 this.data.surname = "";
-                //                 this.isModalShow = false;
-
-                //                 var today = moment().format("YYYY-MM-DD");
-
-                //                 axios
-                //                     .get("/api/reserveMain/" + today)
-                //                     .then((response) => {
-                //                         this.reserveList = response.data;
-                //                     });
-
-                //                 Swal.fire({
-                //                     icon: response.data.icon,
-                //                     title: response.data.title,
-                //                     text: response.data.text,
-                //                 });
-                //             });
-                //     } catch (err) {
-                //         // console.log(err);
-                //         Swal.fire({
-                //             title: "ผิดพลาด",
-                //             text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
-                //             icon: "error",
-                //         });
-                //     }
+                //     this.data.date = moment().format("YYYY-MM-DD");
                 // }
+
+                let timerInterval;
+                await Swal.fire({
+                    title: "กำลังตรวจสอบ...",
+                    html: "กรุณารอ... <b></b>",
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        const timer = Swal.getPopup().querySelector("b");
+                        timerInterval = setInterval(() => {
+                            timer.textContent = `${Swal.getTimerLeft()}`;
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    },
+                }).then((result) => {
+                    /* Read more about handling dismissals below */
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        // console.log("I was closed by the timer");
+                    }
+                });
+
+                if (this.data.name == null) {
+                    Swal.fire({
+                        title: "ผิดพลาด",
+                        text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
+                        icon: "error",
+                    });
+                } else {
+                    // console.log(this.data.name);
+                    try {
+                        this.data.code = await this.getCode();
+                        await axios
+                            .post("/api/addReserve", this.data)
+                            .then((response) => {
+                                this.data.time = [];
+                                this.data.uid = [];
+                                this.data.name = [];
+                                this.data.surname = [];
+                                this.data.type = [];
+                                this.data.faculty = [];
+                                this.data.branch = [];
+                                this.data.rule = [];
+                                this.data.code = "";
+
+                                this.chkRule = "";
+                                this.isModalShow = false;
+
+                                var today = moment().format("YYYY-MM-DD");
+
+                                axios
+                                    .get("/api/reserveMain/" + today)
+                                    .then((response) => {
+                                        this.reserveList = response.data;
+                                    });
+
+                                Swal.fire({
+                                    icon: response.data.icon,
+                                    title: response.data.title,
+                                    text: response.data.text,
+                                });
+                            });
+                    } catch (err) {
+                        // console.log(err);
+                        Swal.fire({
+                            title: "ผิดพลาด",
+                            text: "ไม่พบข้อมูลสมาชิก กรุณาติดต่อเจ้าหน้าที่",
+                            icon: "error",
+                        });
+                    }
+                }
             }
-        }, 
+        },
         getCode() {
             return Math.floor(Math.random() * 9000 + 1000);
         },
@@ -859,11 +896,24 @@ export default {
             }
         },
         showReserve(id, time) {
-            this.showModalRes = true;
-            this.dataCancel.id = id;
-            this.dataCancel.time = time;
+            if (id != null && time != null) {
+                var res = this.reserveList.filter(
+                    (selection) =>
+                        selection["room_id"] == id && selection["time"] == time
+                );
+
+                for (var i = 0; i < res.length; i++) {
+                    this.nameReserve[i] = res[i].name + " " + res[i].surname;
+                    this.chkStatus = res[i].status;
+                }
+
+                this.showModalRes = true;
+                this.dataCancel.id = id;
+                this.dataCancel.time = time;
+            }
         },
         closeReserve() {
+            this.chkStatus = "";
             this.showModalRes = false;
         },
         cancel() {
@@ -884,11 +934,7 @@ export default {
 
                             var today = moment().format("YYYY-MM-DD");
 
-                            axios
-                                .get("/api/reserveMain/" + today)
-                                .then((response) => {
-                                    this.reserveList = response.data;
-                                });
+                            this.getReserve();
 
                             Swal.fire({
                                 title: response.data.title,
@@ -908,13 +954,135 @@ export default {
                 }
             });
         },
+        async chkMem(limit) {
+            this.showAlertInput = false;
+            this.chkRule == "";
+
+            if (limit != this.data.uid.length) {
+                this.showAlertInput = true;
+            } else {
+                this.showAlertInput = false;
+                var today = moment().format("YYYY-MM-DD");
+
+                for (var i = 0; i < this.data.uid.length; i++) {
+                    // console.log(this.data.uid[i])
+
+                    if (this.data.uid[i] == "") {
+                        this.showAlertInput = true;
+                    } else {
+                        await axios
+                            .get("/api/member/" + this.data.uid[i])
+                            .then((response) => {
+                                if (response.data == "false") {
+                                    const token =
+                                        "RqG9I+wk/cB9TiCgCbSOGFq7exTxD6fLMoVeCNtLNrj8XTJdVnNMov9mAgLOEqTBKikM6id3P7ELFjt3gqyCjA==";
+                                    const config = {
+                                        headers: {
+                                            // Accept: "application/x-www-form-urlencode; charset=UTF-8",
+                                            token: token,
+                                        },
+                                    };
+                                    axios
+                                        .get(
+                                            "https://libapp.msu.ac.th/v1/api/GetPatronDetail/" +
+                                                this.data.uid[i],
+                                            config
+                                        )
+                                        // .get(
+                                        //     "https://library.msu.ac.th/libapi/api/checkPatron/" +
+                                        //         this.data.uid[i],
+                                        //     config
+                                        // )
+                                        // .get(
+                                        //     "https://library.msu.ac.th/libapi/api/apitest",
+                                        //     config
+                                        // )
+                                        .then((response) => {
+                                            console.log(response);
+                                            axios
+                                                .post(
+                                                    "/api/member",
+                                                    response.data
+                                                )
+                                                .then((result) => {
+                                                    this.data.name[i - 1] =
+                                                        result.data.name;
+                                                    this.data.surname[i - 1] =
+                                                        result.data.surname;
+                                                    this.data.type[i - 1] =
+                                                        result.data.type;
+                                                    this.data.faculty[i - 1] =
+                                                        result.data.faculty;
+                                                    this.data.branch[i - 1] =
+                                                        result.data.branch;
+                                                    // console.log(this.data);
+                                                })
+                                                .catch((err) => {
+                                                    // console.log(err);
+                                                });
+
+                                            // this.data.name[i] = response.data[0].FNAMETHAI;
+                                            // this.data.surname[i] = response.data[0].LNAMETHAI;
+                                            // console.log(this.data.name);
+                                        })
+                                        .catch((err) => {
+                                            // console.log(err);
+                                            Swal.fire({
+                                                icon: "error",
+                                                title: "ไม่พบข้อมูลสมาชิก",
+                                                text: "กรุณาติดต่อเจ้าหน้าที่",
+                                            });
+                                        });
+                                } else {
+                                    this.data.name[i] = response.data.name;
+                                    this.data.surname[i] = response.data.surname;
+                                    this.data.type[i] = response.data.type;
+                                    this.data.faculty[i] = response.data.faculty;
+                                    this.data.branch[i] = response.data.branch;
+                                }
+                                axios
+                                    .get(
+                                        "/api/checkReserve/" +
+                                            today +
+                                            "/" +
+                                            this.data.uid[i]
+                                    )
+                                    .then((response) => {
+                                        this.data.rule[i - 1] = response.data;
+
+                                        if (
+                                            this.chkRule > response.data ||
+                                            this.chkRule == ""
+                                        ) {
+                                            this.chkRule = response.data;
+                                        }
+                                    })
+                                    .catch((err) => {
+                                        // console.log(err);
+                                    });
+                            })
+                            .catch((err) => {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "ไม่พบข้อมูลสมาชิก",
+                                    text: "กรุณาติดต่อเจ้าหน้าที่",
+                                });
+                            });
+                    }
+                }
+            }
+            this.getReserve();
+        },
     },
     computed: {
         chkLength() {
-            if (this.data.time.length > 3) {
+            if (this.data.time.length > this.chkRule) {
+                this.showAlertRule = true;
+            } else if (this.data.time.length > 3) {
                 this.showAlert = true;
             } else {
                 this.showAlert = false;
+                this.showAlertRule = false;
             }
         },
         chkHoliday() {

@@ -974,31 +974,17 @@ export default {
                             .get("/api/member/" + this.data.uid[i])
                             .then((response) => {
                                 if (response.data == "false") {
-                                    const token =
-                                        "RqG9I+wk/cB9TiCgCbSOGFq7exTxD6fLMoVeCNtLNrj8XTJdVnNMov9mAgLOEqTBKikM6id3P7ELFjt3gqyCjA==";
-                                    const config = {
-                                        headers: {
-                                            // Accept: "application/x-www-form-urlencode; charset=UTF-8",
-                                            token: token,
-                                        },
-                                    };
                                     axios
                                         .get(
-                                            "https://libapp.msu.ac.th/v1/api/GetPatronDetail/" +
-                                                this.data.uid[i],
-                                            config
+                                            "/api/getPatron/" +
+                                                this.data.uid[i]
                                         )
-                                        // .get(
-                                        //     "https://library.msu.ac.th/libapi/api/checkPatron/" +
-                                        //         this.data.uid[i],
-                                        //     config
-                                        // )
                                         // .get(
                                         //     "https://library.msu.ac.th/libapi/api/apitest",
                                         //     config
                                         // )
                                         .then((response) => {
-                                            console.log(response);
+                                            // console.log(response);
                                             axios
                                                 .post(
                                                     "/api/member",

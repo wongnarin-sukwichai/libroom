@@ -62,6 +62,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('record', RecordController::class);
     Route::get('chkRecord/{id}/{code}', [RecordController::class, 'chkRecord']);
 
+    /** Get Patron From WALAI AUTOLIB */
+    Route::get('getPatron/{id}', [ApiController::class, 'getPatron']);
+
     /** Libboard */
     Route::get('getService', [ApiController::class, 'getService']);
     Route::get('getMost', [ApiController::class, 'getMost']);

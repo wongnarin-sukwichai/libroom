@@ -56,6 +56,31 @@ class ApiController extends Controller
         return response()->json($data);
     }
 
+    public function getPatron(string $id)
+    {
+        $url = 'https://libapp.msu.ac.th/v1/api/GetPatronDetail/' . $id .'';
+        $sToken = 'RqG9I+wk/cB9TiCgCbSOGFq7exTxD6fLMoVeCNtLNrj8XTJdVnNMov9mAgLOEqTBKikM6id3P7ELFjt3gqyCjA==';
+
+        $chOne = curl_init();
+        curl_setopt($chOne, CURLOPT_URL, ''. $url .'');
+        curl_setopt($chOne, CURLOPT_CUSTOMREQUEST, 'GET');
+        $headers = array('Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer ' . $sToken . '',);
+        curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($chOne, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($chOne);
+
+        //dd($result);
+        
+        if (curl_error($chOne)) {
+            echo 'error:' . curl_error($chOne);
+        } else {
+            $res = json_decode($result, true);
+            return $res;
+        }
+
+        curl_close($chOne);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
