@@ -974,9 +974,17 @@ export default {
                             .get("/api/member/" + this.data.uid[i])
                             .then((response) => {
                                 if (response.data == "false") {
+                                    const token =
+                                        "{token}";
+                                    const config = {
+                                        headers: {
+                                            // Accept: "application/x-www-form-urlencode; charset=UTF-8",
+                                            Authorization: 'Bearer ' + token,
+                                        },
+                                    };
                                     axios
                                         .get(
-                                            "/api/getPatron/" +
+                                            "https://liboffice.msu.ac.th/v1/api/getPatron/" +
                                                 this.data.uid[i]
                                         )
                                         // .get(
@@ -984,7 +992,7 @@ export default {
                                         //     config
                                         // )
                                         .then((response) => {
-                                            // console.log(response);
+                                            console.log(response);
                                             axios
                                                 .post(
                                                     "/api/member",
