@@ -78,7 +78,7 @@ class MainController extends Controller
 
     public function addReserve(Request $request)
     {
-
+        // dd($request->all());
         $request->validate([
             'date' => 'required',
             'loc_id' => 'required',
@@ -112,8 +112,6 @@ class MainController extends Controller
 
             for ($i = 0; $i < count($request['time']); $i++) {
 
-                if ($chk == 0) {
-
                     for ($j = 0; $j < count($request['uid']); $j++) {
 
                         $data = new Reserve();
@@ -139,15 +137,14 @@ class MainController extends Controller
                         $data->status = 0;
 
                         $data->save();
-                    }
-                }
-
-                return response()->json([
-                    'icon' => "success",
-                    'title' => $request['code'],
-                    'text' => "** กรุณาจดจำรหัส สำหรับใช้ในการยกเลิกการจอง **"
-                ]);
+                    }         
             }
+
+            return response()->json([
+                'icon' => "success",
+                'title' => $request['code'],
+                'text' => "** กรุณาจดจำรหัส สำหรับใช้ในการยกเลิกการจอง **"
+            ]);
 
         } else {
 

@@ -33,10 +33,10 @@
                                     class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                                     >แบบประเมินความพึงพอใจ</router-link
                                 >
-                                <router-link
-                                    to=""
+                                <div
                                     class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                                    >คู่มือการใช้งานระบบ</router-link
+                                     @click="toolShow()"
+                                    >คู่มือการใช้งานระบบ</div
                                 >
                             </div>
                         </div>
@@ -182,10 +182,10 @@
                             class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
                             >แบบประเมินความพึงพอใจ</router-link
                         >
-                        <router-link
-                            to=""
+                        <div
                             class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
-                            >คู่มือการใช้งานระบบ</router-link
+                            @click="toolShow()"
+                            >คู่มือการใช้งานระบบ</div>
                         >
                     </div>
 
@@ -243,6 +243,43 @@
         </main>
         <!-- /End replace -->
     </div>
+
+    <!-- Modal Shirt Picture -->
+    <transition name="fade" mode="out-in">
+        <div
+            class="relative z-10"
+            aria-labelledby="modal-title"
+            role="dialog"
+            aria-modal="true"
+            v-show="modalTool"
+        >
+            <div
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            ></div>
+
+            <div class="fixed inset-0 z-10 overflow-y-auto">
+                <div
+                    class="flex min-h-full justify-center p-4 text-center items-center sm:items-center lg:items-center sm:p-0"
+                >
+                    <box-icon
+                        name="x-circle"
+                        color="black"
+                        size="lg"
+                        class="absolute top-1 md:top-1/4 lg:top-20 scale-100 hover:scale-105 cursor-pointer"
+                        @click="toolClose()"
+                    ></box-icon>
+                    <iframe
+                        :src="tools"
+                        type="application/pdf"
+                        frameBorder="0"
+                        scrolling="auto"
+                        height="600px"
+                        class="sm:w-full md:w-full lg:w-1/2"
+                    ></iframe>
+                </div>
+            </div>
+        </div>
+    </transition>
 </template>
 
 <script>
@@ -252,9 +289,11 @@ export default {
     data() {
         return {
             library: "img/library.png",
+            tools: "pdf/tools.pdf",
             user: "",
             show: false,
             showNav: false,
+            modalTool: true,
         };
     },
     methods: {
@@ -264,6 +303,12 @@ export default {
             await this.$store.dispatch("logout");
             this.$router.push({ name: "login" });
         },
+        toolShow () {
+            this.modalTool = true;
+        },
+        toolClose () {
+            this.modalTool = false;
+        }
     },
     computed: {
         user() {
