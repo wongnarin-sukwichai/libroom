@@ -43,14 +43,16 @@ class ApiController extends Controller
         return response()->json($data);
     }
 
-    public function getAccess(string $id) {
+    public function getAccess(string $room, string $time, string $uid) {
 
         $res = Carbon::now()->format('Y-m-d');
 
         $data = Reserve::where('date', $res)
-        ->where('uid', $id)
+        ->where('room_id', $room)
+        ->where('time', $time)
+        ->where('uid', $uid)
         ->where('status', 1)
-        ->select('date', 'loc_id', 'con_id', 'room_id', 'time', 'uid', 'status')
+        ->select('room_id', 'time', 'uid', 'status')
         ->get();
 
         return response()->json($data);
