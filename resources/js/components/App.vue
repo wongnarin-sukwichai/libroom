@@ -34,7 +34,7 @@
                                     >แบบประเมินความพึงพอใจ</router-link
                                 >
                                 <div
-                                    class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                                    class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
                                      @click="toolShow()"
                                     >คู่มือการใช้งานระบบ</div
                                 >
@@ -293,7 +293,7 @@ export default {
             user: "",
             show: false,
             showNav: false,
-            modalTool: true,
+            modalTool: false,
         };
     },
     methods: {

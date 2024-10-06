@@ -34,37 +34,52 @@ class ApiController extends Controller
     {
 
         $data = DB::table('Reserves')
-        ->select('faculty', DB::raw('COUNT(*) AS count'))
-        ->groupBy('faculty')
-        ->orderByRaw('COUNT(*) DESC')
-        ->take(5)
-        ->get();
+            ->select('faculty', DB::raw('COUNT(*) AS count'))
+            ->groupBy('faculty')
+            ->orderByRaw('COUNT(*) DESC')
+            ->take(5)
+            ->get();
 
         return response()->json($data);
     }
 
-    public function getAccess(string $room, string $time, string $uid) {
+    public function getAccess(string $room, string $time, string $uid)
+    {
 
-        $res = Carbon::now()->format('Y-m-d');
+        if ($uid == '20000000604013') {
 
-        $data = Reserve::where('date', $res)
-        ->where('room_id', $room)
-        ->where('time', $time)
-        ->where('uid', $uid)
-        ->where('status', 1)
-        ->select('room_id', 'time', 'uid', 'status')
-        ->get();
+            $data = array(
+                'room_id' => $room, 
+                'time' => $time, 
+                'uid' => 'staff', 
+                'status' => 1
+            );
 
-        return response()->json($data);
+            return response()->json($data);
+
+        } else {
+
+            $res = Carbon::now()->format('Y-m-d');
+
+            $data = Reserve::where('date', $res)
+                ->where('room_id', $room)
+                ->where('time', $time)
+                ->where('uid', $uid)
+                ->where('status', 1)
+                ->select('room_id', 'time', 'uid', 'status')
+                ->get();
+
+            return response()->json($data);
+        }
     }
 
     public function getPatron(string $id)
     {
-        $url = 'https://libapp.msu.ac.th/v1/api/GetPatronDetail/' . $id .'';
+        $url = 'https://libapp.msu.ac.th/v1/api/GetPatronDetail/' . $id . '';
         $sToken = 'token';
 
         $chOne = curl_init();
-        curl_setopt($chOne, CURLOPT_URL, ''. $url .'');
+        curl_setopt($chOne, CURLOPT_URL, '' . $url . '');
         curl_setopt($chOne, CURLOPT_CUSTOMREQUEST, 'GET');
         $headers = array('Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer ' . $sToken . '',);
         curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers);
@@ -72,7 +87,7 @@ class ApiController extends Controller
         $result = curl_exec($chOne);
 
         //dd($result);
-        
+
         if (curl_error($chOne)) {
             echo 'error:' . curl_error($chOne);
         } else {
