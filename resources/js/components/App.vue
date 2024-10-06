@@ -186,7 +186,6 @@
                             class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
                             @click="toolShow()"
                             >คู่มือการใช้งานระบบ</div>
-                        >
                     </div>
 
                     <div class="border-t border-gray-700 pb-3 pt-4" v-if="user">
@@ -244,7 +243,7 @@
         <!-- /End replace -->
     </div>
 
-    <!-- Modal Shirt Picture -->
+    <!-- Modal tools -->
     <transition name="fade" mode="out-in">
         <div
             class="relative z-10"

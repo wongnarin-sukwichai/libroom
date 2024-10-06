@@ -3,6 +3,22 @@
         <img :src="banner" class="p-2 shadow-lg" />
     </div>
 
+    <div 
+    class="bg-white rounded-lg">
+        <div
+            class="mx-auto max-w-7xl px-6 lg:px-8 border-2 border-dashed border-rose-200 hover:border-rose-300 py-4 text-center hover:text-rose-500 lg:text-2xl sm:text-lg cursor-pointer text-rose-400"
+        >
+            กรุณาศึกษา "คู่มือการใช้งานระบบ"
+
+            <box-icon
+                type="solid"
+                name="hand-up"
+                color="pink"
+                animation="fade-up"
+            ></box-icon>
+        </div>
+    </div>
+
     <div class="bg-white rounded-lg" v-if="!chkHoliday">
         <div
             class="mx-auto max-w-7xl px-6 lg:px-8 border-4 border-dashed border-rose-200 hover:border-rose-300 py-28 text-center hover:text-rose-500 text-4xl cursor-pointer text-rose-400"
@@ -974,12 +990,11 @@ export default {
                             .get("/api/member/" + this.data.uid[i])
                             .then((response) => {
                                 if (response.data == "false") {
-                                    const token =
-                                        "{token}";
+                                    const token = "{token}";
                                     const config = {
                                         headers: {
                                             // Accept: "application/x-www-form-urlencode; charset=UTF-8",
-                                            Authorization: 'Bearer ' + token,
+                                            Authorization: "Bearer " + token,
                                         },
                                     };
                                     axios
@@ -1029,9 +1044,11 @@ export default {
                                         });
                                 } else {
                                     this.data.name[i] = response.data.name;
-                                    this.data.surname[i] = response.data.surname;
+                                    this.data.surname[i] =
+                                        response.data.surname;
                                     this.data.type[i] = response.data.type;
-                                    this.data.faculty[i] = response.data.faculty;
+                                    this.data.faculty[i] =
+                                        response.data.faculty;
                                     this.data.branch[i] = response.data.branch;
                                 }
                                 axios
