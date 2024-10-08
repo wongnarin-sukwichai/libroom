@@ -68,7 +68,7 @@
             <table class="border-collapse">
                 <thead>
                     <tr class="bg-gray-100">
-                        <th class="border p-4">#</th>
+                        <!-- <th class="border p-4">#</th> -->
                         <th class="border p-4 w-48">รายละเอียด</th>
                         <th
                             class="border p-4"
@@ -81,9 +81,9 @@
                 </thead>
                 <tbody>
                     <tr v-for="(room, index) in roomList" :key="index">
-                        <td class="border">
+                        <!-- <td class="border">
                             <img :src="roomPath + room.pic" class="w-16 h-16" />
-                        </td>
+                        </td> -->
                         <td class="border p-4 text-center">
                             {{ room.title }}
                         </td>
@@ -261,7 +261,7 @@ export default {
             today: moment().format("YYYY-MM-DD"),
             isModalShow: false,
             conPath: "../img/containers/",
-            roomPath: "../img/rooms/",
+            /**roomPath: "../img/rooms/",*/
             conList: "",
             roomList: "",
             timeList: "",
