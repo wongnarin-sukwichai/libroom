@@ -64,8 +64,8 @@ class ApiController extends Controller
                 ->where('room_id', $room)
                 ->where('uid', $uid)
                 ->where('status', 1)
-                ->select('room_id', 'time', 'uid', 'status')
-                ->get();
+                ->select('room_id', 'uid', 'status')
+                ->first();
 
             return response()->json($data);
         }
