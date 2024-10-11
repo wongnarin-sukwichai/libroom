@@ -43,14 +43,13 @@ class ApiController extends Controller
         return response()->json($data);
     }
 
-    public function getAccess(string $room, string $time, string $uid)
+    public function getAccess(string $room, string $uid)
     {
 
         if ($uid == '20000000604013') {
 
             $data = array(
                 'room_id' => $room, 
-                'time' => $time, 
                 'uid' => 'staff', 
                 'status' => 1
             );
@@ -63,7 +62,6 @@ class ApiController extends Controller
 
             $data = Reserve::where('date', $res)
                 ->where('room_id', $room)
-                ->where('time', $time)
                 ->where('uid', $uid)
                 ->where('status', 1)
                 ->select('room_id', 'time', 'uid', 'status')
