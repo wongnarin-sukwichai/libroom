@@ -999,8 +999,8 @@ export default {
                                     };
                                     axios
                                         .get(
-                                            "https://liboffice.msu.ac.th/v1/api/getPatron/" +
-                                                this.data.uid[i]
+                                            "https://liboffice.msu.ac.th/api/getPatron/" +
+                                                this.data.uid[i], config
                                         )
                                         // .get(
                                         //     "https://library.msu.ac.th/libapi/api/apitest",
@@ -1008,27 +1008,27 @@ export default {
                                         // )
                                         .then((response) => {
                                             console.log(response);
-                                            axios
-                                                .post(
-                                                    "/api/member",
-                                                    response.data
-                                                )
-                                                .then((result) => {
-                                                    this.data.name[i - 1] =
-                                                        result.data.name;
-                                                    this.data.surname[i - 1] =
-                                                        result.data.surname;
-                                                    this.data.type[i - 1] =
-                                                        result.data.type;
-                                                    this.data.faculty[i - 1] =
-                                                        result.data.faculty;
-                                                    this.data.branch[i - 1] =
-                                                        result.data.branch;
-                                                    // console.log(this.data);
-                                                })
-                                                .catch((err) => {
-                                                    // console.log(err);
-                                                });
+                                            // axios
+                                            //     .post(
+                                            //         "/api/member",
+                                            //         response.data
+                                            //     )
+                                            //     .then((result) => {
+                                            //         this.data.name[i - 1] =
+                                            //             result.data.name;
+                                            //         this.data.surname[i - 1] =
+                                            //             result.data.surname;
+                                            //         this.data.type[i - 1] =
+                                            //             result.data.type;
+                                            //         this.data.faculty[i - 1] =
+                                            //             result.data.faculty;
+                                            //         this.data.branch[i - 1] =
+                                            //             result.data.branch;
+                                            //         // console.log(this.data);
+                                            //     })
+                                            //     .catch((err) => {
+                                            //         // console.log(err);
+                                            //     });
 
                                             // this.data.name[i] = response.data[0].FNAMETHAI;
                                             // this.data.surname[i] = response.data[0].LNAMETHAI;

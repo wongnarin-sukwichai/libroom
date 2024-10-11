@@ -3,6 +3,22 @@
         <img :src="banner" class="p-2 shadow-lg" />
     </div>
 
+    <div 
+    class="bg-white rounded-lg">
+        <div
+            class="mx-auto max-w-7xl px-6 lg:px-8 border-2 border-dashed border-rose-200 hover:border-rose-300 py-4 text-center hover:text-rose-500 lg:text-2xl sm:text-lg cursor-pointer text-rose-400"
+        >
+            กรุณาศึกษา "คู่มือการใช้งานระบบ"
+
+            <box-icon
+                type="solid"
+                name="hand-up"
+                color="pink"
+                animation="fade-up"
+            ></box-icon>
+        </div>
+    </div>
+
     <div class="bg-white rounded-lg" v-if="!chkHoliday">
         <div
             class="mx-auto max-w-7xl px-6 lg:px-8 border-4 border-dashed border-rose-200 hover:border-rose-300 py-28 text-center hover:text-rose-500 text-4xl cursor-pointer text-rose-400"
@@ -119,7 +135,7 @@
                     <table class="border-collapse">
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="border p-4">#</th>
+                                <!-- <th class="border p-4">#</th> -->
                                 <th class="border p-4 w-48">รายละเอียด</th>
                                 <th
                                     class="border p-4"
@@ -132,12 +148,12 @@
                         </thead>
                         <tbody>
                             <tr v-for="(room, index) in roomList" :key="index">
-                                <td class="border">
+                                <!--<td class="border">
                                     <img
                                         :src="roomPath + room.pic"
                                         class="w-16 h-16"
                                     />
-                                </td>
+                                </td>-->
                                 <td class="border p-4 text-center">
                                     {{ room.title }}
                                 </td>
@@ -583,7 +599,7 @@ export default {
             banner: "img/banner.jpg",
             locPath: "img/locations/",
             conPath: "img/containers/",
-            roomPath: "img/rooms/",
+            /**roomPath: "img/rooms/",*/
             tableList: false,
             locList: "",
             conList: "",
@@ -932,7 +948,7 @@ export default {
                         .then((response) => {
                             //console.log(res);
 
-                            var today = moment().format("YYYY-MM-DD");
+                            //var today = moment().format("YYYY-MM-DD");
 
                             this.getReserve();
 
@@ -974,25 +990,18 @@ export default {
                             .get("/api/member/" + this.data.uid[i])
                             .then((response) => {
                                 if (response.data == "false") {
-                                    const token =
-                                        "RqG9I+wk/cB9TiCgCbSOGFq7exTxD6fLMoVeCNtLNrj8XTJdVnNMov9mAgLOEqTBKikM6id3P7ELFjt3gqyCjA==";
+                                    const token = "";
                                     const config = {
                                         headers: {
                                             // Accept: "application/x-www-form-urlencode; charset=UTF-8",
-                                            token: token,
+                                            Authorization: "Bearer " + token,
                                         },
                                     };
                                     axios
                                         .get(
-                                            "https://libapp.msu.ac.th/v1/api/GetPatronDetail/" +
-                                                this.data.uid[i],
-                                            config
+                                            "https://liboffice.msu.ac.th/v1/api/getPatron/" +
+                                                this.data.uid[i]
                                         )
-                                        // .get(
-                                        //     "https://library.msu.ac.th/libapi/api/checkPatron/" +
-                                        //         this.data.uid[i],
-                                        //     config
-                                        // )
                                         // .get(
                                         //     "https://library.msu.ac.th/libapi/api/apitest",
                                         //     config
@@ -1035,9 +1044,11 @@ export default {
                                         });
                                 } else {
                                     this.data.name[i] = response.data.name;
-                                    this.data.surname[i] = response.data.surname;
+                                    this.data.surname[i] =
+                                        response.data.surname;
                                     this.data.type[i] = response.data.type;
-                                    this.data.faculty[i] = response.data.faculty;
+                                    this.data.faculty[i] =
+                                        response.data.faculty;
                                     this.data.branch[i] = response.data.branch;
                                 }
                                 axios
