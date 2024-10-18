@@ -3,8 +3,7 @@
         <img :src="banner" class="p-2 shadow-lg" />
     </div>
 
-    <div 
-    class="bg-white rounded-lg">
+    <div class="bg-white rounded-lg">
         <div
             class="mx-auto max-w-7xl px-6 lg:px-8 border-2 border-dashed border-rose-200 hover:border-rose-300 py-4 text-center hover:text-rose-500 lg:text-2xl sm:text-lg cursor-pointer text-rose-400"
         >
@@ -1000,35 +999,36 @@ export default {
                                     axios
                                         .get(
                                             "https://liboffice.msu.ac.th/api/getPatron/" +
-                                                this.data.uid[i], config
+                                                this.data.uid[i],
+                                            config
                                         )
                                         // .get(
                                         //     "https://library.msu.ac.th/libapi/api/apitest",
                                         //     config
                                         // )
                                         .then((response) => {
-                                            console.log(response);
-                                            // axios
-                                            //     .post(
-                                            //         "/api/member",
-                                            //         response.data
-                                            //     )
-                                            //     .then((result) => {
-                                            //         this.data.name[i - 1] =
-                                            //             result.data.name;
-                                            //         this.data.surname[i - 1] =
-                                            //             result.data.surname;
-                                            //         this.data.type[i - 1] =
-                                            //             result.data.type;
-                                            //         this.data.faculty[i - 1] =
-                                            //             result.data.faculty;
-                                            //         this.data.branch[i - 1] =
-                                            //             result.data.branch;
-                                            //         // console.log(this.data);
-                                            //     })
-                                            //     .catch((err) => {
-                                            //         // console.log(err);
-                                            //     });
+                                            // console.log(response);
+                                            axios
+                                                .post(
+                                                    "/api/member",
+                                                    response.data
+                                                )
+                                                .then((result) => {
+                                                    this.data.name[i - 1] =
+                                                        result.data.name;
+                                                    this.data.surname[i - 1] =
+                                                        result.data.surname;
+                                                    this.data.type[i - 1] =
+                                                        result.data.type;
+                                                    this.data.faculty[i - 1] =
+                                                        result.data.faculty;
+                                                    this.data.branch[i - 1] =
+                                                        result.data.branch;
+                                                    // console.log(this.data);
+                                                })
+                                                .catch((err) => {
+                                                    // console.log(err);
+                                                });
 
                                             // this.data.name[i] = response.data[0].FNAMETHAI;
                                             // this.data.surname[i] = response.data[0].LNAMETHAI;

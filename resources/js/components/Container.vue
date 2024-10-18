@@ -796,7 +796,7 @@ export default {
                 .get("/api/time")
                 .then((response) => {
                     this.timeList = response.data;
-                    console.log(this.timeList);
+                    // console.log(this.timeList);
                 })
                 .catch((err) => {
                     console.log(err);

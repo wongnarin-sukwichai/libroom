@@ -21,19 +21,24 @@ class ApiController extends Controller
 
     public function getService()
     {
-        $data = Reserve::where('loc_id', 1)->count();
-        $res = Reserve::where('loc_id', 2)->count();
+        $res = Carbon::now()->format('Y-m-d');
+
+        $data = Reserve::where('date', $res)->where('loc_id', 1)->count();
+        $result = Reserve::where('date', $res)->where('loc_id', 2)->count();
 
         return response()->json([
             'arec' => $data,
-            'dlp' => $res
+            'dlp' => $result
         ]);
     }
 
     public function getMost()
     {
 
+        $res = Carbon::now()->format('Y-m-d');
+
         $data = DB::table('Reserves')
+            ->where('date', $res)
             ->select('faculty', DB::raw('COUNT(*) AS count'))
             ->groupBy('faculty')
             ->orderByRaw('COUNT(*) DESC')
@@ -49,13 +54,12 @@ class ApiController extends Controller
         if ($uid == '20000000604013') {
 
             $data = array(
-                'room_id' => $room, 
-                'uid' => 'staff', 
+                'room_id' => $room,
+                'uid' => 'staff',
                 'status' => 1
             );
 
             return response()->json($data);
-
         } else {
 
             $res = Carbon::now()->format('Y-m-d');

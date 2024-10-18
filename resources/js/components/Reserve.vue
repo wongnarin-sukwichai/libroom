@@ -251,10 +251,10 @@ moment.locale("th");
 export default {
     async mounted() {
         await this.getTime();
+        this.getReserve();
         this.getContainer();
         this.getRoom();
         this.isWeekend();
-        this.getReserve();
     },
     data() {
         return {
