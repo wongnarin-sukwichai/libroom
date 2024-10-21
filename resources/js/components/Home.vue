@@ -94,7 +94,7 @@
                         </h2>
                         <div class="flex flex-col space-y-1">
                             <router-link
-                                to="/"
+                                to="/stat"
                                 class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
                                 ><box-icon
                                     name="bar-chart"

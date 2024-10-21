@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 
 use App\Models\Reserve;
+use App\Models\Time;
 
 class ApiController extends Controller
 {
@@ -23,8 +24,8 @@ class ApiController extends Controller
     {
         $res = Carbon::now()->format('Y-m-d');
 
-        $data = Reserve::where('date', $res)->where('loc_id', 1)->count();
-        $result = Reserve::where('date', $res)->where('loc_id', 2)->count();
+        $data = Reserve::where('date', $res)->where('loc_id', 1)->where('status', 1)->count();
+        $result = Reserve::where('date', $res)->where('loc_id', 2)->where('status', 1)->count();
 
         return response()->json([
             'arec' => $data,
@@ -39,6 +40,7 @@ class ApiController extends Controller
 
         $data = DB::table('Reserves')
             ->where('date', $res)
+            ->where('status', 1)
             ->select('faculty', DB::raw('COUNT(*) AS count'))
             ->groupBy('faculty')
             ->orderByRaw('COUNT(*) DESC')
@@ -62,10 +64,24 @@ class ApiController extends Controller
             return response()->json($data);
         } else {
 
-            $res = Carbon::now()->format('Y-m-d');
+            $now = Carbon::now();
+            $res = $now->format('Y-m-d');
+            $result = $now->format('H');
+            $check = $now->isWeekend();                    //check ว่าใช่วัน ส-อ ไหม
+
+            // dd($res, $result, $check);
+
+            if ($check == false) {
+                $check = Time::where('id', 1)->first()->hour;
+                $time = $result - $check;         
+            } else {
+                $check = Time::where('id', 2)->first()->hour;
+                $time = $result - $check;  
+            }
 
             $data = Reserve::where('date', $res)
                 ->where('room_id', $room)
+                ->where('time', $time)
                 ->where('uid', $uid)
                 ->where('status', 1)
                 ->select('room_id', 'uid', 'status')

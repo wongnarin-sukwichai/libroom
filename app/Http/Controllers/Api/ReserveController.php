@@ -116,20 +116,19 @@ class ReserveController extends Controller
             $data->update();
         }
 
+        // sleep(1);
 
-        sleep(1);
+        // if ($request['status'] == 0) {
 
-        if ($request['status'] == 0) {
+        //     $res = new Record();
+        //     $res->date = $data->date;
+        //     $res->res_id = $data->id;
+        //     $res->uid = $data->uid;
+        //     $res->name = $data->name;
+        //     $res->surname = $data->surname;
 
-            $res = new Record();
-            $res->date = $data->date;
-            $res->res_id = $data->id;
-            $res->uid = $data->uid;
-            $res->name = $data->name;
-            $res->surname = $data->surname;
-
-            $res->save();
-        }
+        //     $res->save();
+        // }
 
         return response()->json($data);
     }

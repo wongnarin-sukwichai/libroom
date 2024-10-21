@@ -612,7 +612,7 @@ export default {
             conTime2: "",
             roomList: "",
             timeList: "",
-            recordList: "",
+            // recordList: "",
             reserveList: [],
             weekend: "",
             isTime: "",
@@ -770,7 +770,7 @@ export default {
             return result;
         },
         showModal(id, code) {
-            var today = moment().format("YYYY-MM-DD");
+            // var today = moment().format("YYYY-MM-DD");
 
             // axios.get('/api/recordMain/' + today + '/' + )
 
