@@ -269,6 +269,14 @@
                                 ** กรุณากรอกข้อมูลให้ครบ
                             </div>
                         </transition>
+                        <transition name="fade" mode="out-in">
+                            <div
+                                class="text-rose-500 mx-20"
+                                v-show="showAlertDup"
+                            >
+                                ** รหัสห้ามซ้ำ
+                            </div>
+                        </transition>
 
                         <div class="bg-white px-4 pb-4 sm:p-4 sm:pb-4">
                             <div class="sm:flex sm:items-start">
@@ -595,6 +603,7 @@ export default {
             showAlertRule: false,
             showModalRes: false,
             showAlertInput: false,
+            showAlertDup: false,
             banner: "img/banner.jpg",
             locPath: "img/locations/",
             conPath: "img/containers/",
@@ -975,12 +984,15 @@ export default {
 
             if (limit != this.data.uid.length) {
                 this.showAlertInput = true;
+            } else if (this.checkDup(this.data.uid) == false) {
+                this.showAlertDup = true;
+                console.log(this.checkDup(this.data.uid));
             } else {
                 this.showAlertInput = false;
+                this.showAlertDup = false;
                 var today = moment().format("YYYY-MM-DD");
 
                 for (var i = 0; i < this.data.uid.length; i++) {
-                    // console.log(this.data.uid[i])
 
                     if (this.data.uid[i] == "") {
                         this.showAlertInput = true;
@@ -1029,7 +1041,6 @@ export default {
                                                 .catch((err) => {
                                                     // console.log(err);
                                                 });
-
                                             // this.data.name[i] = response.data[0].FNAMETHAI;
                                             // this.data.surname[i] = response.data[0].LNAMETHAI;
                                             // console.log(this.data.name);
@@ -1060,7 +1071,6 @@ export default {
                                     )
                                     .then((response) => {
                                         this.data.rule[i - 1] = response.data;
-
                                         if (
                                             this.chkRule > response.data ||
                                             this.chkRule == ""
@@ -1083,6 +1093,14 @@ export default {
                 }
             }
             this.getReserve();
+        },
+        checkDup(arr) {
+            var res = arr.filter((item, index) => arr.indexOf(item) !== index);
+            if (res == "") {
+                return true;
+            } else {
+                return false;
+            }
         },
     },
     computed: {

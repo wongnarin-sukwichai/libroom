@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\RecordController;
 use App\Http\Controllers\Api\ReserveController;
 use App\Http\Controllers\Api\MemberController;
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Api\StatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,4 +72,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /** Pen1 Access Control */
     Route::get('getAccess/{room}/{uid}', [ApiController::class, 'getAccess']);
+
+    Route::resource('stat', StatController::class);
 }); 
