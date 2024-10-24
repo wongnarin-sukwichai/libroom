@@ -15,6 +15,10 @@
                         >
                     </div>
 
+                    <p class="text-red-500">
+                        ** ระบบแสดงสถิติย้อนหลัง 3 เดือน **
+                    </p>
+
                     <hr class="my-4 border border-dashed" />
 
                     <div class="card-body">
@@ -46,10 +50,14 @@
                                     <th class="p-4 border border-slate-400">
                                         ห้อง Playground
                                     </th>
-                                    <th class="p-4 border border-slate-400 bg-gray-300">
+                                    <th
+                                        class="p-4 border border-slate-400 bg-gray-300"
+                                    >
                                         ทั้งหมด
                                     </th>
-                                    <th class="p-4 border border-slate-400 bg-gray-300">
+                                    <th
+                                        class="p-4 border border-slate-400 bg-gray-300"
+                                    >
                                         หน่วย
                                     </th>
                                 </tr>
@@ -76,7 +84,12 @@
                                         {{ stat["pg"] }}
                                     </td>
                                     <td class="p-4 border border-slate-400">
-                                        {{ stat["a"] + stat["b"] + stat["c"] + stat["pg"] }}
+                                        {{
+                                            stat["a"] +
+                                            stat["b"] +
+                                            stat["c"] +
+                                            stat["pg"]
+                                        }}
                                     </td>
                                     <td class="p-4 border border-slate-400">
                                         คน
@@ -110,10 +123,14 @@
                                 <th class="p-4 border border-slate-400">
                                     ทีวีออนไลน์
                                 </th>
-                                <th class="p-4 border border-slate-400 bg-gray-300">
-                                        ทั้งหมด
-                                    </th>
-                                <th class="p-4 border border-slate-400 bg-gray-300">
+                                <th
+                                    class="p-4 border border-slate-400 bg-gray-300"
+                                >
+                                    ทั้งหมด
+                                </th>
+                                <th
+                                    class="p-4 border border-slate-400 bg-gray-300"
+                                >
                                     หน่วย
                                 </th>
                             </tr>
@@ -133,7 +150,9 @@
                                 <td class="p-4 border border-slate-400">
                                     {{ stat["tv"] }}
                                 </td>
-                                <td class="p-4 border border-slate-400">{{ stat["std"] + stat["tv"] }}</td>
+                                <td class="p-4 border border-slate-400">
+                                    {{ stat["std"] + stat["tv"] }}
+                                </td>
                                 <td class="p-4 border border-slate-400">คน</td>
                             </tr>
                         </tbody>
@@ -141,9 +160,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="mt-8">
-        <p class="text-red-500">** ระบบแสดงสถิติย้อนหลัง 3 เดือน **</p>
     </div>
 </template>
 
