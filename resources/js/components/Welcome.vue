@@ -146,7 +146,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(room, index) in roomList" :key="index">
+                            <tr 
+                            v-for="(room, index) in roomList" 
+                            :key="index">
                                 <!--<td class="border">
                                     <img
                                         :src="roomPath + room.pic"
@@ -725,6 +727,9 @@ export default {
             this.data.loc_id = id;
         },
         async pickCon(id, code, time_1, time_2) {
+
+            this.clearArr();
+
             if (this.weekend == false) {
                 this.isTime = this.setTimer(time_1);
             } else {
@@ -788,11 +793,21 @@ export default {
             this.roomTitle = code;
         },
         close() {
+            this.clearArr();
             this.isModalShow = false;
         },
-        async send() {
-            //console.log(this.data);
-
+        clearArr(){
+                this.data.time = [],
+                this.data.uid = [],
+                this.data.name = [],
+                this.data.surname = [],
+                this.data.type = [],
+                this.data.faculty = [],
+                this.data.branch = [],
+                this.data.rule = [],
+                this.data.code = ""
+        },
+        async send() {        
             if (this.data.uid.length != this.conLimit) {
                 Swal.fire({
                     title: "ผิดพลาด",
@@ -862,15 +877,8 @@ export default {
                         await axios
                             .post("/api/addReserve", this.data)
                             .then((response) => {
-                                this.data.time = [];
-                                this.data.uid = [];
-                                this.data.name = [];
-                                this.data.surname = [];
-                                this.data.type = [];
-                                this.data.faculty = [];
-                                this.data.branch = [];
-                                this.data.rule = [];
-                                this.data.code = "";
+
+                                this.clearArr();
 
                                 this.chkRule = "";
                                 this.isModalShow = false;
@@ -979,6 +987,7 @@ export default {
             });
         },
         async chkMem(limit) {
+
             this.showAlertInput = false;
             this.chkRule == "";
 
@@ -986,14 +995,13 @@ export default {
                 this.showAlertInput = true;
             } else if (this.checkDup(this.data.uid) == false) {
                 this.showAlertDup = true;
-                console.log(this.checkDup(this.data.uid));
+                // console.log(this.checkDup(this.data.uid));
             } else {
                 this.showAlertInput = false;
                 this.showAlertDup = false;
                 var today = moment().format("YYYY-MM-DD");
 
                 for (var i = 0; i < this.data.uid.length; i++) {
-
                     if (this.data.uid[i] == "") {
                         this.showAlertInput = true;
                     } else {
@@ -1092,6 +1100,7 @@ export default {
                     }
                 }
             }
+            console.log(this.data)
             this.getReserve();
         },
         checkDup(arr) {

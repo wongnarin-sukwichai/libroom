@@ -31,13 +31,10 @@
                     <div
                         class="grid w-full sm:grid-cols-2 xl:grid-cols-4 gap-4"
                     >
-                        <div
-                            class="relative flex flex-col shadow-md rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 max-w-sm"
-                            v-for="(con, index) in conList"
-                            :key="index"
-                        >
-                            <template
-                            v-if="loc.id === con.loc_id"
+                        <div v-for="con in filterCon(loc.id)" :key="con.loc_id">
+                            <div
+                                v-if="loc.id === con.loc_id"
+                                class="relative flex flex-col shadow-md rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 max-w-sm"
                             >
                                 <div
                                     class="h-auto overflow-hidden hover:cursor-pointer"
@@ -61,10 +58,10 @@
                                     >
                                         <p class="text-xs text-gray-400">
                                             {{ con.detail }}
-                                        </p>                                       
+                                        </p>
                                     </div>
                                 </div>
-                            </template>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -85,7 +82,7 @@ export default {
             locPath: "img/locations/",
             conPath: "img/containers/",
             locList: "",
-            conList: ""
+            conList: "",
         };
     },
     methods: {
@@ -112,6 +109,9 @@ export default {
         getRoom(id) {
             this.$router.push("/reserve/" + id);
         },
+        filterCon(id) {
+            return this.conList.filter((item) => item.loc_id === id);
+        }
     },
 };
 </script>

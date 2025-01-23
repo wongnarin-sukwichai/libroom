@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Member;
 use App\Models\Record;
 use Illuminate\Http\Request;
 
@@ -46,8 +47,14 @@ class ReserveController extends Controller
 
     public function checkReserve(string $code, string $id)
     {
-        $data = Reserve::where('date', $code)->where('uid', $id)->count();
-        $data = 3 - $data;
+        $result = Member::where('uid', $id)->first();
+
+        if (empty($result)) {
+            $data = 0;
+        } else {
+            $data = Reserve::where('date', $code)->where('uid', $id)->count();
+            $data = 3 - $data;
+        }
 
         return response()->json($data);
     }
