@@ -41,6 +41,12 @@ class StatController extends Controller
             $data[$j]['pg'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '4')->count();
             $data[$j]['std'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '5')->count();
             $data[$j]['tv'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '6')->count();
+            $data[$j]['com'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '7')->count();
+            $data[$j]['pav'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '13')->count();
+            $data[$j]['nap'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '14')->count();
+            $data[$j]['play'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '15')->count();
+            $data[$j]['online'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '16')->count();
+            $data[$j]['pool'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '17')->count();
 
             $j++;
             $k--;
