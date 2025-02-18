@@ -33,11 +33,11 @@
                                     class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                                     >แบบประเมินความพึงพอใจ</router-link
                                 >
-                                <div
+                                <!-- <div
                                     class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
                                      @click="toolShow()"
                                     >คู่มือการใช้งานระบบ</div
-                                >
+                                > -->
                             </div>
                         </div>
                     </div>
@@ -182,10 +182,10 @@
                             class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
                             >แบบประเมินความพึงพอใจ</router-link
                         >
-                        <div
+                        <!-- <div
                             class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
                             @click="toolShow()"
-                            >คู่มือการใช้งานระบบ</div>
+                            >คู่มือการใช้งานระบบ</div> -->
                     </div>
 
                     <div class="border-t border-gray-700 pb-3 pt-4" v-if="user">
@@ -244,7 +244,7 @@
     </div>
 
     <!-- Modal tools -->
-    <transition name="fade" mode="out-in">
+    <!-- <transition name="fade" mode="out-in">
         <div
             class="relative z-10"
             aria-labelledby="modal-title"
@@ -278,7 +278,7 @@
                 </div>
             </div>
         </div>
-    </transition>
+    </transition> -->
 </template>
 
 <script>
@@ -288,7 +288,7 @@ export default {
     data() {
         return {
             library: "img/library.png",
-            tools: "pdf/tools.pdf",
+            // tools: "pdf/tools.pdf",
             user: "",
             show: false,
             showNav: false,
@@ -302,12 +302,12 @@ export default {
             await this.$store.dispatch("logout");
             this.$router.push({ name: "login" });
         },
-        toolShow () {
-            this.modalTool = true;
-        },
-        toolClose () {
-            this.modalTool = false;
-        }
+        // toolShow () {
+        //     this.modalTool = true;
+        // },
+        // toolClose () {
+        //     this.modalTool = false;
+        // }
     },
     computed: {
         user() {

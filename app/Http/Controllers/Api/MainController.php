@@ -193,6 +193,13 @@ class MainController extends Controller
         }
     }
 
+    public function showPlan(string $id) {
+
+        $data = Container::find($id);
+
+        return response()->json($data);
+    }
+
     // public function delReserve(Request $request)
     // {
     //     //  dd($request->all());

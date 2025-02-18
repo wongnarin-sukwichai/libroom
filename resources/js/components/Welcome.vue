@@ -4,18 +4,20 @@
     </div>
 
     <div class="bg-white rounded-lg">
-        <div
-            class="mx-auto max-w-7xl px-6 lg:px-8 border-2 border-dashed border-rose-200 hover:border-rose-300 py-4 text-center hover:text-rose-500 lg:text-2xl sm:text-lg cursor-pointer text-rose-400"
-        >
-            กรุณาศึกษา "คู่มือการใช้งานระบบ"
+        <a href="/pdf/tools.pdf" target="_blank">
+            <div
+                class="mx-auto max-w-7xl px-6 lg:px-8 border-2 border-dashed border-rose-200 hover:border-rose-300 py-4 text-center hover:text-rose-500 lg:text-2xl sm:text-lg cursor-pointer text-rose-400"
+            >
+                กรุณาศึกษา "คู่มือการใช้งานระบบ"
 
-            <box-icon
-                type="solid"
-                name="hand-up"
-                color="pink"
-                animation="fade-up"
-            ></box-icon>
-        </div>
+                <box-icon
+                    type="solid"
+                    name="hand-up"
+                    color="pink"
+                    animation="fade-up"
+                ></box-icon>
+            </div>
+        </a>
     </div>
 
     <div class="bg-white rounded-lg" v-if="!chkHoliday">
@@ -71,7 +73,9 @@
                             <h3 class="mt-6 text-sm text-gray-500">
                                 {{ loc.eng }}
                             </h3>
-                            <p class="text-base font-semibold text-gray-900">
+                            <p
+                                class="text-base font-semibold text-gray-900 mb-6"
+                            >
                                 {{ loc.title }}
                             </p>
                         </div>
@@ -146,9 +150,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr 
-                            v-for="(room, index) in roomList" 
-                            :key="index">
+                            <tr v-for="(room, index) in roomList" :key="index">
                                 <!--<td class="border">
                                     <img
                                         :src="roomPath + room.pic"
@@ -727,7 +729,6 @@ export default {
             this.data.loc_id = id;
         },
         async pickCon(id, code, time_1, time_2) {
-
             this.clearArr();
 
             if (this.weekend == false) {
@@ -796,18 +797,18 @@ export default {
             this.clearArr();
             this.isModalShow = false;
         },
-        clearArr(){
-                this.data.time = [],
-                this.data.uid = [],
-                this.data.name = [],
-                this.data.surname = [],
-                this.data.type = [],
-                this.data.faculty = [],
-                this.data.branch = [],
-                this.data.rule = [],
-                this.data.code = ""
+        clearArr() {
+            (this.data.time = []),
+                (this.data.uid = []),
+                (this.data.name = []),
+                (this.data.surname = []),
+                (this.data.type = []),
+                (this.data.faculty = []),
+                (this.data.branch = []),
+                (this.data.rule = []),
+                (this.data.code = "");
         },
-        async send() {        
+        async send() {
             if (this.data.uid.length != this.conLimit) {
                 Swal.fire({
                     title: "ผิดพลาด",
@@ -877,7 +878,6 @@ export default {
                         await axios
                             .post("/api/addReserve", this.data)
                             .then((response) => {
-
                                 this.clearArr();
 
                                 this.chkRule = "";
@@ -987,7 +987,6 @@ export default {
             });
         },
         async chkMem(limit) {
-
             this.showAlertInput = false;
             this.chkRule == "";
 
@@ -1100,7 +1099,6 @@ export default {
                     }
                 }
             }
-            console.log(this.data)
             this.getReserve();
         },
         checkDup(arr) {

@@ -40,6 +40,8 @@ Route::get('holidayMain/{id}/{code}/{next}/{to}', [MainController::class, 'holid
 Route::resource('member', MemberController::class);
 Route::get('checkReserve/{code}/{id}', [ReserveController::class, 'checkReserve']);
 
+Route::get('showPlan/{id}', [MainController::class, 'showPlan']);
+
 Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
 });

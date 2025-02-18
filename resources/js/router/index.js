@@ -8,8 +8,10 @@ import Time from "../components/Time.vue";
 import Holiday from "../components/Holiday.vue";
 import Container from "../components/Container.vue";
 import Room from "../components/Room.vue";
-import Reserve from "../components/Reserve.vue"
+import Reserve from "../components/Reserve.vue";
 import Stat from "../components/Stat.vue";
+import Plan from "../components/Plan.vue";
+import ShowPlan from "../components/ShowPlan.vue";
 
 import store from "../store";
 
@@ -23,6 +25,16 @@ const routes = [
         path: "/login",
         name: "login",
         component: Login,
+    },
+    {
+        path: "/plan",
+        name: "plan",
+        component: Plan
+    },
+    {
+        path: "/showPlan/:id",
+        name: "showPlan",
+        component: ShowPlan
     },
     {
         path: "/home",
