@@ -117,7 +117,17 @@ export default {
                 });
         },
         getRoom(id) {
-            this.$router.push("/showPlan/" + id);
+            switch (id) {
+                case 1: 
+                this.$router.push("/roomA/" + id);
+                break;
+                case 2:
+                this.$router.push("/roomB/" + id);
+                break;
+                case 3:
+                this.$router.push("/roomC/" + id);
+                break;
+            }
         },
         filterCon(id) {
             return this.conList.filter((item) => item.loc_id === id);

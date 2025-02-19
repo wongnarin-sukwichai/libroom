@@ -4,10 +4,14 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="card-header text-center text-2xl text-gray-800">
+                        <div
+                            class="card-header text-center text-2xl text-gray-800"
+                        >
                             {{ conList.title }}
                         </div>
-                        <div class="card-header text-center text-lg text-gray-500 my-6">
+                        <div
+                            class="card-header text-center text-lg text-gray-500 my-6"
+                        >
                             ( {{ conList.detail }} )
                         </div>
                         <div class="flex card-body justify-center items-center">
@@ -20,6 +24,8 @@
                 </div>
             </div>
         </div>
+
+        <div id="box"></div>
     </div>
 </template>
 
@@ -33,7 +39,7 @@ export default {
     data() {
         return {
             plan: "../img/plans/" + this.$route.params.id + ".png",
-            conList: ""
+            conList: "",
         };
     },
     methods: {
@@ -41,11 +47,11 @@ export default {
             axios
                 .get("/api/showPlan/" + this.$route.params.id)
                 .then((response) => {
-                    this.conList = response.data
-                    console.log(this.conList)
+                    this.conList = response.data;
+                    console.log(this.conList);
                 })
                 .catch((err) => {
-                    console.log(err)
+                    console.log(err);
                 });
         },
     },

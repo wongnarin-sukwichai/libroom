@@ -112,32 +112,32 @@ class MainController extends Controller
 
             for ($i = 0; $i < count($request['time']); $i++) {
 
-                    for ($j = 0; $j < count($request['uid']); $j++) {
+                for ($j = 0; $j < count($request['uid']); $j++) {
 
-                        $data = new Reserve();
+                    $data = new Reserve();
 
-                        $data->date = $request['date'];
-                        $data->loc_id = $request['loc_id'];
-                        $data->con_id = $request['con_id'];
-                        $data->room_id = $request['room_id'];
-                        $data->time = $request['time'][$i];
-                        $data->uid = $request['uid'][$j];
-                        $data->name = $request['name'][$j];
-                        $data->surname = $request['surname'][$j];
-                        if (!empty($request['type'][$j])) {
-                            $data->type = $request['type'][$j];
-                        }
-                        if (!empty($request['faculty'][$j])) {
-                            $data->faculty = $request['faculty'][$j];
-                        }
-                        if (!empty($request['branch'][$j])) {
-                            $data->branch = $request['branch'][$j];
-                        }
-                        $data->code = $request['code'];
-                        $data->status = 0;
+                    $data->date = $request['date'];
+                    $data->loc_id = $request['loc_id'];
+                    $data->con_id = $request['con_id'];
+                    $data->room_id = $request['room_id'];
+                    $data->time = $request['time'][$i];
+                    $data->uid = $request['uid'][$j];
+                    $data->name = $request['name'][$j];
+                    $data->surname = $request['surname'][$j];
+                    if (!empty($request['type'][$j])) {
+                        $data->type = $request['type'][$j];
+                    }
+                    if (!empty($request['faculty'][$j])) {
+                        $data->faculty = $request['faculty'][$j];
+                    }
+                    if (!empty($request['branch'][$j])) {
+                        $data->branch = $request['branch'][$j];
+                    }
+                    $data->code = $request['code'];
+                    $data->status = 0;
 
-                        $data->save();
-                    }         
+                    $data->save();
+                }
             }
 
             return response()->json([
@@ -145,7 +145,6 @@ class MainController extends Controller
                 'title' => $request['code'],
                 'text' => "** กรุณาจดจำรหัส สำหรับใช้ในการยกเลิกการจอง **"
             ]);
-
         } else {
 
             return response()->json([
@@ -193,9 +192,20 @@ class MainController extends Controller
         }
     }
 
-    public function showPlan(string $id) {
+    public function showPlan(string $id)
+    {
 
         $data = Container::find($id);
+
+        return response()->json($data);
+    }
+
+    public function resPlan(string $id, string $code)
+    {
+        $data = Reserve::where('date', $id)
+            ->where('con_id', $code)
+            ->select('room_id', 'time', 'name', 'surname', 'status')
+            ->get();
 
         return response()->json($data);
     }

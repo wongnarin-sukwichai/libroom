@@ -11,7 +11,11 @@ import Room from "../components/Room.vue";
 import Reserve from "../components/Reserve.vue";
 import Stat from "../components/Stat.vue";
 import Plan from "../components/Plan.vue";
-import ShowPlan from "../components/ShowPlan.vue";
+
+// Plans
+import RoomA from "../components/plans/RoomA.vue";
+import RoomB from "../components/plans/RoomB.vue";
+import RoomC from "../components/plans/RoomC.vue";
 
 import store from "../store";
 
@@ -32,9 +36,19 @@ const routes = [
         component: Plan
     },
     {
-        path: "/showPlan/:id",
-        name: "showPlan",
-        component: ShowPlan
+        path: "/roomA/:id",
+        name: "roomA",
+        component: RoomA
+    },
+    {
+        path: "/roomB/:id",
+        name: "roomB",
+        component: RoomB
+    },
+    {
+        path: "/roomC/:id",
+        name: "roomC",
+        component: RoomC
     },
     {
         path: "/home",
