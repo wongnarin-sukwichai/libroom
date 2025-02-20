@@ -745,6 +745,7 @@ export default {
                 .catch((err) => {
                     // console.log(err);
                 });
+
             this.tableList = true;
             this.conActive = id;
             this.conLimit = code;

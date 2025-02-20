@@ -210,6 +210,13 @@ class MainController extends Controller
         return response()->json($data);
     }
 
+    public function roomID(string $id)
+    {
+        $data = Room::where('id', $id)->get();
+
+        return response()->json($data);
+    }
+
     // public function delReserve(Request $request)
     // {
     //     //  dd($request->all());
