@@ -89,7 +89,8 @@ class MainController extends Controller
             'name' => 'required',
             'surname' => 'required',
             'type' => 'required',
-            'code' => 'required'
+            'code' => 'required',
+            'status' => 'required'
         ]);
 
         for ($k = 0; $k < count($request['time']); $k++) {
@@ -134,7 +135,7 @@ class MainController extends Controller
                         $data->branch = $request['branch'][$j];
                     }
                     $data->code = $request['code'];
-                    $data->status = 0;
+                    $data->status = $request['status'];
 
                     $data->save();
                 }

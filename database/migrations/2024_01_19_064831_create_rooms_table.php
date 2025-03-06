@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('con_id');
             $table->string('title');
             $table->integer('status')->comment('0=เปิดใช้งาน, 1=ปิด');
+            $table->integer('kind')->comment('0=ผ่านจนท.ยืนยัน, 1=จองแล้วระบบยืนยันเข้าใช้งานอัตโนมัติ');
             $table->string('created')->nullable()->comment('แก้ไขข้อมูลล่าสุด');
             $table->timestamps();
         });

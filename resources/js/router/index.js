@@ -16,6 +16,7 @@ import Plan from "../components/Plan.vue";
 import RoomA from "../components/plans/RoomA.vue";
 import RoomB from "../components/plans/RoomB.vue";
 import RoomC from "../components/plans/RoomC.vue";
+import Chair from "../components/plans/Chair.vue";
 
 import store from "../store";
 
@@ -49,6 +50,11 @@ const routes = [
         path: "/roomC/:id",
         name: "roomC",
         component: RoomC
+    },
+    {
+        path: "/chair/:code/:id",
+        name: "chair",
+        component: Chair
     },
     {
         path: "/home",

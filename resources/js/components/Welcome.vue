@@ -182,7 +182,7 @@
                                             v-else
                                             class="border p-4 cursor-pointer hover:bg-sky-50"
                                             @click="
-                                                showModal(room.id, room.title)
+                                                showModal(room.id, room.title, room.kind)
                                             "
                                         ></td>
                                     </template>
@@ -644,6 +644,7 @@ export default {
                 branch: [],
                 rule: [],
                 code: "",
+                status: ""
             },
             type: false,
             active: false,
@@ -785,13 +786,14 @@ export default {
             });
             return result;
         },
-        showModal(id, code) {
+        showModal(id, code, kind) {
             // var today = moment().format("YYYY-MM-DD");
 
             // axios.get('/api/recordMain/' + today + '/' + )
 
             this.isModalShow = true;
             this.data.room_id = id;
+            this.data.status = kind;
             this.roomTitle = code;
         },
         close() {
@@ -807,7 +809,8 @@ export default {
                 (this.data.faculty = []),
                 (this.data.branch = []),
                 (this.data.rule = []),
-                (this.data.code = "");
+                (this.data.code = ""),
+                (this.data.status = "");
         },
         async send() {
             if (this.data.uid.length != this.conLimit) {
