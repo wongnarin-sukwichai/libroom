@@ -104,7 +104,17 @@
                                         showModal(room.id, room.title, index)
                                     "
                                 ></td>
-                                <td v-else class="border p-4"></td>
+                                <td
+                                    v-else
+                                    class="border p-4 cursor-pointer hover:bg-blue-50"
+                                    @click="
+                                        showModalStaff(
+                                            room.id,
+                                            room.title,
+                                            index
+                                        )
+                                    "
+                                ></td>
                             </template>
                         </template>
                         <template v-else>
@@ -239,6 +249,107 @@
             </div>
         </div>
     </transition>
+
+    <!-- Modal Show -->
+    <transition name="fade" mode="out-in">
+        <div
+            class="relative z-10"
+            aria-labelledby="modal-title"
+            role="dialog"
+            aria-modal="true"
+            v-show="isModalStaff"
+        >
+            <div
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            ></div>
+
+            <div class="fixed inset-0 z-10 overflow-y-auto">
+                <div
+                    class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+                >
+                    <div
+                        class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                    >
+                        <div class="grid grid-cols-2 bg-white px-4 sm:p-4">
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <box-icon name="user"></box-icon>
+                                </div>
+                                <div
+                                    class="text-center sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >ชื่อผู้จอง :
+                                    </label>
+                                    <div
+                                        class="border-dotted border-2 rounded-lg p-2 mb-1"
+                                    >
+                                        ** จองโดยเจ้าหน้าที่ **
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="text-center sm:ml-4 sm:text-left w-full"
+                                >
+                                    <label
+                                        id="listbox-label"
+                                        class="block text-sm font-medium leading-6 text-gray-900"
+                                        >ยืนยัน :
+                                    </label>
+                                    <button
+                                        class="relative inline-flex items-center justify-center p-4 px-6 py-2 overflow-hidden font-medium text-green-500 transition duration-300 ease-out border-2 border-green-400 rounded-full shadow-md group"
+                                        @click="sendStaff()"
+                                    >
+                                        <span
+                                            class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 bg-green-400 group-hover:translate-x-0 ease -translate-x-full"
+                                        >
+                                            <box-icon
+                                                name="check"
+                                                size="md"
+                                                color="white"
+                                            ></box-icon>
+                                        </span>
+                                        <span
+                                            class="absolute flex items-center justify-center w-full h-full text-gray-400 transition-all duration-300 transform group-hover:translate-x-full ease"
+                                            >ยืนยัน</span
+                                        >
+                                        <span class="relative invisible"
+                                            >ยืนยัน</span
+                                        >
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 mt-4">
+                            <div
+                                class="px-4 py-4 sm:px-6 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100"
+                            >
+                                {{ this.roomTitle }}
+                            </div>
+                            <div
+                                class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
+                            >
+                                <button
+                                    type="button"
+                                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
+                                    @click="closeStaff()"
+                                >
+                                    ออก
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </transition>
 </template>
 
 <script>
@@ -260,6 +371,7 @@ export default {
         return {
             today: moment().format("YYYY-MM-DD"),
             isModalShow: false,
+            isModalStaff: false,
             conPath: "../img/containers/",
             /**roomPath: "../img/rooms/",*/
             conList: "",
@@ -286,7 +398,7 @@ export default {
     },
     methods: {
         showModal(id, code, index) {
-            console.log(id, code, index);
+            // console.log(id, code, index);
             this.roomTitle = code;
 
             this.showReserve(id, index);
@@ -396,7 +508,7 @@ export default {
                 this.data.time = res.time;
                 this.data.status = res.status;
                 this.data.code = res.code;
-                console.log(this.data);
+                // console.log(this.data.code);
             }
         },
         showReserve(id, time) {
@@ -414,7 +526,7 @@ export default {
         sendConfirm() {
             Swal.fire({
                 title: "ยืนยันการจอง?",
-                text: "ต้องกายืนยันการจองห้องหรือไม่?",
+                text: "ต้องการยืนยันการจองห้องหรือไม่?",
                 icon: "success",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -468,6 +580,54 @@ export default {
                         })
                         .catch((err) => {
                             console.log(err);
+                        });
+                }
+            });
+        },
+        showModalStaff(id, code, index) {
+
+            this.data.id = id;
+            this.data.time = index;
+            this.data.status = 1;
+            this.data.code = this.getCode();
+
+            this.roomTitle = code;
+
+            this.isModalStaff = true;
+        },
+        closeStaff() {
+            this.isModalStaff = false;
+        },
+        getCode() {
+            return Math.floor(Math.random() * 9000 + 1000);
+        },
+        sendStaff() {
+            Swal.fire({
+                title: "ยืนยันการจอง?",
+                text: "ต้องการยืนยันการจองห้องหรือไม่?",
+                icon: "success",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .post("../api/reserveStaff/", this.data)
+                        .then((response) => {
+                            this.getReserve();
+
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: "บันทึกข้อมูลเรียบร้อย",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+                            this.isModalStaff = false;
+                        })
+                        .catch((err) => {
+                            // console.log(err);
                         });
                 }
             });

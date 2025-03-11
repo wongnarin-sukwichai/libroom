@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Container;
+use App\Models\Room;
 use Mockery\Matcher\Contains;
 
 class ContainerController extends Controller
@@ -117,6 +118,13 @@ class ContainerController extends Controller
 
         $data->update();
 
+        $res = Room::where('con_id', $id)->get();
+        
+        foreach ($res AS $r) {
+            $r->status = $code;
+            $r->update();
+        }
+ 
         return response()->json($data);
     }
 

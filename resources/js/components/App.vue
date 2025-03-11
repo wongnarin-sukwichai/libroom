@@ -287,7 +287,7 @@ import "boxicons";
 export default {
     data() {
         return {
-            library: "img/library.png",
+            library: "https://libroom.msu.ac.th/img/library.png",
             // tools: "pdf/tools.pdf",
             user: "",
             show: false,

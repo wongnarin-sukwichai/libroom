@@ -887,13 +887,7 @@ export default {
                                 this.chkRule = "";
                                 this.isModalShow = false;
 
-                                var today = moment().format("YYYY-MM-DD");
-
-                                axios
-                                    .get("/api/reserveMain/" + today)
-                                    .then((response) => {
-                                        this.reserveList = response.data;
-                                    });
+                                this.getReserve();
 
                                 Swal.fire({
                                     icon: response.data.icon,

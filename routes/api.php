@@ -44,6 +44,7 @@ Route::get('checkReserve/{code}/{id}', [ReserveController::class, 'checkReserve'
 Route::get('showPlan/{id}', [MainController::class, 'showPlan']);
 Route::get('resPlan/{id}/{code}', [MainController::class, 'resPlan']);
 Route::get('roomID/{id}', [MainController::class, 'roomID']);
+Route::get('resRoom/{id}/{code}', [MainController::class, 'resRoom']);
 
 Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
@@ -64,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('conStatus/{id}/{code}', [ContainerController::class, 'conStatus']);
     Route::get('roomStatus/{id}/{code}', [RoomController::class, 'roomStatus']);
     Route::resource('reserve', ReserveController::class);
+    Route::post('reserveStaff', [ReserveController::class, 'reserveStaff']);
     Route::post('deleteReserve', [ReserveController::class, 'deleteReserve']);
     Route::resource('record', RecordController::class);
     Route::get('chkRecord/{id}/{code}', [RecordController::class, 'chkRecord']);

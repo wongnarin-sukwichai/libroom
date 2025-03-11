@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Member;
 use App\Models\Record;
+use App\Models\Room;
+use App\Models\Reserve;
+
 use Illuminate\Http\Request;
 
-use App\Models\Reserve;
+use Illuminate\Support\Facades\Auth;
 
 class ReserveController extends Controller
 {
@@ -164,5 +167,28 @@ class ReserveController extends Controller
             'title' => "ยกเลิกการจอง",
             'text' => "ยกเลิกการจองเรียบร้อย"
         ]);
+    }
+
+    public function reserveStaff(Request $request)
+    {
+        $res = Room::find($request->id);
+
+        $data = new Reserve();
+
+        $data->date = $request->today;
+        $data->loc_id = $res->loc_id;
+        $data->con_id = $res->con_id;
+        $data->room_id = $request->id;
+        $data->time = $request->time;
+        $data->uid = Auth::user()->id;
+        $data->name = Auth::user()->name;
+        $data->surname = Auth::user()->surname;
+        $data->code = $request->code;
+        $data->status = 1;
+
+        $data->save();
+
+        return response()->json($data);
+
     }
 }
