@@ -182,7 +182,11 @@
                                             v-else
                                             class="border p-4 cursor-pointer hover:bg-sky-50"
                                             @click="
-                                                showModal(room.id, room.title, room.kind)
+                                                showModal(
+                                                    room.id,
+                                                    room.title,
+                                                    room.kind
+                                                )
                                             "
                                         ></td>
                                     </template>
@@ -201,6 +205,30 @@
                 </div>
             </transition>
         </div>
+
+        <transition name="fade" mode="out-in">
+            <div
+                v-if="cookieModal"
+                id="cookie-banner"
+                class="cookie-banner bg-black text-gray-50"
+            >
+                เว็บไซต์นี้มีการใช้งานคุกกี้เพื่อให้ท่านสามารถใช้บริการได้อย่างต่อเนื่องและอำนวยความสะดวกในการใช้งานเว็บไซต์
+                รวมถึงช่วยให้เราปรับปรุงการนำเสนอเนื้อหาตรงตามความต้องการของท่าน
+                โดยสามารถศึกษารายละเอียดเพิ่มเติมได้ใน
+                <a
+                    href="https://pdpa.msu.ac.th/cookie-policy/"
+                    target="_blank"
+                    class="text-sky-300 underline hover:text-sky-500"
+                    >นโยบายการใช้คุกกี้</a
+                >
+                <button
+                    @click="closeCookie()"
+                    class="cookie-button cursor-pointer bg-yellow-400 hover:bg-yellow-500"
+                >
+                    ยอมรับ
+                </button>
+            </div>
+        </transition>
     </div>
 
     <!-- Modal Show -->
@@ -644,7 +672,7 @@ export default {
                 branch: [],
                 rule: [],
                 code: "",
-                status: ""
+                status: "",
             },
             type: false,
             active: false,
@@ -658,6 +686,7 @@ export default {
             nameReserve: [],
             chkStatus: "",
             chkRule: "",
+            cookieModal: true,
         };
     },
     methods: {
@@ -1107,6 +1136,9 @@ export default {
                 return false;
             }
         },
+        closeCookie() {
+            this.cookieModal = false;
+        },
     },
     computed: {
         chkLength() {
@@ -1128,3 +1160,22 @@ export default {
     },
 };
 </script>
+
+<style>
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+}
+.cookie-link {
+    color: #ffd700;
+    text-decoration: none;
+}
+.cookie-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+}
+</style>

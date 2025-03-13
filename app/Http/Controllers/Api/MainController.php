@@ -24,6 +24,13 @@ class MainController extends Controller
 
     public function conMain()
     {
+        $data = Container::where('id', '!=', 20)->get();
+
+        return response()->json($data);
+    }
+
+    public function conPlan()
+    {
         $data = Container::all();
 
         return response()->json($data);
@@ -31,7 +38,8 @@ class MainController extends Controller
 
     public function roomMain(string $id)
     {
-        $data = Room::where('con_id', $id)->get();
+        $data = Room::where('con_id', $id)
+        ->get();
 
         return response()->json($data);
     }

@@ -45,6 +45,7 @@ Route::get('showPlan/{id}', [MainController::class, 'showPlan']);
 Route::get('resPlan/{id}/{code}', [MainController::class, 'resPlan']);
 Route::get('roomID/{id}', [MainController::class, 'roomID']);
 Route::get('resRoom/{id}/{code}', [MainController::class, 'resRoom']);
+Route::get('conPlan', [MainController::class, 'conPlan']);
 
 Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login']);

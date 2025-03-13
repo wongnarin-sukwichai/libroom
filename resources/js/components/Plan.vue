@@ -108,7 +108,7 @@ export default {
         },
         getContainer() {
             axios
-                .get("/api/conMain")
+                .get("/api/conPlan")
                 .then((response) => {
                     this.conList = response.data;
                 })
