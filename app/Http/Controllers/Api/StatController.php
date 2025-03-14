@@ -47,6 +47,10 @@ class StatController extends Controller
             $data[$j]['play'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '15')->count();
             $data[$j]['online'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '16')->count();
             $data[$j]['pool'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '17')->count();
+            $data[$j]['space1'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '18')->count();
+            $data[$j]['space2'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '19')->count();
+            $data[$j]['chaira'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '20')->count();
+            // $data[$j]['chairc'] = Reserve::whereBetween('date', [check($k)->format('Y-m') . '-01', check($k)->format('Y-m') . '-31'])->where('con_id', '')->count();
 
             $j++;
             $k--;

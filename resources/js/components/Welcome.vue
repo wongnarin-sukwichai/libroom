@@ -993,6 +993,7 @@ export default {
 
                             //var today = moment().format("YYYY-MM-DD");
 
+                            this.clearArr();
                             this.getReserve();
 
                             Swal.fire({

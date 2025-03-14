@@ -118,14 +118,17 @@ export default {
         },
         getRoom(id) {
             switch (id) {
-                case 1: 
-                this.$router.push("/roomA/" + id);
-                break;
-                case 2:
-                this.$router.push("/roomB/" + id);
-                break;
-                case 3:
-                this.$router.push("/roomC/" + id);
+                // case 1: 
+                // this.$router.push("/roomA/" + id);
+                // break;
+                // case 2:
+                // this.$router.push("/roomB/" + id);
+                // break;
+                // case 3:
+                // this.$router.push("/roomC/" + id);
+                // break;
+                case 20:
+                this.$router.push("/chairAll/" + id);
                 break;
             }
         },

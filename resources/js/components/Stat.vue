@@ -27,7 +27,7 @@
                                 name="book"
                                 size="md"
                                 class="pr-2"
-                                color="#f59e0b"
+                                color="#7d3c98"
                             ></box-icon>
                             : สำนักวิทยบริการ
                         </p>
@@ -55,6 +55,9 @@
                                     </th>
                                     <th class="p-4 border border-slate-400">
                                         ห้อง Nap Zone
+                                    </th>
+                                    <th class="p-4 border border-slate-400">
+                                        เก้าอี้
                                     </th>
                                     <th
                                         class="p-4 border border-slate-400 bg-gray-300"
@@ -96,13 +99,17 @@
                                         {{ stat["nap"] }}
                                     </td>
                                     <td class="p-4 border border-slate-400">
+                                        {{ stat["chaira"] }}
+                                    </td>
+                                    <td class="p-4 border border-slate-400">
                                         {{
                                             stat["a"] +
                                             stat["b"] +
                                             stat["c"] +
                                             stat["pg"] +
                                             stat["pav"] +
-                                            stat["nap"]
+                                            stat["nap"] + 
+                                            stat["chaira"]
                                         }}
                                     </td>
                                     <td class="p-4 border border-slate-400">
@@ -196,6 +203,75 @@
                                         stat["play"] +
                                         stat["online"] +
                                         stat["pool"]
+                                    }}
+                                </td>
+                                <td class="p-4 border border-slate-400">คน</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="card-body mt-4">
+                        <p class="flex items-center">
+                            <box-icon
+                                name="home-alt"
+                                size="md"
+                                class="pr-2"
+                                color="#f1c40f"
+                            ></box-icon>
+                            : MSU Space
+                        </p>
+                    </div>
+
+                    <table class="table-auto border-collapse border mt-4">
+                        <thead class="bg-amber-100">
+                            <tr>
+                                <th class="p-4 border border-slate-400">
+                                    เดือน
+                                </th>
+                                <th class="p-4 border border-slate-400">
+                                    ห้องประชุม 1
+                                </th>
+                                <th class="p-4 border border-slate-400">
+                                    ห้องประชุม 2
+                                </th>
+                                <th class="p-4 border border-slate-400">
+                                    เก้าอี้
+                                </th>                             
+                                <th
+                                    class="p-4 border border-slate-400 bg-gray-300"
+                                >
+                                    ทั้งหมด
+                                </th>
+                                <th
+                                    class="p-4 border border-slate-400 bg-gray-300"
+                                >
+                                    หน่วย
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                class="text-center"
+                                v-for="(stat, index) in statList"
+                                :key="index"
+                            >
+                                <td class="p-4 border border-slate-400">
+                                    {{ moment(stat.month).format("MMMM") }}
+                                </td>
+                                <td class="p-4 border border-slate-400">
+                                    {{ stat["space1"] }}
+                                </td>
+                                <td class="p-4 border border-slate-400">
+                                    {{ stat["space2"] }}
+                                </td>
+                                <td class="p-4 border border-slate-400">
+                                    {{ stat["chairc"] }}
+                                </td>                            
+                                <td class="p-4 border border-slate-400">
+                                    {{ 
+                                        stat["space1"] + 
+                                        stat["space2"] +
+                                        stat["chairc"] 
                                     }}
                                 </td>
                                 <td class="p-4 border border-slate-400">คน</td>

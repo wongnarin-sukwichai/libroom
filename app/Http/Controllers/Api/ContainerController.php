@@ -17,7 +17,8 @@ class ContainerController extends Controller
      */
     public function index()
     {
-        $data = Container::where('id', '!=', 20)->get();
+        // $data = Container::where('id', '!=', 20)->get();
+        $data = Container::all();
 
         return response()->json($data);
     }

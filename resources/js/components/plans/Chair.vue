@@ -22,7 +22,7 @@
 
     <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8" v-else>
         <div
-            class="box border-2 border-dashed border-gray-900 cursor-pointer bg-amber-50 hover:bg-amber-100"
+            class="box-chair border-2 border-dashed border-gray-900 cursor-pointer bg-amber-50 hover:bg-amber-100"
             @click="showModal()"
         >
             Click
@@ -55,9 +55,9 @@
                             />
                         </div>
 
-                        <div class="flex card-body justify-center items-center">
+                        <div class="flex card-body justify-center items-center mx-4">
                             <div class="overflow-auto">
-                                <table class="border-collapse text-xs">
+                                <table class="border-collapse text-xs ">
                                     <thead>
                                         <tr class="bg-gray-100">
                                             <th
@@ -905,7 +905,7 @@ export default {
 </script>
 
 <style>
-.box {
+.box-chair {
     height: auto;
     position: absolute;
     margin-left: 30%;
@@ -914,11 +914,11 @@ export default {
 }
 
 @media only screen and (max-width: 430px) {
-    .box {
+    .box-chair {
         height: auto;
         position: absolute;
-        margin-left: 30%;
-        margin-top: 15%;
+        margin-left: 45%;
+        margin-top: 40%;
         padding: 1%;
     }
 }
