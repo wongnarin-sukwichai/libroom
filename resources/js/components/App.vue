@@ -289,7 +289,6 @@ export default {
         return {
             library: "https://libroom.msu.ac.th/img/library.png",
             // tools: "pdf/tools.pdf",
-            user: "",
             show: false,
             showNav: false,
             modalTool: false,

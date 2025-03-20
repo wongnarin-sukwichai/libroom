@@ -16,7 +16,7 @@
                             />
                             <span class="text-lg py-1 text-gray-500"
                                 >{{ loc.title }} :
-                                <font class="text-sm">{{ loc.eng }}</font></span
+                                <span class="text-sm">{{ loc.eng }}</span></span
                             >
                         </div>
                     </div>
@@ -83,9 +83,9 @@
 <script>
 import "boxicons";
 export default {
-    mounted() {
-        this.getLocation();
-        this.getContainer();
+    async mounted() {
+        await this.getLocation();
+        await this.getContainer();
     },
     data() {
         return {
@@ -106,7 +106,8 @@ export default {
                     console.log(err);
                 });
         },
-        getContainer() {
+        async getContainer() {
+            try {
             axios
                 .get("/api/conPlan")
                 .then((response) => {
@@ -115,6 +116,9 @@ export default {
                 .catch((err) => {
                     console.log(err);
                 });
+            } catch (err) {
+                console.log(err)
+            }
         },
         getRoom(id) {
             switch (id) {
@@ -133,6 +137,7 @@ export default {
             }
         },
         filterCon(id) {
+            if(!this.conList.length) return [];
             return this.conList.filter((item) => item.loc_id === id);
         },
     },

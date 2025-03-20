@@ -610,7 +610,7 @@
 </template>
 
 <script>
-import "boxicons";
+// import "boxicons";
 import Swal from "sweetalert2";
 import moment from "moment"; //format date thai
 import "moment/dist/locale/th";
@@ -618,13 +618,13 @@ import axios from "axios";
 moment.locale("th");
 
 export default {
-    mounted() {
-        this.getHoliday();
-        this.getLocation();
-        this.getContainer();
-        this.isWeekend();
-        this.getTime();
-        this.getReserve();
+    async mounted() {
+        await this.getHoliday();
+        await this.getLocation();
+        await this.getContainer();
+        await this.isWeekend();
+        await this.getTime();
+        await this.getReserve();
     },
     data() {
         return {
