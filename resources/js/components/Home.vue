@@ -114,17 +114,20 @@
                             Tools
                         </h2>
                         <div class="flex flex-col space-y-1">
-                            <router-link
-                                to="/"
-                                class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
-                                ><box-icon
-                                    name="file"
-                                    color="gray"
-                                    size="sm"
-                                    class="pr-2"
-                                ></box-icon>
-                                <p class="p-1">คู่มือการใช้งาน</p></router-link
-                            >
+                            <a href="/pdf/stafftools.pdf" target="_blank">
+                                <div
+                                    to="/"
+                                    class="flex p-2 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                >
+                                    <box-icon
+                                        name="file"
+                                        color="gray"
+                                        size="sm"
+                                        class="pr-2"
+                                    ></box-icon>
+                                    <p class="p-1">คู่มือการใช้งาน</p>
+                                </div>
+                            </a>
                         </div>
                     </div>
                     <div class="space-y-2">

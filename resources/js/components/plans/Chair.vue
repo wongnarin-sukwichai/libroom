@@ -481,6 +481,10 @@ export default {
             plan: "../../img/plans/chair.png",
             isModalShow: false,
             showModalRes: false,
+            showAlertInput: false,
+            showAlertDup: false,
+            showAlert: false,
+            showAlertRule: false,
             conList: "",
             reserveList: [],
             timeList: "",
@@ -513,6 +517,7 @@ export default {
             roomTitle: "",
             nameReserve: [],
             chkStatus: "",
+            chkLength: ""
         };
     },
     methods: {
@@ -913,12 +918,22 @@ export default {
     padding: 1%;
 }
 
-@media only screen and (max-width: 430px) {
+@media (max-width: 430px) {
     .box-chair {
         height: auto;
         position: absolute;
         margin-left: 45%;
-        margin-top: 40%;
+        margin-top: 50%;
+        padding: 1%;
+    }
+}
+
+@media (max-width: 820px) {
+    .box-chair {
+        height: auto;
+        position: absolute;
+        margin-left: 44%;
+        margin-top: 30%;
         padding: 1%;
     }
 }
