@@ -151,7 +151,7 @@
                                     Game Playstation
                                 </th>
                                 <th class="p-4 border border-slate-400">
-                                    Gmae Online
+                                    Game Online
                                 </th>
                                 <th class="p-4 border border-slate-400">
                                     Pool Table

@@ -19,6 +19,7 @@ class StatController extends Controller
         function check($code)
         {
             $now = Carbon::now();
+            // $now = Carbon::createFromDate('2025-03-01');
 
             if ($code != 0) {
                 $result = $now->subMonths($code);
@@ -55,7 +56,7 @@ class StatController extends Controller
             $j++;
             $k--;
         }
-
+        
         return response()->json($data);
     }
 

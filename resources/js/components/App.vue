@@ -28,10 +28,11 @@
                                     >ข้อปฏิบัติการเข้าใช้บริการ</router-link
                                 >
 
-                                <router-link
-                                    to=""
+                                <a
+                                    href="https://forms.gle/iV5VMHgdwqfv3CP46"
                                     class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                                    >แบบประเมินความพึงพอใจ</router-link
+                                    target="_blank"
+                                    >แบบสอบถามความพึงพอใจ</a
                                 >
                                 <!-- <div
                                     class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
@@ -177,10 +178,11 @@
                             class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
                             >ข้อปฏิบัติการเข้าใช้บริการ</router-link
                         >
-                        <router-link
-                            to=""
+                        <a
+                            href="https://forms.gle/iV5VMHgdwqfv3CP46"
                             class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
-                            >แบบประเมินความพึงพอใจ</router-link
+                            target="_blank"
+                            >แบบสอบถามความพึงพอใจ</a
                         >
                         <!-- <div
                             class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
