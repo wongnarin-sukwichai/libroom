@@ -22,10 +22,18 @@ class ApiController extends Controller
 
     public function getService()
     {
-        $res = Carbon::now()->format('Y-m-d');
+        $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d');
 
-        $data = Reserve::where('date', $res)->where('loc_id', 1)->where('status', 1)->count();
-        $result = Reserve::where('date', $res)->where('loc_id', 2)->where('status', 1)->count();
+        $data = Reserve::whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->where('loc_id', 1)
+            ->where('status', 1)
+            ->count();
+
+        $result = Reserve::whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->where('loc_id', 2)
+            ->where('status', 1)
+            ->count();
 
         return response()->json([
             'arec' => $data,
@@ -35,11 +43,13 @@ class ApiController extends Controller
 
     public function getMost()
     {
+        // กำหนดช่วงเวลาเดือนปัจจุบัน
+        $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d');
 
-        $res = Carbon::now()->format('Y-m-d');
-
+        // Query ข้อมูล
         $data = DB::table('Reserves')
-            ->where('date', $res)
+            ->whereBetween('date', [$startOfMonth, $endOfMonth]) // ดึงข้อมูลทั้งเดือน
             ->where('status', 1)
             ->select('faculty', DB::raw('COUNT(*) AS count'))
             ->groupBy('faculty')
@@ -73,10 +83,10 @@ class ApiController extends Controller
 
             if ($check == false) {
                 $check = Time::where('id', 1)->first()->hour;
-                $time = $result - $check;         
+                $time = $result - $check;
             } else {
                 $check = Time::where('id', 2)->first()->hour;
-                $time = $result - $check;  
+                $time = $result - $check;
             }
 
             $data = Reserve::where('date', $res)
