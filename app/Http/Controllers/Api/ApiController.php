@@ -35,22 +35,23 @@ class ApiController extends Controller
             ->where('status', 1)
             ->count();
 
+        $res = Reserve::whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->where('loc_id', 3)
+            ->where('status', 1)
+            ->count();
+
         return response()->json([
             'arec' => $data,
-            'dlp' => $result
+            'dlp' => $result,
+            'res' => $res
         ]);
     }
 
     public function getMost()
     {
-        // กำหนดช่วงเวลาเดือนปัจจุบัน
-        $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
-        $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d');
-
         // Query ข้อมูล
-        $data = DB::table('Reserves')
-            ->whereBetween('date', [$startOfMonth, $endOfMonth]) // ดึงข้อมูลทั้งเดือน
-            ->where('status', 1)
+        $data = DB::table('memberss')
+            ->whereNotNull('faculty') // กันค่า faculty ว่าง
             ->select('faculty', DB::raw('COUNT(*) AS count'))
             ->groupBy('faculty')
             ->orderByRaw('COUNT(*) DESC')
