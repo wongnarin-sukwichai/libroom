@@ -176,7 +176,13 @@
                                                     ? 'bg-rose-300'
                                                     : 'bg-green-300'
                                             "
-                                            @click="showReserve(room.id, index)"
+                                            @click="
+                                                showReserve(
+                                                    room.id,
+                                                    index,
+                                                    room.con_id
+                                                )
+                                            "
                                         ></td>
                                         <td
                                             v-else
@@ -954,14 +960,19 @@ export default {
                 return res.status;
             }
         },
-        showReserve(id, time) {
+        showReserve(id, time, limit) {
+
+            const limited = this.chkConLimit(limit);
+
             if (id != null && time != null) {
-                var res = this.reserveList.filter(
+                const res = this.reserveList.filter(
                     (selection) =>
                         selection["room_id"] == id && selection["time"] == time
                 );
 
-                for (var i = 0; i < res.length; i++) {
+                this.nameReserve = [];
+
+                for (let i = 0; i < Math.min(res.length, limited); i++) {
                     this.nameReserve[i] = res[i].name + " " + res[i].surname;
                     this.chkStatus = res[i].status;
                 }
@@ -969,6 +980,16 @@ export default {
                 this.showModalRes = true;
                 this.dataCancel.id = id;
                 this.dataCancel.time = time;
+            }
+        },
+        chkConLimit(limit) {
+            if (limit != null) {
+                var res = this.conList.filter(
+                    (selection) => 
+                        selection["id"] == limit
+                );
+
+                return res[0].limited;
             }
         },
         closeReserve() {
