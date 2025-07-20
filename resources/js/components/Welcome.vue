@@ -984,7 +984,7 @@ export default {
         },
         chkConLimit(limit) {
             if (limit != null) {
-                var res = this.conList.filter(
+                const res = this.conList.filter(
                     (selection) => 
                         selection["id"] == limit
                 );
