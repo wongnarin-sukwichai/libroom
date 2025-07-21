@@ -517,8 +517,9 @@ export default {
             }
         },
         showReserve(id, time, limit) {
+            
             const limited = this.chkConLimit(limit);
-            console.log(limited);
+            
             if (id != null && time != null) {
                 const res = this.reserveList.filter(
                     (selection) =>
