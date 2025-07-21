@@ -101,7 +101,12 @@
                                             : 'bg-green-300'
                                     "
                                     @click="
-                                        showModal(room.id, room.title, index)
+                                        showModal(
+                                            room.id,
+                                            room.title,
+                                            index,
+                                            room.con_id
+                                        )
                                     "
                                 ></td>
                                 <td
@@ -363,7 +368,7 @@ export default {
     async mounted() {
         await this.getTime();
         await this.getReserve();
-        this.getContainer();
+        await this.getContainer();
         this.getRoom();
         this.isWeekend();
     },
@@ -374,7 +379,7 @@ export default {
             isModalStaff: false,
             conPath: "../img/containers/",
             /**roomPath: "../img/rooms/",*/
-            conList: "",
+            conList: {},
             roomList: "",
             timeList: "",
             reserveList: "",
@@ -397,11 +402,11 @@ export default {
         };
     },
     methods: {
-        showModal(id, code, index) {
+        showModal(id, code, index, limit) {
             // console.log(id, code, index);
             this.roomTitle = code;
 
-            this.showReserve(id, index);
+            this.showReserve(id, index, limit);
             this.getResID(id, index);
 
             this.dataCancel.room_id = id;
@@ -511,16 +516,27 @@ export default {
                 // console.log(this.data.code);
             }
         },
-        showReserve(id, time) {
+        showReserve(id, time, limit) {
+            const limited = this.chkConLimit(limit);
+            console.log(limited);
             if (id != null && time != null) {
-                var res = this.reserveList.filter(
+                const res = this.reserveList.filter(
                     (selection) =>
                         selection["room_id"] == id && selection["time"] == time
                 );
 
-                for (var i = 0; i < res.length; i++) {
+                this.nameReserve = [];
+
+                for (let i = 0; i < Math.min(res.length, limited); i++) {
                     this.nameReserve[i] = res[i].name + " " + res[i].surname;
                 }
+            }
+        },
+        chkConLimit(limit) {
+            if (limit != null && this.conList.id == limit) {
+                return this.conList.limited;
+            } else {
+                return null;
             }
         },
         sendConfirm() {
@@ -585,7 +601,6 @@ export default {
             });
         },
         showModalStaff(id, code, index) {
-
             this.data.id = id;
             this.data.time = index;
             this.data.status = 1;
