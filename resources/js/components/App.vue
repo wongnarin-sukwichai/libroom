@@ -169,7 +169,7 @@
                     <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                         <!-- Current: "bg-gray-900 text-gray-900", Default: "text-gray-50 hover:bg-gray-50 hover:text-gray-900" -->
                         <router-link
-                            to=""
+                            to="/"
                             class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
                             >หน้าแรก</router-link
                         >
@@ -184,10 +184,12 @@
                             target="_blank"
                             >แบบสอบถามความพึงพอใจ</a
                         >
-                        <!-- <div
+                        <hr class="border-dashed">
+                        <router-link
+                            to="/login"
                             class="text-gray-50 hover:bg-gray-50 hover:text-gray-900 cursor-pointer block rounded-md px-3 py-2 text-base font-medium"
-                            @click="toolShow()"
-                            >คู่มือการใช้งานระบบ</div> -->
+                            >เข้าสู่ระบบ</router-link
+                        >
                     </div>
 
                     <div class="border-t border-gray-700 pb-3 pt-4" v-if="user">

@@ -189,6 +189,5 @@ class ReserveController extends Controller
         $data->save();
 
         return response()->json($data);
-
     }
 }
