@@ -3,20 +3,21 @@
         <img :src="banner" class="p-2 shadow-lg" />
     </div>
 
-    <div 
-    class="bg-white rounded-lg">
-        <div
-            class="mx-auto max-w-7xl px-6 lg:px-8 border-2 border-dashed border-rose-200 hover:border-rose-300 py-4 text-center hover:text-rose-500 lg:text-2xl sm:text-lg cursor-pointer text-rose-400"
-        >
-            กรุณาศึกษา "คู่มือการใช้งานระบบ"
+    <div class="bg-white rounded-lg">
+        <a href="/pdf/tools.pdf" target="_blank">
+            <div
+                class="mx-auto max-w-7xl px-6 lg:px-8 border-2 border-dashed border-rose-200 hover:border-rose-300 py-4 text-center hover:text-rose-500 lg:text-2xl sm:text-lg cursor-pointer text-rose-400"
+            >
+                กรุณาศึกษา "คู่มือการใช้งานระบบ"
 
-            <box-icon
-                type="solid"
-                name="hand-up"
-                color="pink"
-                animation="fade-up"
-            ></box-icon>
-        </div>
+                <box-icon
+                    type="solid"
+                    name="hand-up"
+                    color="pink"
+                    animation="fade-up"
+                ></box-icon>
+            </div>
+        </a>
     </div>
 
     <div class="bg-white rounded-lg" v-if="!chkHoliday">
@@ -72,7 +73,9 @@
                             <h3 class="mt-6 text-sm text-gray-500">
                                 {{ loc.eng }}
                             </h3>
-                            <p class="text-base font-semibold text-gray-900">
+                            <p
+                                class="text-base font-semibold text-gray-900 mb-6"
+                            >
                                 {{ loc.title }}
                             </p>
                         </div>
@@ -173,13 +176,23 @@
                                                     ? 'bg-rose-300'
                                                     : 'bg-green-300'
                                             "
-                                            @click="showReserve(room.id, index)"
+                                            @click="
+                                                showReserve(
+                                                    room.id,
+                                                    index,
+                                                    room.con_id
+                                                )
+                                            "
                                         ></td>
                                         <td
                                             v-else
                                             class="border p-4 cursor-pointer hover:bg-sky-50"
                                             @click="
-                                                showModal(room.id, room.title)
+                                                showModal(
+                                                    room.id,
+                                                    room.title,
+                                                    room.kind
+                                                )
                                             "
                                         ></td>
                                     </template>
@@ -198,6 +211,30 @@
                 </div>
             </transition>
         </div>
+
+        <transition name="fade" mode="out-in">
+            <div
+                v-if="cookieModal"
+                id="cookie-banner"
+                class="cookie-banner bg-black text-gray-50"
+            >
+                เว็บไซต์นี้มีการใช้งานคุกกี้เพื่อให้ท่านสามารถใช้บริการได้อย่างต่อเนื่องและอำนวยความสะดวกในการใช้งานเว็บไซต์
+                รวมถึงช่วยให้เราปรับปรุงการนำเสนอเนื้อหาตรงตามความต้องการของท่าน
+                โดยสามารถศึกษารายละเอียดเพิ่มเติมได้ใน
+                <a
+                    href="https://pdpa.msu.ac.th/cookie-policy/"
+                    target="_blank"
+                    class="text-sky-300 underline hover:text-sky-500"
+                    >นโยบายการใช้คุกกี้</a
+                >
+                <button
+                    @click="closeCookie()"
+                    class="cookie-button cursor-pointer bg-yellow-400 hover:bg-yellow-500"
+                >
+                    ยอมรับ
+                </button>
+            </div>
+        </transition>
     </div>
 
     <!-- Modal Show -->
@@ -268,6 +305,14 @@
                                 v-show="showAlertInput"
                             >
                                 ** กรุณากรอกข้อมูลให้ครบ
+                            </div>
+                        </transition>
+                        <transition name="fade" mode="out-in">
+                            <div
+                                class="text-rose-500 mx-20"
+                                v-show="showAlertDup"
+                            >
+                                ** รหัสห้ามซ้ำ
                             </div>
                         </transition>
 
@@ -571,7 +616,7 @@
 </template>
 
 <script>
-import "boxicons";
+// import "boxicons";
 import Swal from "sweetalert2";
 import moment from "moment"; //format date thai
 import "moment/dist/locale/th";
@@ -579,13 +624,13 @@ import axios from "axios";
 moment.locale("th");
 
 export default {
-    mounted() {
-        this.getHoliday();
-        this.getLocation();
-        this.getContainer();
-        this.isWeekend();
-        this.getTime();
-        this.getReserve();
+    async mounted() {
+        await this.getHoliday();
+        await this.getLocation();
+        await this.getContainer();
+        await this.isWeekend();
+        await this.getTime();
+        await this.getReserve();
     },
     data() {
         return {
@@ -596,6 +641,7 @@ export default {
             showAlertRule: false,
             showModalRes: false,
             showAlertInput: false,
+            showAlertDup: false,
             banner: "img/banner.jpg",
             locPath: "img/locations/",
             conPath: "img/containers/",
@@ -613,7 +659,7 @@ export default {
             conTime2: "",
             roomList: "",
             timeList: "",
-            recordList: "",
+            // recordList: "",
             reserveList: [],
             weekend: "",
             isTime: "",
@@ -632,6 +678,7 @@ export default {
                 branch: [],
                 rule: [],
                 code: "",
+                status: "",
             },
             type: false,
             active: false,
@@ -645,6 +692,7 @@ export default {
             nameReserve: [],
             chkStatus: "",
             chkRule: "",
+            cookieModal: true,
         };
     },
     methods: {
@@ -717,6 +765,8 @@ export default {
             this.data.loc_id = id;
         },
         async pickCon(id, code, time_1, time_2) {
+            this.clearArr();
+
             if (this.weekend == false) {
                 this.isTime = this.setTimer(time_1);
             } else {
@@ -731,6 +781,7 @@ export default {
                 .catch((err) => {
                     // console.log(err);
                 });
+
             this.tableList = true;
             this.conActive = id;
             this.conLimit = code;
@@ -770,21 +821,33 @@ export default {
             });
             return result;
         },
-        showModal(id, code) {
-            var today = moment().format("YYYY-MM-DD");
+        showModal(id, code, kind) {
+            // var today = moment().format("YYYY-MM-DD");
 
             // axios.get('/api/recordMain/' + today + '/' + )
 
             this.isModalShow = true;
             this.data.room_id = id;
+            this.data.status = kind;
             this.roomTitle = code;
         },
         close() {
+            this.clearArr();
             this.isModalShow = false;
         },
+        clearArr() {
+            (this.data.time = []),
+                (this.data.uid = []),
+                (this.data.name = []),
+                (this.data.surname = []),
+                (this.data.type = []),
+                (this.data.faculty = []),
+                (this.data.branch = []),
+                (this.data.rule = []),
+                (this.data.code = ""),
+                (this.data.status = "");
+        },
         async send() {
-            //console.log(this.data);
-
             if (this.data.uid.length != this.conLimit) {
                 Swal.fire({
                     title: "ผิดพลาด",
@@ -854,26 +917,12 @@ export default {
                         await axios
                             .post("/api/addReserve", this.data)
                             .then((response) => {
-                                this.data.time = [];
-                                this.data.uid = [];
-                                this.data.name = [];
-                                this.data.surname = [];
-                                this.data.type = [];
-                                this.data.faculty = [];
-                                this.data.branch = [];
-                                this.data.rule = [];
-                                this.data.code = "";
+                                this.clearArr();
 
                                 this.chkRule = "";
                                 this.isModalShow = false;
 
-                                var today = moment().format("YYYY-MM-DD");
-
-                                axios
-                                    .get("/api/reserveMain/" + today)
-                                    .then((response) => {
-                                        this.reserveList = response.data;
-                                    });
+                                this.getReserve();
 
                                 Swal.fire({
                                     icon: response.data.icon,
@@ -911,14 +960,18 @@ export default {
                 return res.status;
             }
         },
-        showReserve(id, time) {
+        showReserve(id, time, limit) {
+            const limited = this.chkConLimit(limit);
+
             if (id != null && time != null) {
-                var res = this.reserveList.filter(
+                const res = this.reserveList.filter(
                     (selection) =>
                         selection["room_id"] == id && selection["time"] == time
                 );
 
-                for (var i = 0; i < res.length; i++) {
+                this.nameReserve = [];
+
+                for (let i = 0; i < Math.min(res.length, limited); i++) {
                     this.nameReserve[i] = res[i].name + " " + res[i].surname;
                     this.chkStatus = res[i].status;
                 }
@@ -926,6 +979,15 @@ export default {
                 this.showModalRes = true;
                 this.dataCancel.id = id;
                 this.dataCancel.time = time;
+            }
+        },
+        chkConLimit(limit) {
+            if (limit != null) {
+                const res = this.conList.filter(
+                    (selection) => selection["id"] == limit
+                );
+
+                return res[0].limited;
             }
         },
         closeReserve() {
@@ -950,6 +1012,7 @@ export default {
 
                             //var today = moment().format("YYYY-MM-DD");
 
+                            this.clearArr();
                             this.getReserve();
 
                             Swal.fire({
@@ -976,13 +1039,15 @@ export default {
 
             if (limit != this.data.uid.length) {
                 this.showAlertInput = true;
+            } else if (this.checkDup(this.data.uid) == false) {
+                this.showAlertDup = true;
+                // console.log(this.checkDup(this.data.uid));
             } else {
                 this.showAlertInput = false;
+                this.showAlertDup = false;
                 var today = moment().format("YYYY-MM-DD");
 
                 for (var i = 0; i < this.data.uid.length; i++) {
-                    // console.log(this.data.uid[i])
-
                     if (this.data.uid[i] == "") {
                         this.showAlertInput = true;
                     } else {
@@ -990,7 +1055,7 @@ export default {
                             .get("/api/member/" + this.data.uid[i])
                             .then((response) => {
                                 if (response.data == "false") {
-                                    const token = "";
+                                    const token = "{token}";
                                     const config = {
                                         headers: {
                                             // Accept: "application/x-www-form-urlencode; charset=UTF-8",
@@ -999,15 +1064,16 @@ export default {
                                     };
                                     axios
                                         .get(
-                                            "https://liboffice.msu.ac.th/v1/api/getPatron/" +
-                                                this.data.uid[i]
+                                            "https://liboffice.msu.ac.th/api/getPatron/" +
+                                                this.data.uid[i],
+                                            config
                                         )
                                         // .get(
                                         //     "https://library.msu.ac.th/libapi/api/apitest",
                                         //     config
                                         // )
                                         .then((response) => {
-                                            console.log(response);
+                                            // console.log(response);
                                             axios
                                                 .post(
                                                     "/api/member",
@@ -1029,7 +1095,6 @@ export default {
                                                 .catch((err) => {
                                                     // console.log(err);
                                                 });
-
                                             // this.data.name[i] = response.data[0].FNAMETHAI;
                                             // this.data.surname[i] = response.data[0].LNAMETHAI;
                                             // console.log(this.data.name);
@@ -1060,7 +1125,6 @@ export default {
                                     )
                                     .then((response) => {
                                         this.data.rule[i - 1] = response.data;
-
                                         if (
                                             this.chkRule > response.data ||
                                             this.chkRule == ""
@@ -1084,6 +1148,17 @@ export default {
             }
             this.getReserve();
         },
+        checkDup(arr) {
+            var res = arr.filter((item, index) => arr.indexOf(item) !== index);
+            if (res == "") {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        closeCookie() {
+            this.cookieModal = false;
+        },
     },
     computed: {
         chkLength() {
@@ -1105,3 +1180,22 @@ export default {
     },
 };
 </script>
+
+<style>
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+}
+.cookie-link {
+    color: #ffd700;
+    text-decoration: none;
+}
+.cookie-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+}
+</style>

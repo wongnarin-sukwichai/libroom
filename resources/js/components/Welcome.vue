@@ -44,7 +44,10 @@
     <div class="bg-white rounded-lg" v-else>
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <!-- Location -->
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div
+                class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+                ref="locSection"
+            >
                 <div class="mx-auto max-w-2xl lg:max-w-none">
                     <div
                         class="mt-6 space-y-12 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:space-y-0"
@@ -85,7 +88,7 @@
 
             <!-- Arec Room -->
             <transition name="fade" mode="out-in">
-                <div class="bg-white">
+                <div class="bg-white" ref="arecSection">
                     <div
                         class="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-12 lg:max-w-7xl lg:px-8"
                     >
@@ -134,7 +137,7 @@
 
             <!-- Table -->
             <transition name="fade" mode="out-in">
-                <div class="overflow-auto" v-if="tableList">
+                <div class="overflow-auto" v-if="tableList" ref="tableSection">
                     <table class="border-collapse">
                         <thead>
                             <tr class="bg-gray-100">
@@ -613,6 +616,19 @@
             </div>
         </div>
     </transition>
+
+    <!-- Back to Location Button -->
+    <transition name="fade" mode="out-in">
+        <button
+            v-if="locActive !== ''"
+            @click="scrollToLoc()"
+            type="button"
+            title="กลับไปเลือกสถานที่"
+            class="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-sky-500 text-white shadow-lg hover:bg-sky-600 transition"
+        >
+            <box-icon name="chevron-up" color="white"></box-icon>
+        </button>
+    </transition>
 </template>
 
 <script>
@@ -763,6 +779,8 @@ export default {
             this.locGray = false;
             this.conGray = true;
             this.data.loc_id = id;
+
+            this.scrollToSection("arecSection");
         },
         async pickCon(id, code, time_1, time_2) {
             this.clearArr();
@@ -789,6 +807,8 @@ export default {
             this.conTime2 = time_2;
             this.conGray = false;
             this.data.con_id = id;
+
+            this.scrollToSection("tableSection");
         },
         getReserve() {
             var today = moment().format("YYYY-MM-DD");
@@ -1158,6 +1178,17 @@ export default {
         },
         closeCookie() {
             this.cookieModal = false;
+        },
+        scrollToSection(ref) {
+            this.$nextTick(() => {
+                const el = this.$refs[ref];
+                if (el) {
+                    el.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            });
+        },
+        scrollToLoc() {
+            this.scrollToSection("locSection");
         },
     },
     computed: {
