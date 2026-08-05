@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"/c/xampp/mysql/bin/mysql.exe\" -u root libroom_old -e \"SELECT * FROM times;\")",
+      "Bash(\"/c/xampp/mysql/bin/mysql.exe\" -u root libroom_old -e \"SELECT * FROM reserves WHERE date = CURDATE\\(\\) ORDER BY room_id, time LIMIT 30;\")",
+      "Bash(\"/c/xampp/mysql/bin/mysql.exe\" -u root libroom_old -e \"SELECT room_id,time,status FROM reserves WHERE date='2026-08-05' AND room_id=49 ORDER BY time;\")",
+      "Bash(php artisan tinker '--execute= *)",
+      "Bash(\"/c/xampp/mysql/bin/mysql.exe\" -u root libroom_old -e \"SELECT id, con_id, title FROM rooms WHERE id=49;\")"
+    ]
+  }
+}

@@ -64,7 +64,7 @@ class ApiController extends Controller
     public function getAccess(string $room, string $uid)
     {
 
-        if ($uid == '20000000604013') {
+        if ($uid == '4013') {
 
             $data = array(
                 'room_id' => $room,
@@ -125,6 +125,49 @@ class ApiController extends Controller
         }
 
         curl_close($chOne);
+    }
+
+    public function getTimeReserve(string $room)
+    {
+        // อนุญาตเฉพาะห้อง id 49 และ 50 เท่านั้น นอกเหนือจากนี้คืนค่าว่างกลับไป
+        if (!in_array($room, ['49', '50'])) {
+            return response()->json([]);
+        }
+
+        $now = Carbon::now();
+        $today = $now->format('Y-m-d');
+        $isWeekend = $now->isWeekend();
+
+        // 1. ดึงเงื่อนไขเวลาตามวัน (ธรรมดา / เสาร์-อาทิตย์)
+        $timeConfig = Time::find($isWeekend ? 2 : 1);
+
+        $totalSlots = (int) $timeConfig->total; // เช่น 11 หรือ 8
+        $startHour = (int) $timeConfig->total;  // เช่น 11 หรือ 8
+
+        // 2. ดึงรายการการจองของห้องและวันที่ระบุ
+        // pluck('time') จะได้ array ของ slot ที่ถูกจอง เช่น [1, 2, 7]
+        $bookedSlots = Reserve::where('date', $today)
+            ->where('room_id', $room)
+            ->pluck('time')
+            ->toArray();
+
+        // 3. สร้าง Array ของ slots (0 = ว่าง, 1 = ไม่ว่าง)
+        // time ในตาราง reserves เริ่มนับที่ 0 จึงต้อง loop เริ่มที่ 0 ให้ index ตรงกับค่า time
+        $slots = [];
+        for ($i = 0; $i < $totalSlots; $i++) {
+            // เช็กว่า slot (ลำดับชั่วโมง) นี้ถูกจองไปแล้วหรือยัง
+            $slots[] = in_array($i, $bookedSlots) ? 1 : 0;
+        }
+
+        // 4. ส่งผลลัพธ์กลับในรูปแบบ JSON
+        return response()->json([
+            'room_id'    => $room,
+            'date'       => $today,
+            'start_hour' => $startHour,
+            'start_time' => (float) $timeConfig->start,
+            'end_time'   => (float) $timeConfig->end,
+            'slots'      => $slots
+        ]);
     }
 
     /**

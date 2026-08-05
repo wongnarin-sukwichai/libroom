@@ -80,6 +80,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /** Pen1 Access Control */
     Route::get('getAccess/{room}/{uid}', [ApiController::class, 'getAccess']);
+    Route::get('getTimeReserve/{room}', [ApiController::class, 'getTimeReserve']);
 
     Route::resource('stat', StatController::class);
 }); 
