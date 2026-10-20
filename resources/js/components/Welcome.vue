@@ -646,10 +646,16 @@
                 >
                     <box-icon name="x"></box-icon>
                 </button>
-                <img
-                    :src="bannerModal"
-                    class="max-h-[85vh] lg:max-h-[92vh] w-full rounded-lg object-contain shadow-2xl"
-                />
+                <picture>
+                    <source
+                        media="(max-width: 639px)"
+                        :srcset="bannerModalMobile"
+                    />
+                    <img
+                        :src="bannerModal"
+                        class="max-h-[85vh] lg:max-h-[92vh] w-full rounded-lg object-contain shadow-2xl"
+                    />
+                </picture>
             </div>
         </div>
     </transition>
@@ -735,6 +741,7 @@ export default {
             cookieModal: true,
             showBannerModal: true,
             bannerModal: "img/banner/banner.png",
+            bannerModalMobile: "img/banner/banner_mobile.png",
         };
     },
     methods: {
