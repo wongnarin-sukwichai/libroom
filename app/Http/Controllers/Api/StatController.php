@@ -19,7 +19,7 @@ class StatController extends Controller
         function check($code)
         {
             $now = Carbon::now();
-            // $now = Carbon::createFromDate('2025-03-01');
+            //$now = Carbon::createFromDate('2026-06-01');
 
             if ($code != 0) {
                 $result = $now->subMonths($code);

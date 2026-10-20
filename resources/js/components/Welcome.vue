@@ -1,12 +1,12 @@
 <template>
-    <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+    <div class="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <img :src="banner" class="p-2 shadow-lg" />
     </div>
 
     <div class="bg-white rounded-lg">
         <a href="/pdf/tools.pdf" target="_blank">
             <div
-                class="mx-auto max-w-7xl px-6 lg:px-8 border-2 border-dashed border-rose-200 hover:border-rose-300 py-4 text-center hover:text-rose-500 lg:text-2xl sm:text-lg cursor-pointer text-rose-400"
+                class="px-6 py-4 mx-auto text-center border-2 border-dashed cursor-pointer max-w-7xl lg:px-8 border-rose-200 hover:border-rose-300 hover:text-rose-500 lg:text-2xl sm:text-lg text-rose-400"
             >
                 กรุณาศึกษา "คู่มือการใช้งานระบบ"
 
@@ -22,7 +22,7 @@
 
     <div class="bg-white rounded-lg" v-if="!chkHoliday">
         <div
-            class="mx-auto max-w-7xl px-6 lg:px-8 border-4 border-dashed border-rose-200 hover:border-rose-300 py-28 text-center hover:text-rose-500 text-4xl cursor-pointer text-rose-400"
+            class="px-6 mx-auto text-4xl text-center border-4 border-dashed cursor-pointer max-w-7xl lg:px-8 border-rose-200 hover:border-rose-300 py-28 hover:text-rose-500 text-rose-400"
         >
             <box-icon
                 type="solid"
@@ -42,23 +42,23 @@
     </div>
 
     <div class="bg-white rounded-lg" v-else>
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="px-6 mx-auto max-w-7xl lg:px-8">
             <!-- Location -->
             <div
-                class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+                class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8"
                 ref="locSection"
             >
-                <div class="mx-auto max-w-2xl lg:max-w-none">
+                <div class="max-w-2xl mx-auto lg:max-w-none">
                     <div
                         class="mt-6 space-y-12 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:space-y-0"
                     >
                         <div
-                            class="group relative"
+                            class="relative group"
                             v-for="(loc, index) in locList"
                             :key="index"
                         >
                             <div
-                                class="relative h-80 w-full overflow-hidden rounded-lg sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 sm:h-64 hover:opacity-75"
+                                class="relative w-full overflow-hidden rounded-lg h-80 sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 sm:h-64 hover:opacity-75"
                                 @click="pickLoc(loc.id)"
                                 :class="
                                     locActive === loc.id
@@ -70,14 +70,14 @@
                             >
                                 <img
                                     :src="locPath + loc.pic"
-                                    class="h-full w-full object-cover object-center cursor-pointer"
+                                    class="object-cover object-center w-full h-full cursor-pointer"
                                 />
                             </div>
                             <h3 class="mt-6 text-sm text-gray-500">
                                 {{ loc.eng }}
                             </h3>
                             <p
-                                class="text-base font-semibold text-gray-900 mb-6"
+                                class="mb-6 text-base font-semibold text-gray-900"
                             >
                                 {{ loc.title }}
                             </p>
@@ -90,7 +90,7 @@
             <transition name="fade" mode="out-in">
                 <div class="bg-white" ref="arecSection">
                     <div
-                        class="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-12 lg:max-w-7xl lg:px-8"
+                        class="max-w-2xl px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:max-w-7xl lg:px-8"
                     >
                         <div
                             class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
@@ -101,7 +101,7 @@
                                 :key="index"
                             >
                                 <div
-                                    class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg xl:aspect-h-8 xl:aspect-w-7"
+                                    class="w-full overflow-hidden rounded-lg aspect-h-1 aspect-w-1 xl:aspect-h-8 xl:aspect-w-7"
                                     @click="
                                         pickCon(
                                             con.id,
@@ -120,10 +120,10 @@
                                 >
                                     <img
                                         :src="conPath + con.pic"
-                                        class="h-full w-full object-cover object-center group-hover:opacity-75 cursor-pointer"
+                                        class="object-cover object-center w-full h-full cursor-pointer group-hover:opacity-75"
                                     />
                                 </div>
-                                <h3 class="mt-4 text-md text-gray-700">
+                                <h3 class="mt-4 text-gray-700 text-md">
                                     {{ con.title }}
                                 </h3>
                                 <p class="mt-1 text-xs text-gray-500">
@@ -141,10 +141,10 @@
                     <table class="border-collapse">
                         <thead>
                             <tr class="bg-gray-100">
-                                <!-- <th class="border p-4">#</th> -->
-                                <th class="border p-4 w-48">รายละเอียด</th>
+                                <!-- <th class="p-4 border">#</th> -->
+                                <th class="w-48 p-4 border">รายละเอียด</th>
                                 <th
-                                    class="border p-4"
+                                    class="p-4 border"
                                     v-for="(n, index) in isTime.total"
                                     :key="index"
                                 >
@@ -160,7 +160,7 @@
                                         class="w-16 h-16"
                                     />
                                 </td>-->
-                                <td class="border p-4 text-center">
+                                <td class="p-4 text-center border">
                                     {{ room.title }}
                                 </td>
                                 <template v-if="room.status === 0">
@@ -173,7 +173,7 @@
                                                 chkReserve(room.id, index) ===
                                                 true
                                             "
-                                            class="border p-4 text-center cursor-pointer"
+                                            class="p-4 text-center border cursor-pointer"
                                             :class="
                                                 chkConfirm(room.id, index) === 0
                                                     ? 'bg-rose-300'
@@ -189,7 +189,7 @@
                                         ></td>
                                         <td
                                             v-else
-                                            class="border p-4 cursor-pointer hover:bg-sky-50"
+                                            class="p-4 border cursor-pointer hover:bg-sky-50"
                                             @click="
                                                 showModal(
                                                     room.id,
@@ -202,7 +202,7 @@
                                 </template>
                                 <template v-else>
                                     <td
-                                        class="border p-4 bg-rose-300 text-center"
+                                        class="p-4 text-center border bg-rose-300"
                                         :colspan="isTime.total"
                                     >
                                         ** งดให้บริการชั่วคราว **
@@ -215,11 +215,11 @@
             </transition>
         </div>
 
-        <transition name="fade" mode="out-in">
+        <!-- <transition name="fade" mode="out-in">
             <div
                 v-if="cookieModal"
                 id="cookie-banner"
-                class="cookie-banner bg-black text-gray-50"
+                class="bg-black cookie-banner text-gray-50"
             >
                 เว็บไซต์นี้มีการใช้งานคุกกี้เพื่อให้ท่านสามารถใช้บริการได้อย่างต่อเนื่องและอำนวยความสะดวกในการใช้งานเว็บไซต์
                 รวมถึงช่วยให้เราปรับปรุงการนำเสนอเนื้อหาตรงตามความต้องการของท่าน
@@ -227,17 +227,17 @@
                 <a
                     href="https://pdpa.msu.ac.th/cookie-policy/"
                     target="_blank"
-                    class="text-sky-300 underline hover:text-sky-500"
+                    class="underline text-sky-300 hover:text-sky-500"
                     >นโยบายการใช้คุกกี้</a
                 >
                 <button
                     @click="closeCookie()"
-                    class="cookie-button cursor-pointer bg-yellow-400 hover:bg-yellow-500"
+                    class="bg-yellow-400 cursor-pointer cookie-button hover:bg-yellow-500"
                 >
                     ยอมรับ
                 </button>
             </div>
-        </transition>
+        </transition> -->
     </div>
 
     <!-- Modal Show -->
@@ -250,30 +250,30 @@
             v-show="isModalShow"
         >
             <div
-                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
             ></div>
 
             <div class="fixed inset-0 z-10 overflow-y-auto">
                 <div
-                    class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+                    class="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0"
                 >
                     <div
-                        class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                        class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-full sm:max-w-lg"
                     >
                         <br />
                         <div
-                            class="grid grid-cols-5 bg-white px-4"
+                            class="grid grid-cols-5 px-4 bg-white"
                             v-for="(lim, index) in this.conLimit"
                             :key="index"
                         >
                             <div class="col-span-3 sm:flex sm:items-start">
                                 <div
-                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
+                                    class="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
                                 >
                                     <box-icon name="user"></box-icon>
                                 </div>
                                 <div
-                                    class="mt-0 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                    class="w-full mt-0 text-center sm:mt-0 sm:ml-4 sm:text-left"
                                 >
                                     <label
                                         id="listbox-label"
@@ -291,10 +291,10 @@
                             </div>
 
                             <div
-                                class="col-span-2 flex items-left justify-left mx-5 py-5"
+                                class="flex col-span-2 py-5 mx-5 items-left justify-left"
                             >
                                 <div
-                                    class="border-dotted border-2 border-sky-500 rounded-lg p-3 text-xs"
+                                    class="p-3 text-xs border-2 border-dotted rounded-lg border-sky-500"
                                 >
                                     {{ this.data.name[index] }} : เหลือ
                                     {{ this.data.rule[index] }} สิทธิ์
@@ -304,7 +304,7 @@
 
                         <transition name="fade" mode="out-in">
                             <div
-                                class="text-rose-500 mx-20"
+                                class="mx-20 text-rose-500"
                                 v-show="showAlertInput"
                             >
                                 ** กรุณากรอกข้อมูลให้ครบ
@@ -312,22 +312,22 @@
                         </transition>
                         <transition name="fade" mode="out-in">
                             <div
-                                class="text-rose-500 mx-20"
+                                class="mx-20 text-rose-500"
                                 v-show="showAlertDup"
                             >
                                 ** รหัสห้ามซ้ำ
                             </div>
                         </transition>
 
-                        <div class="bg-white px-4 pb-4 sm:p-4 sm:pb-4">
+                        <div class="px-4 pb-4 bg-white sm:p-4 sm:pb-4">
                             <div class="sm:flex sm:items-start">
                                 <div
-                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
+                                    class="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
                                 >
                                     <box-icon name="check"></box-icon>
                                 </div>
                                 <div
-                                    class="text-center sm:ml-4 sm:text-left w-full"
+                                    class="w-full text-center sm:ml-4 sm:text-left"
                                 >
                                     <label
                                         id="listbox-label"
@@ -335,14 +335,14 @@
                                         >ตรวจสอบรหัสและสิทธิ์ :
                                     </label>
 
-                                    <div class="text-center w-full pt-2">
+                                    <div class="w-full pt-2 text-center">
                                         <label
                                             id="listbox-label"
                                             class="text-sm font-medium leading-6 text-gray-900"
                                         >
                                         </label>
                                         <button
-                                            class="block w-full items-center justify-center p-4 px-6 py-2 font-medium border-2 border-green-400 rounded-full shadow-md group text-gray-400 hover:text-black hover:bg-green-200"
+                                            class="items-center justify-center block w-full p-4 px-6 py-2 font-medium text-gray-400 border-2 border-green-400 rounded-full shadow-md group hover:text-black hover:bg-green-200"
                                             @click="chkMem(this.conLimit)"
                                         >
                                             <span
@@ -356,20 +356,20 @@
 
                             <div class="sm:flex sm:items-start">
                                 <div
-                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                    class="w-full mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left"
                                 ></div>
                             </div>
                         </div>
 
-                        <div class="bg-white px-4 pt-5 sm:p-4 sm:pb-4">
+                        <div class="px-4 pt-5 bg-white sm:p-4 sm:pb-4">
                             <div class="sm:flex sm:items-start">
                                 <div
-                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
+                                    class="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
                                 >
                                     <box-icon name="time"></box-icon>
                                 </div>
                                 <div
-                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                    class="w-full mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left"
                                 >
                                     <label
                                         id="listbox-label"
@@ -429,16 +429,16 @@
                         </div>
 
                         <!-- <div
-                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                            class="grid grid-cols-2 px-4 pb-4 bg-white sm:p-4 sm:pb-4"
                         >
                             <div class="sm:flex sm:items-start">
                                 <div
-                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
+                                    class="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
                                 >
                                     <box-icon name="calendar"></box-icon>
                                 </div>
                                 <div
-                                    class="text-center sm:ml-4 sm:text-left w-full"
+                                    class="w-full text-center sm:ml-4 sm:text-left"
                                 >
                                     <label
                                         id="listbox-label"
@@ -446,7 +446,7 @@
                                         >จองข้ามวัน :
                                     </label>
                                     <div
-                                        class="border p-4 rounded-lg"
+                                        class="p-4 border rounded-lg"
                                         v-if="chkNextHol"
                                     >
                                         <label>
@@ -458,7 +458,7 @@
                                             วันพรุ่งนี้
                                         </label>
                                     </div>
-                                    <div class="border p-4 rounded-lg" v-else>
+                                    <div class="p-4 border rounded-lg" v-else>
                                         <label
                                             class="flex items-center justify-center"
                                         >
@@ -477,7 +477,7 @@
 
                             <div class="sm:flex sm:items-start">
                                 <div
-                                    class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                                    class="w-full mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left"
                                 ></div>
                             </div>
                         </div> -->
@@ -498,17 +498,17 @@
                                 </div>
                             </div>
                             <div
-                                class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
+                                class="px-4 py-3 bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6"
                             >
                                 <button
-                                    class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto"
+                                    class="inline-flex justify-center w-full px-3 py-2 text-sm text-white bg-green-500 rounded-md shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto"
                                     @click="send()"
                                 >
                                     บันทึก
                                 </button>
                                 <button
                                     type="button"
-                                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
+                                    class="inline-flex justify-center w-full px-3 py-2 mt-3 text-sm text-gray-900 bg-white rounded-md shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
                                     @click="close()"
                                 >
                                     ออก
@@ -531,28 +531,28 @@
             v-show="showModalRes"
         >
             <div
-                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
             ></div>
 
             <div class="fixed inset-0 z-10 overflow-y-auto">
                 <div
-                    class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+                    class="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0"
                 >
                     <form
-                        class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                        class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-full sm:max-w-lg"
                         @submit.prevent="cancel()"
                     >
                         <div
-                            class="grid grid-cols-2 bg-white px-4 pb-4 sm:p-4 sm:pb-4"
+                            class="grid grid-cols-2 px-4 pb-4 bg-white sm:p-4 sm:pb-4"
                         >
                             <div class="sm:flex sm:items-start">
                                 <div
-                                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
+                                    class="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto rounded-full bg-lime-100 sm:mx-0 sm:h-10 sm:w-10"
                                 >
                                     <box-icon name="user"></box-icon>
                                 </div>
                                 <div
-                                    class="text-center sm:ml-4 sm:text-left w-full"
+                                    class="w-full text-center sm:ml-4 sm:text-left"
                                 >
                                     <label
                                         id="listbox-label"
@@ -560,7 +560,7 @@
                                         >ชื่อผู้จอง :
                                     </label>
                                     <div
-                                        class="border-dotted border-2 rounded-lg p-2 mb-1"
+                                        class="p-2 mb-1 border-2 border-dotted rounded-lg"
                                         v-for="(nameRes, index) in this
                                             .nameReserve"
                                         :key="index"
@@ -575,7 +575,7 @@
                                 v-if="this.chkStatus === 0"
                             >
                                 <div
-                                    class="text-center sm:ml-4 sm:text-left w-full"
+                                    class="w-full text-center sm:ml-4 sm:text-left"
                                 >
                                     <label
                                         id="listbox-label"
@@ -584,7 +584,7 @@
                                     </label>
                                     <input
                                         type="text"
-                                        class="form-control block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                        class="block w-full px-3 py-2 m-0 text-base font-normal text-gray-700 transition ease-in-out bg-white border border-gray-300 border-solid rounded form-control bg-clip-padding focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                         placeholder="** ใส่รหัสยกเลิก 4 หลัก **"
                                         required
                                         v-model="dataCancel.code"
@@ -594,18 +594,18 @@
                         </div>
 
                         <div
-                            class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
+                            class="px-4 py-3 bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6"
                         >
                             <button
                                 v-if="this.chkStatus === 0"
                                 type="submit"
-                                class="inline-flex w-full justify-center rounded-md bg-rose-400 px-3 py-2 text-sm text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
+                                class="inline-flex justify-center w-full px-3 py-2 text-sm text-white rounded-md shadow-sm bg-rose-400 hover:bg-rose-500 sm:ml-3 sm:w-auto"
                             >
                                 ยกเลิก
                             </button>
                             <button
                                 type="button"
-                                class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
+                                class="inline-flex justify-center w-full px-3 py-2 mt-3 text-sm text-gray-900 bg-white rounded-md shadow-sm hover:bg-gray-50 ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
                                 @click="closeReserve()"
                             >
                                 ออก
@@ -624,10 +624,34 @@
             @click="scrollToLoc()"
             type="button"
             title="กลับไปเลือกสถานที่"
-            class="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-sky-500 text-white shadow-lg hover:bg-sky-600 transition"
+            class="fixed z-50 flex items-center justify-center w-12 h-12 text-white transition rounded-full shadow-lg bottom-6 right-6 bg-sky-500 hover:bg-sky-600"
         >
             <box-icon name="chevron-up" color="white"></box-icon>
         </button>
+    </transition>
+
+    <!-- Announcement Banner Modal -->
+    <transition name="fade">
+        <div
+            v-if="showBannerModal"
+            @click.self="closeBannerModal()"
+            class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4"
+        >
+            <div class="relative w-full max-w-3xl lg:max-w-5xl xl:max-w-6xl">
+                <button
+                    @click="closeBannerModal()"
+                    type="button"
+                    title="ปิด"
+                    class="absolute flex items-center justify-center w-10 h-10 text-gray-700 transition bg-white rounded-full shadow-lg -top-3 -right-3 hover:bg-gray-100"
+                >
+                    <box-icon name="x"></box-icon>
+                </button>
+                <img
+                    :src="bannerModal"
+                    class="max-h-[85vh] lg:max-h-[92vh] w-full rounded-lg object-contain shadow-2xl"
+                />
+            </div>
+        </div>
     </transition>
 </template>
 
@@ -709,9 +733,14 @@ export default {
             chkStatus: "",
             chkRule: "",
             cookieModal: true,
+            showBannerModal: true,
+            bannerModal: "img/banner/banner.png",
         };
     },
     methods: {
+        closeBannerModal() {
+            this.showBannerModal = false;
+        },
         getHoliday() {
             // var d = moment().format("DD");
             // var m = moment().format("MM");
